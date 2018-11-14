@@ -4,14 +4,12 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 
-
 // 引入公共的css样式
 import '../static/css/aui.css'
 import '../static/css/aui-flex.css'
 import '../static/css/common.css'
 import '../static/css/standard.css'
 import '../static/css/iconfont.css'
-
 
 // mint-ui
 import MintUI from 'mint-ui'
@@ -27,4 +25,4 @@ new Vue({
   router,
   components: {App},
   template: '<App/>'
-});
+})
