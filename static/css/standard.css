@@ -121,4 +121,50 @@
   width: 40%;
   height: 120px;
 }
+/* 列表最后一列无border*/
+.lastli{
+  border: none;
+}
 
+header{
+  width: 100%;
+  background-color: #03a9f4;
+  height: 2.5rem;
+  text-align: center;
+  color: #FFFFFF;
+  line-height: 2.5rem;
+  font-size: 1rem;
+}
+.title{
+  margin-left: 0.5rem;
+  font-size:0.7rem;
+}
+.value{
+  margin-right: 0.5rem;
+  float: right;
+  color:#B3B3B3;
+  font-size:0.7rem;
+}
+.one{
+  height: 2rem;
+  line-height: 2rem;
+  border-bottom: solid 1px #B3B3B3;
+  background-color: #FFFFFF;
+}
+.smalltitle{
+  margin-top: 0.8rem;
+  height: 1.7rem;
+  line-height: 1.7rem;
+  background-color: #03a9f4;
+  color:#FFFFFF;
+  font-size: 0.8rem;
+}
+.jianjie{
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  padding: 0.5rem;
+  max-width: 95%;
+  height: 6rem;
+  border: solid 1px #B3B3B3;
+  font-size: 0.7rem;
+}

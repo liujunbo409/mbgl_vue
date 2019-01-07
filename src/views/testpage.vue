@@ -1,6 +1,6 @@
 <template>
   <div >
-    <header >医生认证</header>
+    <test></test>
     <div class="one">
       <label class="title">姓名</label>
       <label class="value">医生姓名</label>
