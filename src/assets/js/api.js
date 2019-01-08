@@ -343,7 +343,22 @@ export const doc_userAccess = params => {
 export const doc_userInform = params => {
   return axios_ajax('api/doctor/my/inform', params, 'GET', false);
 }
-
+//待审核问答题库列表
+export const doc_getQaWaitList = params => {
+  return axios_ajax('api/doctor/qa/shenhe/waitList', params, 'GET', false);
+}
+//已审核问答题库列表
+export const doc_getQaAlreadyList = params => {
+  return axios_ajax('api/doctor/qa/shenhe/alreadyList', params, 'GET', false);
+}
+//审核问答题库详情
+export const doc_getQaInfo= params => {
+  return axios_ajax('api/doctor/qa/shenhe/info', params, 'GET', false);
+}
+//审核问答题库
+export const doc_QaShenhe= params => {
+  return axios_ajax('api/doctor/qa/shenhe/shenhe', params, 'POST', false);
+}
 /*
  *
  * 创建Toast
@@ -416,6 +431,10 @@ export default{
   doc_userFeedBack,
   doc_userAccess,
   doc_userInform,
+  doc_getQaWaitList,
+  doc_getQaAlreadyList,
+  doc_getQaInfo,
+  doc_QaShenhe,
 }
 
 

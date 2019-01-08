@@ -258,6 +258,24 @@ let routers = [
         keepAlive: false // false 表示需要使用缓存
       }
     },
+     //主页=> 审核问答题库
+     {
+      path: '/MBGL/doctor/assessQa',
+      name: 'assessQa',
+      component: resolve => require(['@/views/MBGL/doctor/assessQa/index'], resolve),
+      meta: {
+        keepAlive: false // false 表示需要使用缓存
+      }
+    },
+    //主页=> 审核问答题库详情
+    {
+      path: '/MBGL/doctor/assessQa/detail',
+      name: 'assessQaDetail',
+      component: resolve => require(['@/views/MBGL/doctor/assessQa/detail'], resolve),
+      meta: {
+        keepAlive: false // false 表示需要使用缓存
+      }
+    },
   // {
   //   path: '/testqn',
   //   name: 'testqn',
