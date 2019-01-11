@@ -17,101 +17,32 @@
         <span class="" style="font-size:0.55rem;color:#B3B3B3;margin-left:0.5rem">
           {{detailinfo.question.oper_name}}&nbsp;&nbsp;{{detailinfo.question.created_at}}
         </span>
-        <!-- <span class="" style="font-size:0.55rem;color:#B3B3B3;margin-left:0.5rem">
-          {{accepttext}}&nbsp;&nbsp;{{collecttext}}
-        </span> -->
     </div>
-<br/>
-
-    <div class="aui-padded-15" style="font-weight:light;font-size:0.7rem">
-      <div v-html="detailinfo.question.answer"></div>
-    </div>
-    <div  style="float:left;margin-left:1rem;">问答题库所属分类：</div><br>
+     <div  style="float:left;margin-left:1rem;">所属分类：</div><br>
     <ul>
           <li class="aui-list-item"  style="text-indent: 5%;"
           v-for="(bank,key) of bankLists"  :class="key == bankLists.length-1?'lastli':''">
               {{bank.bankname}}
           </li>
     </ul>
-    <!-- <div  style="float:left;margin-left:1rem;">文章来源：</div><br/>
-        <div class="mt-10" style="margin-left:10px" v-if="sourceflg">
-            <h4>
-                <span v-if="sourceinfo.source_type == 'J'">
-                    <span v-if="sourceinfo.sequence != null">[{{sourceinfo.sequence}}]</span>
-                    <span v-if="sourceinfo.source_author != null">[{{sourceinfo.source_author}}]</span>
-                    <span v-if="sourceinfo.source_name != null">[{{sourceinfo.source_name}}]</span>
-                    <span>[J].</span>
-                    <span v-if="sourceinfo.journal_name != null">[{{sourceinfo.journal_name}}]</span>
-                    <span v-if="sourceinfo.journal_year != null">[{{sourceinfo.journal_year}}]</span>
-                    <span v-if="sourceinfo.journal_date != null">[{{sourceinfo.journal_date}}]</span>
-                    <span v-if="sourceinfo.source_page != null">[{{sourceinfo.source_page}}]</span>
-                </span>
-                <span v-else-if="sourceinfo.source_type == 'A'">
-                    <span v-if="sourceinfo.sequence != null">[{{sourceinfo.original_author}}]</span>
-                    <span v-if="sourceinfo.source_author != null">[{{sourceinfo.original_author}}]</span>
-                    <span v-if="sourceinfo.source_name != null">[{{sourceinfo.original_author}}]</span>
-                    <span>[A].</span>
-                    <span v-if="sourceinfo.original_author != null">[{{sourceinfo.original_author}}]</span>
-                    <span v-if="sourceinfo.original_name != null">[{{sourceinfo.original_name}}]</span>
-                    <span>[C].</span>
-                    <span v-if="sourceinfo.published_place != null">[{{sourceinfo.published_place}}]</span>
-                    <span v-if="sourceinfo.published_press != null">[{{sourceinfo.published_press}}]</span>
-                    <span v-if="sourceinfo.published_year != null">[{{sourceinfo.published_year}}]</span>
-                    <span v-if="sourceinfo.source_page != null">[{{sourceinfo.source_page}}]</span>
-                </span>
-                <span v-else-if="sourceinfo.source_type == 'N'">
-                    <span v-if="sourceinfo.sequence != null">[{{sourceinfo.sequence}}]</span>
-                    <span v-if="sourceinfo.source_author != null">[{{sourceinfo.source_author}}]</span>
-                    <span v-if="sourceinfo.source_name != null">[{{sourceinfo.source_name}}]</span>
-                    <span>[N].</span>
-                    <span v-if="sourceinfo.news_name != null">[{{sourceinfo.news_name}}]</span>
-                    <span v-if="sourceinfo.news_date != null">[{{sourceinfo.news_date}}]</span>
-                </span>
-                <span v-else-if="sourceinfo.source_type == 'S'">
-                    <span v-if="sourceinfo.sequence != null">[{{sourceinfo.sequence}}]</span>
-                    <span v-if="sourceinfo.standard_number != null">[{{sourceinfo.standard_number}}]</span>
-                    <span v-if="sourceinfo.standard_name != null">[{{sourceinfo.standard_name}}]</span>
-                    <span>[S].</span>
-                </span>
-                <span v-else-if="sourceinfo.source_type == 'P'">
-                    <span v-if="sourceinfo.sequence != null">[{{sourceinfo.sequence}}]</span>
-                    <span v-if="sourceinfo.patent_author != null">[{{sourceinfo.patent_author}}]</span>
-                    <span v-if="sourceinfo.patent_name != null">[{{sourceinfo.patent_name}}]</span>
-                    <span>[P].</span>
-                    <span v-if="sourceinfo.patent_country != null">[{{sourceinfo.patent_country}}]</span>
-                    <span v-if="sourceinfo.patent_number != null">[{{sourceinfo.patent_number}}]</span>
-                    <span v-if="sourceinfo.patent_date != null">[{{sourceinfo.patent_date}}]</span>
-                </span>
-                <span v-else-if="sourceinfo.source_type == 'E'">
-                    <span v-if="sourceinfo.sequence != null">[{{sourceinfo.sequence}}]</span>
-                    <span v-if="sourceinfo.source_author != null">[{{sourceinfo.source_author}}]</span>
-                    <span v-if="sourceinfo.source_name != null">[{{sourceinfo.source_name}}]</span>
-                    <span v-if="sourceinfo.edocument_type != null">[{{sourceinfo.edocument_type}}]</span>
-                    <span v-if="sourceinfo.edocument_address != null">[{{sourceinfo.edocument_address}}]</span>
-                    <span v-if="sourceinfo.edocument_date != null">[{{sourceinfo.edocument_date}}]</span>
-                </span>
-                <span v-else-if="sourceinfo.source_type == 'Z'">
-                    <span v-if="sourceinfo.sequence != null">[{{sourceinfo.sequence}}]</span>
-                    <span v-if="sourceinfo.source_author != null">[{{sourceinfo.source_author}}]</span>
-                    <span v-if="sourceinfo.source_name != null">[{{sourceinfo.source_name}}]</span>
-                    <span v-if="sourceinfo.source_type != null">[{{sourceinfo.source_type}}]</span>
-                    <span v-if="sourceinfo.published_place != null">[{{sourceinfo.published_place}}]</span>
-                    <span v-if="sourceinfo.published_press != null">[{{sourceinfo.published_press}}]</span>
-                    <span v-if="sourceinfo.published_year != null">[{{sourceinfo.published_year}}]</span>
-                </span>
-                <span v-else>
-                    <span v-if="sourceinfo.sequence != null">[{{sourceinfo.sequence}}]</span>
-                    <span v-if="sourceinfo.source_author != null">[{{sourceinfo.source_author}}]</span>
-                    <span v-if="sourceinfo.source_name != null">[{{sourceinfo.source_name}}]</span>
-                    <span v-if="sourceinfo.source_type != null">[{{sourceinfo.source_type}}]</span>
-                    <span v-if="sourceinfo.published_place != null">[{{sourceinfo.published_place}}]</span>
-                    <span v-if="sourceinfo.published_press != null">[{{sourceinfo.published_press}}]</span>
-                    <span v-if="sourceinfo.published_year != null">[{{sourceinfo.published_year}}]</span>
-                    <span v-if="sourceinfo.source_page != null">[{{sourceinfo.source_page}}]</span>
-                </span>
-            </h4>
-        </div>
-         -->
+    <div class="aui-padded-15" style="font-weight:light;font-size:0.7rem">
+      <div v-html="detailinfo.question.answer"></div>
+    </div>
+    
+     <div  style="float:left;margin-left:1rem;">关联文章：</div><br/>
+        <ul>
+          <li class="aui-list-item"  style="text-indent: 5%;"
+          v-for="(bind,key) of bindLists"  :class="key == bindLists.length-1?'lastli':''">
+              {{bind.article.title}}
+          </li>
+        </ul>
+         <div  style="float:left;margin-left:1rem;">文章来源：</div><br/>
+        <ul>
+          <li class="aui-list-item"  style="text-indent: 5%;"
+          v-for="(source,key) of sourceLists"  :class="key == sourceLists.length-1?'lastli':''">
+              {{source.source_text}}
+          </li>
+        </ul>
         <div v-show="detailinfo.shenhe.status=='1'" class="aui-tab" id="tab">
           <div class="aui-tab-item" style="font-size: 0.6rem;background: #03a9f4;border-right:1px solid #FFFFFF;
           color:#FFFFFF;position: fixed;top: auto;bottom: 0;width: 50%;" @click="ShenheArticle(2)">
@@ -158,7 +89,9 @@
         detailinfo : null,        //文章详情信息
         sourceinfo : null,        //文章来源信息   
         sourceflg : false,         //文章来源是否显示
-        bankLists : '' //问答题库分类
+        bankLists : '' ,//问答题库分类
+        sourceLists :'',//来源
+        bindLists :''//关联
       }
     },
     methods :{
@@ -168,6 +101,8 @@
         self.api.doc_getQaInfo({question_id : question_id,shenhe_id:self.shenhe_id,from:self.from}).then((res)=>{
           self.detailinfo = res.data.ret;
           self.bankLists = res.data.ret.banks;
+          self.sourceLists = res.data.ret.sources;//来源
+          self.bindLists = res.data.ret.binds;//关联
           //格式化标题 
           if(self.detailinfo.title.length > 8)
           {

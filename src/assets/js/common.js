@@ -126,6 +126,10 @@ export const jumpToPageWithArticleid = params => {
 export const jumpToQaInfo = params => {
   params.router.push({path: params.url, query: {question_id : params.question_id, shenhe_id: params.shenhe_id, from : params.from}})
 }
+//跳转到问答题库详情
+export const gotoQaDetail = params => {
+  params.router.push({path: params.url, query: {question_id : params.question_id,bank_id:params.bank_id}})
+}
 export default{
   //公共方法///////////////////////////////////////////////////////////////
   consoledebug,
@@ -147,6 +151,7 @@ export default{
   goToArticleFeedBackWithCollected,
   jumpToPageWithArticleid,
   jumpToQaInfo,
+  gotoQaDetail,
 };
 
 

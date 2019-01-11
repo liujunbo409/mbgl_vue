@@ -239,7 +239,7 @@ export const doc_getIlllist = params => {
   return axios_ajax('api/common/baseIllList', params, 'GET', false);
 }
 
-//获取目录列表
+//获取文章目录列表
 export const doc_getCataloglist = params => {
   return axios_ajax('api/doctor/article/mulu', params, 'GET', false);
 }
@@ -359,6 +359,18 @@ export const doc_getQaInfo= params => {
 export const doc_QaShenhe= params => {
   return axios_ajax('api/doctor/qa/shenhe/shenhe', params, 'POST', false);
 }
+//获取问答题库分类列表
+export const doc_getBankMululist = params => {
+  return axios_ajax('api/doctor/qa/bankList', params, 'GET', false);
+}
+//获取问答题库分类下问答列表
+export const doc_getQalist = params => {
+  return axios_ajax('api/doctor/qa/qaList', params, 'GET', false);
+}
+//审核问答题库详情
+export const doc_getQaDetail= params => {
+  return axios_ajax('api/doctor/qa/info', params, 'GET', false);
+}
 /*
  *
  * 创建Toast
@@ -435,6 +447,9 @@ export default{
   doc_getQaAlreadyList,
   doc_getQaInfo,
   doc_QaShenhe,
+  doc_getBankMululist,
+  doc_getQalist,
+  doc_getQaDetail,
 }
 
 

@@ -276,6 +276,25 @@ let routers = [
         keepAlive: false // false 表示需要使用缓存
       }
     },
+    //主页=> 全部问答题库
+  {
+    path: '/MBGL/doctor/systemQa',
+    name: 'systemQa',
+    component: resolve => require(['@/views/MBGL/doctor/systemQa/catalogselect'], resolve),
+    meta: {
+      keepAlive: false // false 表示需要使用缓存
+    }
+    
+  },
+  //主页=> 全部问答题库 =>问答题库详情
+  {
+    path: '/MBGL/doctor/Qadetail',
+    name: 'Qadetail',
+    component: resolve => require(['@/views/MBGL/doctor/systemQa/Qadetail'], resolve),
+    meta: {
+      keepAlive: false // false 表示需要使用缓存
+    }
+  },
   // {
   //   path: '/testqn',
   //   name: 'testqn',

@@ -82,11 +82,20 @@
       }
     },
     mounted(){
-      this.api.doc_getCataloglist({ill_id : this.illid}).then((res)=>{
+      if(this.type=='article'){
+        this.api.doc_getCataloglist({ill_id : this.illid}).then((res)=>{
         this.toTree(res.data.ret);
         }).catch((err)=>{
 
         })
+      }
+      else if(this.type=='question'){
+        this.api.doc_getBankMululist({ill_id : this.illid}).then((res)=>{
+        this.toTree(res.data.ret);
+        }).catch((err)=>{
+
+        })
+      }
     },
 
     data() {
@@ -99,7 +108,7 @@
         }
       };
     },
-    props :['illid']
+    props :['illid','type']
   };
 </script>
 <style>

@@ -16,25 +16,23 @@
           </div>
     </div>
     <div v-if="catalogflg">
-    <tree :illid='illid' :type="'article'" @selectBymuluid="selectBymuluid"></tree>
+    <tree :illid='illid' :type="'question'" @selectBymuluid="selectBymuluid"></tree>
     </div>
     <div v-if="articleflg">
       <ul class="aui-list aui-form-list">
-      <li class="aui-list-item" v-for="(item,key) of articleinfo" @click="gotoArticle(item.article.id, item.mulu_id)" :class="key == articleinfo.length-1?'lastli':''">
+      <li class="aui-list-item" v-for="(item,key) of qaList" @click="gotoQainfo(item.id)" :class="key == qaList.length-1?'lastli':''">
         <div class="aui-list-item-inner">
           <div>
-            {{item.article.title}}
+            {{item.question}}
             <div>
-        <span style="font-size:0.55rem;color:#B3B3B3">收藏 :{{item.article.used_num}}</span>
-            <span style="margin-left:1rem;font-size:0.55rem;color:#B3B3B3">认可 : {{item.article.accept_num}}</span>
-            <span style="margin-left:1rem;font-size:0.55rem;color:#B3B3B3">浏览 :{{item.article.show_num}}</span>
+            <span style="margin-left:1rem;font-size:0.55rem;color:#B3B3B3">浏览 :{{item.counts.show_num}}</span>
         </div>
           </div>
           <span class="aui-iconfont aui-icon-right" style="color: #B3B3B3"></span>
         </div>
       </li>
       </ul>
-       <div v-show="articleinfo != ''" class="block" style="text-align:center;background-color:#FFFFFF;padding-top:1rem">
+       <div v-show="qaList != ''" class="block" style="text-align:center;background-color:#FFFFFF;padding-top:1rem">
         <el-pagination
           @prev-click = "gotoPrev"
           @next-click = "gotoNext"
@@ -60,7 +58,6 @@
     mounted(){
       //获取疾病
       self.api.doc_getIlllist().then((res)=>{
-        
         self.illinfo = res.data.ret;
       }).catch((err)=>{
 
@@ -70,10 +67,11 @@
       return {
         illid : '',                              //选择的疾病目录id
         illinfo: null,
-        articleinfo : null,
+        qaList : null,
         illflg : true,
         catalogflg : false,
         articleflg : false,
+        banknow : '',//当前选择目录
         pagetotal : '',    //共有多少条数据
         currentpage : '',     //目前是第几页
         prevurl : '',      //上一页的url
@@ -89,9 +87,10 @@
         self.catalogflg = true;
       },
       selectBymuluid : function(data){
-        self.api.doc_getArticlelist({mulu_id : data.id}).then((res)=>{
+        self.banknow = data.id;
+        self.api.doc_getQalist({bank_id : data.id}).then((res)=>{
           //self.common.consoledebug.log("res :"  + JSON.stringify(res.data.ret));
-          self.articleinfo = res.data.ret.data;
+          self.qaList = res.data.ret.data;
           self.pagetotal = res.data.ret.total;
           self.currentpage = res.data.ret.current_page;
           self.prevurl = res.data.ret.prev_page_url;
@@ -105,13 +104,13 @@
 
         })
       },
-      gotoArticle : function(articleid, muluid){
-        self.common.goToArticleDetail({router: self.$router, articleid : articleid, muluid : muluid, illid : self.illid});
+      gotoQainfo : function(id){
+        self.common.gotoQaDetail({router: self.$router, url : "../doctor/Qadetail", question_id : id,bank_id:self.banknow});
       },
       gotoNext : function(){
         this.api.axios_ajax(this.nexturl, '', 'GET', false).then((res)=>{
           //console.log("数据：" + JSON.stringify(res.data.ret) );
-          self.articleinfo = res.data.ret.data;
+          self.qaList = res.data.ret.data;
           self.currentpage = res.data.ret.current_page;
           self.prevurl = res.data.ret.prev_page_url;
           self.nexturl = res.data.ret.next_page_url;
@@ -125,7 +124,7 @@
       gotoPrev : function (){
         this.api.axios_ajax(this.prevurl, '', 'GET', false).then((res)=>{
           //console.log("数据：" + JSON.stringify(res.data.ret) );
-          self.articleinfo = res.data.ret.data;
+          self.qaList = res.data.ret.data;
           self.currentpage = res.data.ret.current_page;
           self.prevurl = res.data.ret.prev_page_url;
           self.nexturl = res.data.ret.next_page_url;
