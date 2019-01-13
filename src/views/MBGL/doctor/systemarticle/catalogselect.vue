@@ -9,7 +9,7 @@
         <span class="aui-iconfont aui-icon-home"></span>
       </a>
     </header>
-    <span style="margin-top:0.5rem;margin-left:0.5rem;color:#03a9f4;font-size:0.7rem">选择疾病 </span>
+    <!-- <span style="margin-top:0.5rem;margin-left:0.5rem;color:#03a9f4;font-size:0.7rem">选择疾病 </span> -->
     <div  v-if="illflg">
       <div class="illList" style="margin-top:1rem; width:40%;margin-left:1.25rem" v-bind:id="item.id" v-bind:value="item.id" v-for="(item,key) of illinfo" @click="selectill(item.id)">
           <div >{{item.name}}</div>
