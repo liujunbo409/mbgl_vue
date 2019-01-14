@@ -371,6 +371,10 @@ export const doc_getQalist = params => {
 export const doc_getQaDetail= params => {
   return axios_ajax('api/doctor/qa/info', params, 'GET', false);
 }
+//获取疾病下问答列表
+export const doc_getillQaList = params => {
+  return axios_ajax('api/doctor/qa/illQaList', params, 'GET', false);
+}
 /*
  *
  * 创建Toast
@@ -450,6 +454,7 @@ export default{
   doc_getBankMululist,
   doc_getQalist,
   doc_getQaDetail,
+  doc_getillQaList,
 }
 
 

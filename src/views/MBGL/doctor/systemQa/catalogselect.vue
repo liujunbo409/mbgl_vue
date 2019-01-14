@@ -9,11 +9,16 @@
         <span class="aui-iconfont aui-icon-home"></span>
       </a>
     </header>
-    <span style="margin-top:0.5rem;margin-left:0.5rem;color:#03a9f4;font-size:0.7rem">选择疾病 </span>
     <div  v-if="illflg">
       <div class="illList" style="margin-top:1rem; width:40%;margin-left:1.25rem" v-bind:id="item.id" v-bind:value="item.id" v-for="(item,key) of illinfo" @click="selectill(item.id)">
           <div >{{item.name}}</div>
           </div>
+    </div>
+     <div  v-if="!illflg">
+      <span style="margin-top:0.5rem;margin-left:0.5rem;color:#03a9f4;font-size:0.7rem" v-show="cataloguse&&catalogflg"  @click="changeiIlflg('0')">忽略分类查看</span>
+      <span style="margin-top:0.5rem;margin-left:0.5rem;color:#03a9f4;font-size:0.7rem" v-show="!cataloguse&&!catalogflg"  @click="changeiIlflg('1')">按照分类查看</span>
+      <span style="margin-top:0.5rem;margin-left:0.5rem;color:#03a9f4;font-size:0.7rem" v-show="cataloguse&&!catalogflg"  @click="changeiIlflg('2')">重新选择分类</span>
+      <span style="margin-top:0.5rem;margin-left:0.5rem;color:#03a9f4;font-size:0.7rem" @click="rechoseIll()">选择疾病 </span>
     </div>
     <div v-if="catalogflg">
     <tree :illid='illid' :type="'question'" @selectBymuluid="selectBymuluid"></tree>
@@ -74,6 +79,7 @@
         qaList : null,
         illflg : true,
         catalogflg : false,
+        cataloguse : false,//是否按照分类查询
         articleflg : false,
         banknow : '',//当前选择目录
         pagetotal : '',    //共有多少条数据
@@ -89,7 +95,30 @@
       selectill : function(illid){
         self.illid = illid;
         self.illflg = false;
-        self.catalogflg = true;
+        if(self.catalogflg){//展示分类
+           
+        }
+        else{//不显示分类
+          self.getillQaList();
+        }
+      },
+       rechoseIll : function(){
+        self.cataloguse = false;//不使用分类
+        self.catalogflg = false;//不显示分类树
+        self.illflg = true;//显示疾病列表
+        self.articleflg = false;//不显示问答列表
+      },
+      changeiIlflg : function(type){
+        if(type=='0'){// 忽略分类
+            self.cataloguse = false;//不使用分类
+            self.catalogflg = false;//不显示分类树
+            self.getillQaList();
+        }
+        else{//重新选择分类
+            self.cataloguse = true;//使用分类
+            self.catalogflg = true;//不显示分类树
+            self.articleflg = false;//隐藏问答列表
+        }
       },
       selectBymuluid : function(data){
         self.banknow = data.id;
@@ -105,12 +134,32 @@
           self.pageper = Number(res.data.ret.data.per_page);
           self.illflg = false;
           self.catalogflg = false;
+          self.cataloguse = true;//使用分类
           self.articleflg =true;
         }).catch((err)=>{
 
         })
       },
+       getillQaList : function(){
+        self.api.doc_getillQaList({ill_id : self.illid,questionSearch:self.questionSearch}).then((res)=>{
+          //self.common.consoledebug.log("res :"  + JSON.stringify(res.data.ret));
+          self.qaList = res.data.ret.data.data;
+          self.pagetotal = res.data.ret.data.total;
+          self.currentpage = res.data.ret.data.current_page;
+          self.prevurl = res.data.ret.data.prev_page_url;
+          self.nexturl = res.data.ret.data.next_page_url;
+          self.pageto = res.data.ret.to;
+          self.pageper = Number(res.data.ret.per_page);
+          self.illflg = false;
+          self.catalogflg = false;
+          self.articleflg =true;
+          self.questionSearch = res.data.ret.questionSearch;
+        }).catch((err)=>{
+
+        })
+      },
       searchQaList : function(){
+        if(self.cataloguse){//按照分类查询
         self.api.doc_getQalist({bank_id :self.banknow,questionSearch:self.questionSearch}).then((res)=>{
           //self.common.consoledebug.log("res :"  + JSON.stringify(res.data.ret));
           self.qaList = res.data.ret.data.data;
@@ -127,6 +176,10 @@
         }).catch((err)=>{
 
         })
+         }
+        else{//不按照分类查询
+                  self.getillQaList();
+        }
       },
       gotoQainfo : function(id){
         self.common.gotoQaDetail({router: self.$router, url : "../doctor/Qadetail", question_id : id,bank_id:self.banknow});
