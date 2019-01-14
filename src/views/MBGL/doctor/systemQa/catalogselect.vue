@@ -4,7 +4,7 @@
       <a class="aui-pull-left" @click="clickBack">
         <span class="aui-iconfont aui-icon-left"></span>
       </a>
-      <div class="aui-title">文章列表</div>
+      <div class="aui-title">问答题库</div>
       <a class="aui-pull-right" href="#/MBGL/doctor/index">
         <span class="aui-iconfont aui-icon-home"></span>
       </a>
@@ -19,13 +19,17 @@
     <tree :illid='illid' :type="'question'" @selectBymuluid="selectBymuluid"></tree>
     </div>
     <div v-if="articleflg">
+      <div style="display: flex;">
+        <input v-model="questionSearch" style="width: 80%;line-height: 1.5rem;">
+        <div @click="searchQaList()" class="searchbtn">搜索</div>
+      </div>
       <ul class="aui-list aui-form-list">
-      <li class="aui-list-item" v-for="(item,key) of qaList" @click="gotoQainfo(item.id)" :class="key == qaList.length-1?'lastli':''">
+      <li class="aui-list-item" v-for="(item,key) of qaList" @click="gotoQainfo(item.qa.id)" :class="key == qaList.length-1?'lastli':''">
         <div class="aui-list-item-inner">
           <div>
-            {{item.question}}
+            {{item.qa.question}}
             <div>
-            <span style="margin-left:1rem;font-size:0.55rem;color:#B3B3B3">浏览 :{{item.counts.show_num}}</span>
+            <span style="margin-left:1rem;font-size:0.55rem;color:#B3B3B3">浏览 :{{item.show_num}}</span>
         </div>
           </div>
           <span class="aui-iconfont aui-icon-right" style="color: #B3B3B3"></span>
@@ -78,6 +82,7 @@
         nexturl :'',       //下一页的url
         pageto :'',        //最后一页（共有几页）
         pageper :'',       //每页有几条数据
+        questionSearch : '', //查询条件
       }
     },
     methods :{
@@ -88,15 +93,34 @@
       },
       selectBymuluid : function(data){
         self.banknow = data.id;
-        self.api.doc_getQalist({bank_id : data.id}).then((res)=>{
+        self.api.doc_getQalist({bank_id : self.banknow}).then((res)=>{
           //self.common.consoledebug.log("res :"  + JSON.stringify(res.data.ret));
-          self.qaList = res.data.ret.data;
-          self.pagetotal = res.data.ret.total;
-          self.currentpage = res.data.ret.current_page;
-          self.prevurl = res.data.ret.prev_page_url;
-          self.nexturl = res.data.ret.next_page_url;
-          self.pageto = res.data.ret.to;
-          self.pageper = Number(res.data.ret.per_page);
+          self.qaList = res.data.ret.data.data;
+          self.questionSearch = res.data.ret.questionSearch;
+          self.pagetotal = res.data.ret.data.total;
+          self.currentpage = res.data.ret.data.current_page;
+          self.prevurl = res.data.ret.data.prev_page_url;
+          self.nexturl = res.data.ret.data.next_page_url;
+          self.pageto = res.data.ret.data.to;
+          self.pageper = Number(res.data.ret.data.per_page);
+          self.illflg = false;
+          self.catalogflg = false;
+          self.articleflg =true;
+        }).catch((err)=>{
+
+        })
+      },
+      searchQaList : function(){
+        self.api.doc_getQalist({bank_id :self.banknow,questionSearch:self.questionSearch}).then((res)=>{
+          //self.common.consoledebug.log("res :"  + JSON.stringify(res.data.ret));
+          self.qaList = res.data.ret.data.data;
+          self.questionSearch = res.data.ret.questionSearch;
+          self.pagetotal = res.data.ret.data.total;
+          self.currentpage = res.data.ret.data.current_page;
+          self.prevurl = res.data.ret.data.prev_page_url;
+          self.nexturl = res.data.ret.data.next_page_url;
+          self.pageto = res.data.ret.data.to;
+          self.pageper = Number(res.data.ret.data.per_page);
           self.illflg = false;
           self.catalogflg = false;
           self.articleflg =true;
@@ -110,12 +134,13 @@
       gotoNext : function(){
         this.api.axios_ajax(this.nexturl, '', 'GET', false).then((res)=>{
           //console.log("数据：" + JSON.stringify(res.data.ret) );
-          self.qaList = res.data.ret.data;
-          self.currentpage = res.data.ret.current_page;
-          self.prevurl = res.data.ret.prev_page_url;
-          self.nexturl = res.data.ret.next_page_url;
-          self.pageto =  res.data.ret.to;
-          self.pageper = Number(res.data.ret.per_page);
+          self.qaList = res.data.ret.data.data;
+          self.questionSearch = res.data.ret.questionSearch;
+          self.currentpage = res.data.ret.data.current_page;
+          self.prevurl = res.data.ret.data.prev_page_url;
+          self.nexturl = res.data.ret.data.next_page_url;
+          self.pageto =  res.data.ret.data.to;
+          self.pageper = Number(res.data.ret.data.per_page);
         }).catch((err)=>{
 
         })
@@ -124,12 +149,13 @@
       gotoPrev : function (){
         this.api.axios_ajax(this.prevurl, '', 'GET', false).then((res)=>{
           //console.log("数据：" + JSON.stringify(res.data.ret) );
-          self.qaList = res.data.ret.data;
-          self.currentpage = res.data.ret.current_page;
-          self.prevurl = res.data.ret.prev_page_url;
-          self.nexturl = res.data.ret.next_page_url;
-          self.pageto =  res.data.ret.to;
-          self.pageper = Number(res.data.ret.per_page);
+          self.qaList = res.data.ret.data.data;
+          self.questionSearch = res.data.ret.questionSearch;
+          self.currentpage = res.data.ret.data.current_page;
+          self.prevurl = res.data.ret.data.prev_page_url;
+          self.nexturl = res.data.ret.data.next_page_url;
+          self.pageto =  res.data.ret.data.to;
+          self.pageper = Number(res.data.ret.data.per_page);
         }).catch((err)=>{
 
         })
@@ -162,5 +188,12 @@
 }
 .lastli{
   border: none;
+}
+.searchbtn{
+  background: #03a9f4;
+  color: #fff;
+  width: 20%;
+  text-align: center;
+  line-height: 1.5rem;
 }
 </style>
