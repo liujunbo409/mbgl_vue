@@ -375,6 +375,10 @@ export const doc_getQaDetail= params => {
 export const doc_getillQaList = params => {
   return axios_ajax('api/doctor/qa/illQaList', params, 'GET', false);
 }
+//问答反馈
+export const doc_doQaFeedBack = params => {
+  return axios_ajax('api/doctor/qa/qaFeedback', params, 'POST', false);
+}
 /*
  *
  * 创建Toast
@@ -455,6 +459,7 @@ export default{
   doc_getQalist,
   doc_getQaDetail,
   doc_getillQaList,
+  doc_doQaFeedBack,
 }
 
 

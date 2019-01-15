@@ -295,6 +295,15 @@ let routers = [
       keepAlive: false // false 表示需要使用缓存
     }
   },
+    //主页=> 问答题库反馈 
+    {
+      path: '/MBGL/doctor/qafeedback',
+      name: 'qafeedback',
+      component: resolve => require(['@/views/MBGL/doctor/systemQa/qafeedback'], resolve),
+      meta: {
+        keepAlive: false // false 表示需要使用缓存
+      }
+    },
   // {
   //   path: '/testqn',
   //   name: 'testqn',

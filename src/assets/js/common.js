@@ -130,6 +130,10 @@ export const jumpToQaInfo = params => {
 export const gotoQaDetail = params => {
   params.router.push({path: params.url, query: {question_id : params.question_id,bank_id:params.bank_id}})
 }
+//选择文章之后进行文章反馈
+export const goToQaFeedBack = params => {
+  params.router.push({path: "../doctor/qafeedback", query: {question_id : params.question_id}})
+}
 export default{
   //公共方法///////////////////////////////////////////////////////////////
   consoledebug,
@@ -152,6 +156,7 @@ export default{
   jumpToPageWithArticleid,
   jumpToQaInfo,
   gotoQaDetail,
+  goToQaFeedBack,
 };
 
 

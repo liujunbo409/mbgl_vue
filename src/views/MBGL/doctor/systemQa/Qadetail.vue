@@ -45,6 +45,10 @@
               {{source.source_text}}
           </li>
         </ul>
+        <!-- 问答反馈 -->
+        <div class="illList" style="margin-top:1rem; width:40%;margin-left:1.25rem;margin-bottom:3rem;" @click="gotoFeedBack">
+          <div >问答反馈</div>
+          </div>
   </div>
 </template>
 <script>
@@ -98,6 +102,10 @@
       //浏览关联文章
       gotoArticle : function(articleid, muluid,illid){
         self.common.goToArticleDetail({router: self.$router, articleid : articleid, muluid : muluid, illid : illid});
+      },
+      //文章反馈
+      gotoFeedBack : function(){
+        self.common.goToQaFeedBack({router: self.$router, question_id : self.question_id});
       },
       clickBack : function () {
         self.common.clickBack();
