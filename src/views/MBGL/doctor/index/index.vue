@@ -62,6 +62,11 @@
 
           <div class="aui-grid-label aui-font-size-12">全部问答题库</div>
         </div>
+        <div class="aui-col-xs-4" @click="selTab(8)">
+          <i class="aui-iconfont iconfont icon-guanyuwomen1"></i>
+
+          <div class="aui-grid-label aui-font-size-12">我收藏的问答</div>
+        </div>
       </div>
     </section>
     <!-- 我的待审核文章 -->
@@ -294,6 +299,9 @@
               //全部问答题库
           case 7 :
             self.common.jumpToPage({router: self.$router, url : "../doctor/systemQa"});
+            break;
+          case 8 :
+            self.common.jumpToPage({router: self.$router, url : "../doctor/qaCollectList"});
             break;
         }
       },

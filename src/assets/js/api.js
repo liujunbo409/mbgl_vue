@@ -375,6 +375,10 @@ export const doc_getQaDetail= params => {
 export const doc_getillQaList = params => {
   return axios_ajax('api/doctor/qa/illQaList', params, 'GET', false);
 }
+//问答题库收藏列表
+export const doc_getQaCollectList= params => {
+  return axios_ajax('api/doctor/qa/collectList', params, 'GET', false);
+}
 //问答反馈
 export const doc_doQaFeedBack = params => {
   return axios_ajax('api/doctor/qa/qaFeedback', params, 'POST', false);
@@ -470,6 +474,7 @@ export default{
   doc_doQaFeedBack,
   doc_getQaCollectStatus,
   doc_qaCollectChange,
+  doc_getQaCollectList,
 }
 
 

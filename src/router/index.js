@@ -304,6 +304,15 @@ let routers = [
         keepAlive: false // false 表示需要使用缓存
       }
     },
+     //主页=> 问答题库收藏列表
+  {
+    path: '/MBGL/doctor/qaCollectList',
+    name: 'qaCollectList',
+    component: resolve => require(['@/views/MBGL/doctor/systemQa/qaCollectList'], resolve),
+    meta: {
+      keepAlive: false // false 表示需要使用缓存
+    }
+  },
   // {
   //   path: '/testqn',
   //   name: 'testqn',
