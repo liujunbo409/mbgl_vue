@@ -379,6 +379,14 @@ export const doc_getillQaList = params => {
 export const doc_doQaFeedBack = params => {
   return axios_ajax('api/doctor/qa/qaFeedback', params, 'POST', false);
 }
+//获取收藏问答状态
+export const doc_getQaCollectStatus = params => {
+  return axios_ajax('api/doctor/qa/collect', params, 'GET', false);
+}
+//修改收藏文章状态
+export const doc_qaCollectChange = params => {
+  return axios_ajax('api/doctor/qa/collectPost', params, 'POST', false);
+}
 /*
  *
  * 创建Toast
@@ -460,6 +468,8 @@ export default{
   doc_getQaDetail,
   doc_getillQaList,
   doc_doQaFeedBack,
+  doc_getQaCollectStatus,
+  doc_qaCollectChange,
 }
 
 

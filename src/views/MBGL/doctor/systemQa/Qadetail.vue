@@ -16,7 +16,7 @@
     <div class="aui-text-center aui-margin-t-10 aui-text-default" style="float:left;width:100%;">
         <span class="" style="font-size:0.55rem;color:#B3B3B3;margin-left:0.5rem">
           {{detailinfo.oper_name}}&nbsp;&nbsp;{{detailinfo.created_at}}
-          浏览数：{{count.show_num}}
+          浏览数：{{count.doctor_show_num}}
         </span>
     </div>
      <div  style="float:left;margin-left:1rem;width:100%">所属分类：</div><br>
@@ -49,6 +49,13 @@
         <div class="illList" style="margin-top:1rem; width:40%;margin-left:1.25rem;margin-bottom:3rem;" @click="gotoFeedBack">
           <div >问答反馈</div>
           </div>
+          <div class="aui-bar aui-bar-tab aui-bg-info" id="footer" style="margin-top:2rem">
+        <div class="aui-bar-tab-item aui-active" tapmode @click="changeCollectStatus">
+            <div class="aui-bar-tab-label aui-text-white aui-border-r cy-btn">
+                    {{footer}}
+            </div>
+        </div>
+    </div>
   </div>
 </template>
 <script>
@@ -98,6 +105,18 @@
         }).catch((err)=>{
 
         })
+         //获取问答收藏状态
+        self.api.doc_getQaCollectStatus({qa_id : question_id, user_id : localStorage.getItem("doc_id")}).then((res)=>{
+          if(res.data.ret == "true"){
+            self.collecttext = "已收藏";
+            self.footer = "取消收藏";
+          }else{
+            self.collecttext = "未收藏";
+            self.footer = "收藏问答";
+          }
+        }).catch((err)=>{
+
+        })
       },
       //浏览关联文章
       gotoArticle : function(articleid, muluid,illid){
@@ -106,6 +125,27 @@
       //文章反馈
       gotoFeedBack : function(){
         self.common.goToQaFeedBack({router: self.$router, question_id : self.question_id});
+      },
+      //切换收藏状态
+      changeCollectStatus : function(){
+        let params = {
+          user_id : localStorage.getItem("doc_id"),
+          qa_id  : self.question_id,
+          token : localStorage.getItem("token"),
+        }
+        self.api.doc_qaCollectChange(params).then((res)=>{
+          self.init(self.question_id);
+        }).catch((err)=>{
+
+        })
+        if(self.collecttext == "未收藏"){
+          self.$message({
+          message: '收藏成功',
+          type: 'success'
+        });
+        }else{
+          this.$message('已取消收藏');
+        }
       },
       clickBack : function () {
         self.common.clickBack();

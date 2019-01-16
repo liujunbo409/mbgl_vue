@@ -34,7 +34,7 @@
           <div>
             {{item.qa.question}}
             <div>
-            <span style="margin-left:1rem;font-size:0.55rem;color:#B3B3B3">浏览 :{{item.show_num}}</span>
+            <span style="margin-left:1rem;font-size:0.55rem;color:#B3B3B3">浏览 :{{item.doctor_show_num}}</span>
         </div>
           </div>
           <span class="aui-iconfont aui-icon-right" style="color: #B3B3B3"></span>
