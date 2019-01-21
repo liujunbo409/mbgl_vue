@@ -122,7 +122,18 @@ export const goToArticleFeedBackWithCollected = params => {
 export const jumpToPageWithArticleid = params => {
   params.router.push({path: params.url, query: {articleid : params.articleid, type: params.type, shenheid : params.shenheid}})
 }
-
+//跳转到问答题库审核详情，参数为question_id,shenhe_id,来源from
+export const jumpToQaInfo = params => {
+  params.router.push({path: params.url, query: {question_id : params.question_id, shenhe_id: params.shenhe_id, from : params.from}})
+}
+//跳转到问答题库详情
+export const gotoQaDetail = params => {
+  params.router.push({path: params.url, query: {question_id : params.question_id,bank_id:params.bank_id}})
+}
+//选择文章之后进行文章反馈
+export const goToQaFeedBack = params => {
+  params.router.push({path: "../doctor/qafeedback", query: {question_id : params.question_id}})
+}
 export default{
   //公共方法///////////////////////////////////////////////////////////////
   consoledebug,
@@ -143,6 +154,9 @@ export default{
   goToArticleFeedBack,
   goToArticleFeedBackWithCollected,
   jumpToPageWithArticleid,
+  jumpToQaInfo,
+  gotoQaDetail,
+  goToQaFeedBack,
 };
 
 

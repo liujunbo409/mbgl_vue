@@ -52,6 +52,21 @@
 
           <div class="aui-grid-label aui-font-size-12">收藏文章</div>
         </div>
+        <div class="aui-col-xs-4" @click="selTab(6)">
+          <i class="aui-iconfont iconfont icon-dkw_shenhetongguo"></i>
+
+          <div class="aui-grid-label aui-font-size-12">审核问答题库</div>
+        </div>
+         <div class="aui-col-xs-4" @click="selTab(7)">
+          <i class="aui-iconfont iconfont icon-guanyuwomen1"></i>
+
+          <div class="aui-grid-label aui-font-size-12">全部问答题库</div>
+        </div>
+        <div class="aui-col-xs-4" @click="selTab(8)">
+          <i class="aui-iconfont iconfont icon-guanyuwomen1"></i>
+
+          <div class="aui-grid-label aui-font-size-12">我收藏的问答</div>
+        </div>
       </div>
     </section>
     <!-- 我的待审核文章 -->
@@ -136,6 +151,7 @@
       //var gotype = localStorage.getItem("type");
       let doc_id = localStorage.getItem("doc_id");
       //doc_id = '35';//测试用
+      //doc_id = '32';//测试用
       if(doc_id == '' || doc_id == null){
             self.common.jumpToPage({router: self.$router, url : "../doctor/login"});
       }else{
@@ -276,6 +292,17 @@
           //收藏文章
           case 5 :
             self.common.jumpToPage({router: self.$router, url : "../doctor/collectarticle"});
+            break;
+            //审核问答题库
+          case 6 :
+            self.common.jumpToPage({router: self.$router, url : "../doctor/assessQa"});
+            break;
+              //全部问答题库
+          case 7 :
+            self.common.jumpToPage({router: self.$router, url : "../doctor/systemQa"});
+            break;
+          case 8 :
+            self.common.jumpToPage({router: self.$router, url : "../doctor/qaCollectList"});
             break;
         }
       },

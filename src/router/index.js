@@ -258,6 +258,61 @@ let routers = [
         keepAlive: false // false 表示需要使用缓存
       }
     },
+     //主页=> 审核问答题库
+     {
+      path: '/MBGL/doctor/assessQa',
+      name: 'assessQa',
+      component: resolve => require(['@/views/MBGL/doctor/assessQa/index'], resolve),
+      meta: {
+        keepAlive: false // false 表示需要使用缓存
+      }
+    },
+    //主页=> 审核问答题库详情
+    {
+      path: '/MBGL/doctor/assessQa/detail',
+      name: 'assessQaDetail',
+      component: resolve => require(['@/views/MBGL/doctor/assessQa/detail'], resolve),
+      meta: {
+        keepAlive: false // false 表示需要使用缓存
+      }
+    },
+    //主页=> 全部问答题库
+  {
+    path: '/MBGL/doctor/systemQa',
+    name: 'systemQa',
+    component: resolve => require(['@/views/MBGL/doctor/systemQa/catalogselect'], resolve),
+    meta: {
+      keepAlive: false // false 表示需要使用缓存
+    }
+    
+  },
+  //主页=> 全部问答题库 =>问答题库详情
+  {
+    path: '/MBGL/doctor/Qadetail',
+    name: 'Qadetail',
+    component: resolve => require(['@/views/MBGL/doctor/systemQa/Qadetail'], resolve),
+    meta: {
+      keepAlive: false // false 表示需要使用缓存
+    }
+  },
+    //主页=> 问答题库反馈 
+    {
+      path: '/MBGL/doctor/qafeedback',
+      name: 'qafeedback',
+      component: resolve => require(['@/views/MBGL/doctor/systemQa/qafeedback'], resolve),
+      meta: {
+        keepAlive: false // false 表示需要使用缓存
+      }
+    },
+     //主页=> 问答题库收藏列表
+  {
+    path: '/MBGL/doctor/qaCollectList',
+    name: 'qaCollectList',
+    component: resolve => require(['@/views/MBGL/doctor/systemQa/qaCollectList'], resolve),
+    meta: {
+      keepAlive: false // false 表示需要使用缓存
+    }
+  },
   // {
   //   path: '/testqn',
   //   name: 'testqn',

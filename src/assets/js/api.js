@@ -239,7 +239,7 @@ export const doc_getIlllist = params => {
   return axios_ajax('api/common/baseIllList', params, 'GET', false);
 }
 
-//获取目录列表
+//获取文章目录列表
 export const doc_getCataloglist = params => {
   return axios_ajax('api/doctor/article/mulu', params, 'GET', false);
 }
@@ -343,7 +343,54 @@ export const doc_userAccess = params => {
 export const doc_userInform = params => {
   return axios_ajax('api/doctor/my/inform', params, 'GET', false);
 }
-
+//待审核问答题库列表
+export const doc_getQaWaitList = params => {
+  return axios_ajax('api/doctor/qa/shenhe/waitList', params, 'GET', false);
+}
+//已审核问答题库列表
+export const doc_getQaAlreadyList = params => {
+  return axios_ajax('api/doctor/qa/shenhe/alreadyList', params, 'GET', false);
+}
+//审核问答题库详情
+export const doc_getQaInfo= params => {
+  return axios_ajax('api/doctor/qa/shenhe/info', params, 'GET', false);
+}
+//审核问答题库
+export const doc_QaShenhe= params => {
+  return axios_ajax('api/doctor/qa/shenhe/shenhe', params, 'POST', false);
+}
+//获取问答题库分类列表
+export const doc_getBankMululist = params => {
+  return axios_ajax('api/doctor/qa/bankList', params, 'GET', false);
+}
+//获取问答题库分类下问答列表
+export const doc_getQalist = params => {
+  return axios_ajax('api/doctor/qa/qaList', params, 'GET', false);
+}
+//审核问答题库详情
+export const doc_getQaDetail= params => {
+  return axios_ajax('api/doctor/qa/info', params, 'GET', false);
+}
+//获取疾病下问答列表
+export const doc_getillQaList = params => {
+  return axios_ajax('api/doctor/qa/illQaList', params, 'GET', false);
+}
+//问答题库收藏列表
+export const doc_getQaCollectList= params => {
+  return axios_ajax('api/doctor/qa/collectList', params, 'GET', false);
+}
+//问答反馈
+export const doc_doQaFeedBack = params => {
+  return axios_ajax('api/doctor/qa/qaFeedback', params, 'POST', false);
+}
+//获取收藏问答状态
+export const doc_getQaCollectStatus = params => {
+  return axios_ajax('api/doctor/qa/collect', params, 'GET', false);
+}
+//修改收藏文章状态
+export const doc_qaCollectChange = params => {
+  return axios_ajax('api/doctor/qa/collectPost', params, 'POST', false);
+}
 /*
  *
  * 创建Toast
@@ -416,6 +463,18 @@ export default{
   doc_userFeedBack,
   doc_userAccess,
   doc_userInform,
+  doc_getQaWaitList,
+  doc_getQaAlreadyList,
+  doc_getQaInfo,
+  doc_QaShenhe,
+  doc_getBankMululist,
+  doc_getQalist,
+  doc_getQaDetail,
+  doc_getillQaList,
+  doc_doQaFeedBack,
+  doc_getQaCollectStatus,
+  doc_qaCollectChange,
+  doc_getQaCollectList,
 }
 
 
