@@ -195,13 +195,15 @@
             message:'请填写备注',
             closeOnClickModal:false,   //点击model背景层不关闭MessageBox
             showCancelButton:true,   //不显示取消按钮
-            inputPattern: reg,    //正则条件
+            inputPattern: reg,    //正则条件就
             inputErrorMessage:'备注不能为空',
             showInput:true
         }).then(({ value, action }) => {
             /* value 为填写的值，进行下一步操作*/
             let params = {
+              user_id : localStorage.getItem("doc_id"),
               shenhe_id : self.shenheid,
+              article_id : self.articleid,
               status : status,
               token : localStorage.getItem("token"),
               remark : value,

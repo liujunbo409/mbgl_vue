@@ -52,9 +52,9 @@
             <div class="aui-list-item-label" style="width:40%">
               选择教学疾病
             </div>
-            <div class="aui-list-item-input">
-              <div class="aui-text-right" @click="gotoselectill">
-                <input type="text" class="aui-text-right" style="color: #B3B3B3" maxlength="15" v-bind:disabled="true" placeholder="未选择"
+            <div class="aui-list-item-input" @click="gotoselectill">
+              <div class="aui-text-right" >
+                <input type="text" class="aui-text-right" style="color: #B3B3B3" maxlength="15"  placeholder="未选择"
                        v-model="illnames">
               </div>
             </div>
