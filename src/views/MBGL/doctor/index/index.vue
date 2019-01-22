@@ -150,7 +150,8 @@
       // }
       //var gotype = localStorage.getItem("type");
       let doc_id = localStorage.getItem("doc_id");
-      doc_id = '32';//测试用
+      //doc_id = '35';//测试用
+      //doc_id = '32';//测试用
       if(doc_id == '' || doc_id == null){
             self.common.jumpToPage({router: self.$router, url : "../doctor/login"});
       }else{

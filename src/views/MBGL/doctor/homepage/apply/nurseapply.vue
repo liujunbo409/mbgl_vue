@@ -47,19 +47,19 @@
             </div>
           </div>
         </li>
-        <li class="aui-list-item" style="border:none">
+        <!-- <li class="aui-list-item" style="border:none">
           <div class="aui-list-item-inner">
             <div class="aui-list-item-label">
               选择教学疾病
             </div>
             <div class="aui-list-item-input">
               <div class="aui-text-right" @click="gotoselectill">
-                <input type="text" class="aui-text-right" style="color: #B3B3B3" maxlength="15" v-bind:disabled="true" placeholder="未选择"
+                <input type="text" class="aui-text-right" style="color: #B3B3B3" maxlength="15" placeholder="未选择"
                        v-model="illnames">
               </div>
             </div>
           </div>
-        </li>
+        </li> -->
       </ul>
       <ul class="aui-list aui-form-list" style="margin-top:0.5rem">
         <li class="aui-list-item">
@@ -243,24 +243,58 @@
           MessageBox('提示','个人简介应在20字符以上')
           return false;
         }
-        //护士资格认证申请
-        let params = {
-          user_id: localStorage.getItem("doc_id"),
-          token: localStorage.getItem("token"),
-          hospital : self.hospital,
-          title : self.nurse_title,
-          department_id : self.department,
-          ill_ids : self.illids,
-          desc : self.desc,
-          zgzj_img : self.zgrzurl,
-          zyzj_img : self.zyrzurl,
-        }
-        self.api.doc_nurApply(params).then((res)=>{
-          self.common.consoledebug.log("ret :" + JSON.stringify(res));
-          MessageBox('提示','资格申请已提交！');
+        var ill_ids = "";
+        self.api.doc_getDepartmentIllList({department_id : self.department}).then((res)=>{
+          self.common.consoledebug.log("ret :" + JSON.stringify(res.data.ret));
+          self.illinfo = res.data.ret;
+          for(var i in self.illinfo){
+            if(i != self.illinfo.length-1 ){
+              ill_ids += self.illinfo[i].ill_id + "&";
+            }else{
+              ill_ids += self.illinfo[i].ill_id;
+            }
+          }
+          self.illids = ill_ids;
+          //护士资格认证申请
+          let params = {
+            user_id: localStorage.getItem("doc_id"),
+            token: localStorage.getItem("token"),
+            hospital : self.hospital,
+            title : self.nurse_title,
+            department_id : self.department,
+            ill_ids : self.illids,
+            desc : self.desc,
+            zgzj_img : self.zgrzurl,
+            zyzj_img : self.zyrzurl,
+          }
+          self.api.doc_nurApply(params).then((res)=>{
+            self.common.consoledebug.log("ret :" + JSON.stringify(res));
+            MessageBox('提示','资格申请已提交！');
+          }).catch((err)=>{
+
+          })
         }).catch((err)=>{
 
         })
+        // //护士资格认证申请
+        // let params = {
+        //   user_id: localStorage.getItem("doc_id"),
+        //   token: localStorage.getItem("token"),
+        //   hospital : self.hospital,
+        //   title : self.nurse_title,
+        //   department_id : self.department,
+        //   ill_ids : self.illids,
+        //   desc : self.desc,
+        //   zgzj_img : self.zgrzurl,
+        //   zyzj_img : self.zyrzurl,
+        // }
+        // console.log(self.illids);
+        // self.api.doc_nurApply(params).then((res)=>{
+        //   self.common.consoledebug.log("ret :" + JSON.stringify(res));
+        //   MessageBox('提示','资格申请已提交！');
+        // }).catch((err)=>{
+
+        // })
       },
       zgrzChange : function(data){
         //self.common.consoledebug.log("你把资格认证图片url改为：" + data.url);
@@ -314,16 +348,23 @@
         }
       },
       doSubmitill : function(){
+        //获取科室疾病列表
+        self.api.doc_getDepartmentIllList({department_id : departmentid}).then((res)=>{
+          self.common.consoledebug.log("ret :" + JSON.stringify(res.data.ret));
+          self.illinfo = res.data.ret;
+        }).catch((err)=>{
+
+        })
         var ill_ids = "";
         var ill_names = "";
         if(self.illselected != null){
-          for(var i = 0; i < self.illselected.length ; i++){
-            if(i != self.illselected.length-1 ){
-              ill_ids += self.illselected[i].ill_id + "&";
-              ill_names += self.illselected[i].ill.name + ",";
+          for(var i = 0; i < self.illinfo.length ; i++){
+            if(i != self.illinfo.length-1 ){
+              ill_ids += self.illinfo[i].ill_id + "&";
+              ill_names += self.illinfo[i].ill.name + ",";
             }else{
-              ill_ids += self.illselected[i].ill_id;
-              ill_names += self.illselected[i].ill.name;
+              ill_ids += self.illinfo[i].ill_id;
+              ill_names += self.illinfo[i].ill.name;
             }
           }
         }

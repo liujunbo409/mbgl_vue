@@ -29,7 +29,7 @@ var self = null
 		methods: {
       init : function(){
         this.photourl = this.src;
-        if(this.photourl == ""){
+        if(this.photourl == "" || this.photourl == null){
           this.photourl = "http://twst.isart.me/image/camera_1543541569909.png";
       }
       },
