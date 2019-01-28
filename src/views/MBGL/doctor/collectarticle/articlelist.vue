@@ -36,6 +36,7 @@
        <div v-show="articleinfo != ''" class="block" style="text-align:center;background-color:#FFFFFF;padding-top:1rem">
         <el-pagination
           @prev-click = "gotoPrev"
+          @current-change="handleCurrentChange"
           @next-click = "gotoNext"
           :current-page="currentpage"
           :page-size="pageper"
@@ -72,9 +73,32 @@
         nexturl :'',       //下一页的url
         pageto :'',        //最后一页（共有几页）
         pageper :'',       //每页有几条数据
+        path : '',        //分页的url
+        firsturl : '',    //第一页url
       }
     },
     methods :{
+      handleCurrentChange : function(page){
+         console.log(page);
+         console.log(self.firsturl);
+         console.log(self.path);
+        var illanduserid = self.firsturl.split("?");
+        illanduserid = illanduserid[1].split("&");
+        var illid = illanduserid[0];
+        var userid = illanduserid[1];
+        console.log(illanduserid);
+        this.api.axios_ajax(self.path + '?' + illid + '&' + userid + '&page=' + page, '', 'GET', false).then((res)=>{
+          //console.log("数据：" + JSON.stringify(res.data.ret) );
+          self.articleinfo = res.data.ret.data;
+          self.currentpage = res.data.ret.current_page;
+          self.prevurl = res.data.ret.prev_page_url;
+          self.nexturl = res.data.ret.next_page_url;
+          self.pageto =  res.data.ret.to;
+          self.pageper = Number(res.data.ret.per_page);
+        }).catch((err)=>{
+
+        })
+      },
       init : function(){
         self.api.doc_getIlllist().then((res)=>{
         self.illinfo = res.data.ret;
@@ -90,7 +114,9 @@
           self.currentpage = res.data.ret.current_page;
           self.prevurl = res.data.ret.prev_page_url;
           self.nexturl = res.data.ret.next_page_url;
+          self.firsturl = res.data.ret.first_page_url;
           self.pageto = res.data.ret.to;
+          self.path = res.data.ret.path;
           self.pageper = Number(res.data.ret.per_page);
           self.illflg = false;
           self.articleflg = true;

@@ -45,6 +45,7 @@
         <el-pagination
           @prev-click = "gotoPrev"
           @next-click = "gotoNext"
+          @current-change="handleCurrentChange"
           :current-page="currentpage"
           :page-size="pageper"
           layout=" prev, pager, next, total"
@@ -89,9 +90,28 @@
         pageto :'',        //最后一页（共有几页）
         pageper :'',       //每页有几条数据
         questionSearch : '', //查询条件
+        path : '',        //分页的url
+        firsturl : '',    //第一页url
       }
     },
     methods :{
+      handleCurrentChange : function(page){
+        console.log(page);
+        console.log(self.firsturl);
+        console.log(self.path);
+        this.api.axios_ajax(self.path + '?' +'&page=' + page, '', 'GET', false).then((res)=>{
+          //console.log("数据：" + JSON.stringify(res.data.ret) );
+          self.qaList = res.data.ret.data.data;
+          self.questionSearch = res.data.ret.questionSearch;
+          self.currentpage = res.data.ret.data.current_page;
+          self.prevurl = res.data.ret.data.prev_page_url;
+          self.nexturl = res.data.ret.data.next_page_url;
+          self.pageto =  res.data.ret.data.to;
+          self.pageper = Number(res.data.ret.data.per_page);
+        }).catch((err)=>{
+
+        })
+      },
       selectill : function(illid){
         self.illid = illid;
         self.illflg = false;
@@ -130,7 +150,9 @@
           self.currentpage = res.data.ret.data.current_page;
           self.prevurl = res.data.ret.data.prev_page_url;
           self.nexturl = res.data.ret.data.next_page_url;
+          self.firsturl = res.data.ret.data.first_page_url;
           self.pageto = res.data.ret.data.to;
+          self.path = res.data.ret.data.path;
           self.pageper = Number(res.data.ret.data.per_page);
           self.illflg = false;
           self.catalogflg = false;
@@ -148,12 +170,16 @@
           self.currentpage = res.data.ret.data.current_page;
           self.prevurl = res.data.ret.data.prev_page_url;
           self.nexturl = res.data.ret.data.next_page_url;
-          self.pageto = res.data.ret.to;
+          self.firsturl = res.data.ret.data.first_page_url;
+          self.pageto = res.data.ret.data.to;
+          self.path = res.data.ret.data.path;
           self.pageper = Number(res.data.ret.per_page);
           self.illflg = false;
           self.catalogflg = false;
           self.articleflg =true;
           self.questionSearch = res.data.ret.questionSearch;
+          console.log(self.firsturl);
+        console.log(self.path);
         }).catch((err)=>{
 
         })
@@ -178,7 +204,7 @@
         })
          }
         else{//不按照分类查询
-                  self.getillQaList();
+            self.getillQaList();
         }
       },
       gotoQainfo : function(id){

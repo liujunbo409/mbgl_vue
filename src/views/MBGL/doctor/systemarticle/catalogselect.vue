@@ -38,6 +38,7 @@
         <el-pagination
           @prev-click = "gotoPrev"
           @next-click = "gotoNext"
+          @current-change="handleCurrentChange"
           :current-page="currentpage"
           :page-size="pageper"
           layout=" prev, pager, next, total"
@@ -69,6 +70,7 @@
     data(){
       return {
         illid : '',                              //选择的疾病目录id
+        muluid : '',
         illinfo: null,
         articleinfo : null,
         illflg : true,
@@ -80,9 +82,31 @@
         nexturl :'',       //下一页的url
         pageto :'',        //最后一页（共有几页）
         pageper :'',       //每页有几条数据
+        path : '',        //分页的url
+        firsturl : '',    //第一页url
       }
     },
     methods :{
+      handleCurrentChange : function(page){
+        console.log(page);
+        console.log(self.firsturl);
+        console.log(self.path);
+        var muluid = self.firsturl.split("?");
+        muluid = muluid[1].split("&");
+        muluid = muluid[0];
+        console.log(muluid);
+        this.api.axios_ajax(self.path + '?' + muluid + '&page=' + page, '', 'GET', false).then((res)=>{
+          //console.log("数据：" + JSON.stringify(res.data.ret) );
+          self.articleinfo = res.data.ret.data;
+          self.currentpage = res.data.ret.current_page;
+          self.prevurl = res.data.ret.prev_page_url;
+          self.nexturl = res.data.ret.next_page_url;
+          self.pageto =  res.data.ret.to;
+          self.pageper = Number(res.data.ret.per_page);
+        }).catch((err)=>{
+
+        })
+      },
       selectill : function(illid){
         self.illid = illid;
         self.illflg = false;
@@ -98,6 +122,8 @@
           self.nexturl = res.data.ret.next_page_url;
           self.pageto = res.data.ret.to;
           self.pageper = Number(res.data.ret.per_page);
+          self.path = res.data.ret.path;
+          self.firsturl = res.data.ret.first_page_url;
           self.illflg = false;
           self.catalogflg = false;
           self.articleflg =true;
