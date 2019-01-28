@@ -49,6 +49,8 @@
         let params = {
           user_id : localStorage.getItem("doc_id"),
           token : localStorage.getItem("token"),
+          content : self.content,
+          mokuai : 'user_feedback'
         }
         self.api.doc_userFeedBack(params).then((res)=>{
           MessageBox('提交成功！','非常感谢您的反馈！');
