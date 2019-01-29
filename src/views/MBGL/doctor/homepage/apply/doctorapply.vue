@@ -232,12 +232,12 @@
           MessageBox('提示','请填写简介')
           return false;
         }
-        if(self.zgrzurl == "")
+        if(self.zgrzurl == "" || self.zgrzurl == null)
         {
           MessageBox('提示','请上传资格认证图片')
           return false;
         }
-        if(self.zyrzurl == "")
+        if(self.zyrzurl == "" || self.zyrzurl == null)
         {
           MessageBox('提示','请上传执业证书图片')
           return false;

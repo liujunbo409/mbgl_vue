@@ -80,7 +80,7 @@
     },
     mounted(){
       var role = null;
-      var doc_id = localStorage.getItem("doc_id")
+      var doc_id = localStorage.getItem("doc_id");
       //获得医生的信息
       self.api.doc_getByIdWithToken({user_id : doc_id, level : 4}).then((res)=>{
           role = JSON.stringify(res.data.ret.role_str);

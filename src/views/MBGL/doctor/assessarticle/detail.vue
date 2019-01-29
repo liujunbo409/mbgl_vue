@@ -211,6 +211,8 @@
             //进行文章的审核
             self.api.doc_shenheArticle(params).then((res)=>{
               self.common.consoledebug.log("ret :"  + JSON.stringify(res.data.ret));
+              MessageBox('提示', '操作成功！')
+              self.clickBack();
             }).catch((err)=>{
 
             })

@@ -112,11 +112,8 @@
           <div >文章反馈</div>
           </div>
     <div v-if="acceptflg">
-      <div class="illList" style="margin-top:1rem; width:40%;margin-left:1.25rem" @click="changeAcceptStatus">
-          <div >专业认可</div>
-          </div>
-          <div class="illList" style="margin-top:1rem; width:40%;margin-left:1.25rem" >
-          <div >取消认可</div>
+      <div class="illList" style="margin-top:1rem; width:40%;margin-left:1.25rem;margin-bottom:3rem;border-color:#03a9f4;color:#03a9f4" @click="changeAcceptStatus">
+          <div >{{acceptbtntext}}</div>
           </div>
     </div>
     <div v-if="nexusflg" v-for="item of nexusinfo">
@@ -136,8 +133,6 @@
   export default {
     created() {
       self = this;    //使用self来代替this，避免this无效
-    },
-    mounted(){
       var articleid = self.$route.query.articleid;
       var muluid = self.$route.query.muluid;
       var illid = self.$route.query.illid;
@@ -145,6 +140,9 @@
       self.illid = illid;
       //初始化
       self.init(articleid, muluid);
+    },
+    mounted(){
+      
     },
     data(){
       return {
@@ -158,6 +156,7 @@
         sourceflg : false,         //文章来源是否显示
         collecttext : '',         //收藏处显示的文字
         accepttext : '',          //认可处显示的文字
+        acceptbtntext : '',       //认可按钮显示的文字
         acceptflg : false,
         footer : "",
       }
@@ -214,7 +213,8 @@
         })
         //获取文章是否有认可资格
         self.api.doc_getAcceptTitle({article_id : articleid, user_id : localStorage.getItem("doc_id"), role : localStorage.getItem("role"), ill_id : self.illid}).then((res)=>{
-          self.common.consoledebug.log("是否有认可资格 :"  + JSON.stringify(res.data.message));
+          self.common.consoledebug.log("是否有认可资格 :"  + JSON.stringify(res));
+                
           if(res.data.result == true)
           {
             self.acceptflg = true;
@@ -222,8 +222,10 @@
               self.common.consoledebug.log("认可状态 :"  + JSON.stringify(res.data.ret));
               if(res.data.ret == "true"){
                 self.accepttext = "已认可";
+                self.acceptbtntext = "取消认可";
               }else{
                 self.accepttext = "未认可";
+                self.acceptbtntext = "专业认可";
               }
               }).catch((err)=>{
 
@@ -269,6 +271,10 @@
         }
         self.api.doc_doAcceptChange(params).then((res)=>{
           //self.common.consoledebug.log("res :"  + JSON.stringify(res.data.ret));
+          self.$message({
+          message: '操作成功',
+          type: 'success'
+        });
           self.init(self.articleid, self.muluid);
         }).catch((err)=>{
 

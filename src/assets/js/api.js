@@ -391,6 +391,10 @@ export const doc_getQaCollectStatus = params => {
 export const doc_qaCollectChange = params => {
   return axios_ajax('api/doctor/qa/collectPost', params, 'POST', false);
 }
+//判断用户是否被停用
+export const doc_getUserStatus = params => {
+  return axios_ajax('api/doctor/my/userStatus', params, 'GET', false);
+}
 /*
  *
  * 创建Toast
@@ -475,6 +479,7 @@ export default{
   doc_getQaCollectStatus,
   doc_qaCollectChange,
   doc_getQaCollectList,
+  doc_getUserStatus,
 }
 
 

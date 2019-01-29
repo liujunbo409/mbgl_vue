@@ -55,6 +55,7 @@ new Vue({
   components: {App},
   template: '<App/>'
 })
+import {MessageBox} from 'mint-ui'
 //路由拦截
 router.beforeEach((to, from, next) => {
   //let docid = localStorage.getItem("doc_id");
@@ -82,18 +83,42 @@ router.beforeEach((to, from, next) => {
 
   //   })
   // }
+  //是否被停用
+  api.doc_getUserStatus({user_id : localStorage.getItem("doc_id")}).then((res)=>{
+    if(res.data.result == false){
+      MessageBox('提示', '您已被停用！请联系管理员！');
+      router.push({name: 'login'});
+    }
+  }).catch((err)=>{
+
+  })
   //是否被驳回
   api.doc_userInform({user_id : localStorage.getItem("doc_id"), role : localStorage.getItem("role")}).then((res)=>{
     if(res.data.result == true){
-      alert(JSON.stringify(res.data.ret));
+      MessageBox('提示', '请完成医生审核！');
       router.push({name: 'doctorapply'});
     }else{
-      if(to.name != 'homepage' || to.name !='myrole')
+      if(to.name != 'homepage' && to.name !='myrole' && to.name != 'myinfo' && to.name != 'management' && to.name != 'revisephonenum' && to.name != 'revisepassword'
+      && to.name !='userfeedback' && to.name !='index' && to.name !='selectrole' && to.name !='doctorapply'  && to.name !='nurseapply'
+      )
       {
+        // var role = localStorage.getItem("role");
+        // if(role == 'doctor' && to.name == 'nurseapply'){
+        //   MessageBox('提示', '您现在没有进入该模块的权限，将前往首页');
+        //   router.push({name: 'index'});
+        // }else if (role == 'nurse' && to.name == 'doctorapply'){
+        //   MessageBox('提示', '您现在没有进入该模块的权限，将前往首页');
+        //   router.push({name: 'index'});
+        // }
       //是否有查看权限
       api.doc_userAccess({user_id : localStorage.getItem("doc_id"), role : localStorage.getItem("role")}).then((res)=>{
         if(res.data.result == false){
-          alert('您现在没有进入该模块的权限，将前往首页');
+          //alert('您现在没有进入该模块的权限，将前往首页');
+          MessageBox('提示', '您现在没有进入该模块的权限，将前往首页');
+          // this.$message({
+          //   message: '您现在没有进入该模块的权限，将前往首页',
+          //   type: 'warning'
+          // });
           router.push({name: 'index'});
         }
       }).catch((err)=>{})
