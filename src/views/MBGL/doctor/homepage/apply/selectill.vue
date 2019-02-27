@@ -25,7 +25,7 @@
             内科疾病 （点击添加）
         </div>
       </li>
-      <li class="aui-list-item" style="border:none;height:20rem">
+      <li class="aui-list-item" style="border:none;height:15rem">
         <div class="aui-list-item-inner">
           <div class="illList" v-bind:id="item.id" v-bind:value="item.id" v-for="(item,key) of illinfo" @click="selectill(item, item.id)">
           <div >{{item.ill.name}}</div>

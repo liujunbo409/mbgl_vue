@@ -54,8 +54,9 @@
             </div>
             <div class="aui-list-item-input" @click="gotoselectill">
               <div class="aui-text-right" >
-                <input type="text" class="aui-text-right" style="color: #B3B3B3" maxlength="15"  placeholder="未选择"
-                       v-model="illnames">
+                <!-- <input type="text" class="aui-text-right" style="color: #B3B3B3" maxlength="15"  placeholder="未选择"
+                       v-model="illnames"> -->
+                       <div class="aui-text-right" style="color: #B3B3B3" >{{illnames}}</div>
               </div>
             </div>
           </div>
