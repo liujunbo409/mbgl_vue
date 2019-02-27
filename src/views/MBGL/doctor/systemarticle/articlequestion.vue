@@ -54,7 +54,7 @@
              }
           }
           self.questioninfo = res.data.ret
-          console.log("answersinfo : " + JSON.stringify(self.answersinfo));
+          //console.log("answersinfo : " + JSON.stringify(self.answersinfo));
         }).catch((err)=>{
 
         })

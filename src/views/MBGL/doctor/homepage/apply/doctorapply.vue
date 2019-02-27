@@ -17,7 +17,7 @@
               医院
             </div>
             <div class="aui-list-item-input">
-              <select v-model="hospital" @change="getDepartmentList">
+              <select v-model="hospital" @change="getDepartmentList" class="select">
                 <option  v-bind:key="key" v-bind:value="item.id" v-for="(item,key) of hospitalinfo" >{{item.hospital_name}}</option>
                 <!-- <option value="0" >{{hospitalinput}}</option> -->
               </select>
@@ -30,7 +30,7 @@
               科室
             </div>
             <div class="aui-list-item-input">
-              <select v-model="department">
+              <select v-model="department" class="select">
                 <option  v-bind:key="key" v-bind:value="item.id" v-for="(item,key) of departmentinfo" >{{item.name}}</option>
                 <!-- <option value="0" >{{hospitalinput}}</option> -->
               </select>
@@ -43,7 +43,7 @@
               职称
             </div>
             <div class="aui-list-item-input">
-              <utilselect  :selectvalue="doctor_title" :utilparam="doctor_titleutil" :id="doctor_titleutil" @changeSelect="titleChange"></utilselect>
+              <utilselect :selectvalue="doctor_title" :utilparam="doctor_titleutil" :id="doctor_titleutil" @changeSelect="titleChange"></utilselect>
             </div>
           </div>
         </li>
@@ -52,7 +52,7 @@
             <div class="aui-list-item-label" style="width:40%">
               选择教学疾病
             </div>
-            <div class="aui-list-item-input" @click="gotoselectill">
+            <div class="aui-list-item-input" @click="gotoselectill" style="width: 200px;">
               <div class="aui-text-right" >
                 <input type="text" class="aui-text-right" style="color: #B3B3B3" maxlength="15"  placeholder="未选择"
                        v-model="illnames">
@@ -188,14 +188,15 @@
         })
         //获取用户信息
         self.api.doc_docapplyIndex({user_id : localStorage.getItem("doc_id")}).then((res)=>{
-          self.common.consoledebug.log("ret :" + JSON.stringify(res.data.ret));
+          //self.common.consoledebug.log("ret :" + JSON.stringify(res.data.ret));
           //信息赋值
           self.info = res.data.ret;
           self.hospital = self.info.hospital_cache;
           self.hospitalname = self.info.hospital_name;
-          self.doctor_title = self.info.title;
+          self.doctor_title = self.info.title_cache;
           self.departmentname = self.info.department_name;
           self.department = self.info.department_id_cache;
+          ///self.olddepartment = self.info.department_id_cache;
           self.desc = self.info.desc_cache;
           self.zgrzurl = self.info.zgzj_img;
           self.zyrzurl = self.info.zyzj_img;
@@ -244,7 +245,7 @@
         }
         if(self.desc.length < 20 )
         {
-          MessageBox('提示','个人简介应在20字符以上')
+          MessageBox('提示','个人简介应在20字以上')
           return false;
         }
         //医生资格认证申请
@@ -259,16 +260,17 @@
           zgzj_img : self.zgrzurl,
           zyzj_img : self.zyrzurl,
         }
-        self.common.consoledebug.log("资格申请时的url :" + JSON.stringify(self.zgrzurl));
+        //self.common.consoledebug.log("资格申请时的url :" + JSON.stringify(self.zgrzurl));
         self.api.doc_docApply(params).then((res)=>{
-          self.common.consoledebug.log("ret :" + JSON.stringify(res));
+          //self.common.consoledebug.log("ret :" + JSON.stringify(res));
           MessageBox('提示','资格申请已提交！');
+          self.common.jumpToPage({router: self.$router, url : "../index"});
         }).catch((err)=>{
 
         })
       },
       zgrzChange : function(data){
-        self.common.consoledebug.log("你把资格认证图片url改为：" + data.url);
+        //self.common.consoledebug.log("你把资格认证图片url改为：" + data.url);
         self.zgrzurl = data.url;
       },
       zyrzChange : function(data){
@@ -283,7 +285,7 @@
         self.illselected = [];
         //获取科室疾病列表
         self.api.doc_getDepartmentIllList({department_id : departmentid}).then((res)=>{
-          self.common.consoledebug.log("ret :" + JSON.stringify(res.data.ret));
+          //self.common.consoledebug.log("ret :" + JSON.stringify(res.data.ret));
           self.illinfo = res.data.ret;
         }).catch((err)=>{
 
@@ -347,7 +349,7 @@
       goBackToApplyIndex : function(){
         self.selectillflg = false;
         self.indexflg = true;
-        self.init();
+        //self.init();
       },
       clickBack : function () {
         self.common.clickBack();
@@ -356,7 +358,7 @@
   }
 
 </script>
-<style>
+<style scoped>
 .illList{
   text-align: center;
   width:80px;
@@ -391,5 +393,9 @@
   box-shadow: none;
   margin-left: auto;
   margin-right: auto;
+}
+.select{
+  width: 250px;
+  direction: rtl;
 }
 </style>

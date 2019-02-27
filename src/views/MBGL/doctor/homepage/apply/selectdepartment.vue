@@ -61,13 +61,13 @@
         var hospitalid = self.$route.query.hospital;
         //获取科室列表
         self.api.doc_getDepartmentList({hospital_id : hospitalid}).then((res)=>{
-          self.common.consoledebug.log(JSON.stringify(res.data.ret));
+          //self.common.consoledebug.log(JSON.stringify(res.data.ret));
           self.departmentinfo = res.data.ret;
         }).catch((err)=>{
         })
       },
       selectdepartment : function(data){
-        self.common.consoledebug.log(data)
+        //self.common.consoledebug.log(data)
         self.common.goToApplyindex({router: self.$router, departmentid : data.id, departmentname : data.name});
       },
       customDepartment : function(){

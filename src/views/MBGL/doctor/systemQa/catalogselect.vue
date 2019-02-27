@@ -96,9 +96,9 @@
     },
     methods :{
       handleCurrentChange : function(page){
-        console.log(page);
-        console.log(self.firsturl);
-        console.log(self.path);
+        //console.log(page);
+        //console.log(self.firsturl);
+        //console.log(self.path);
         this.api.axios_ajax(self.path + '?' +'&page=' + page, '', 'GET', false).then((res)=>{
           //console.log("数据：" + JSON.stringify(res.data.ret) );
           self.qaList = res.data.ret.data.data;
@@ -178,8 +178,8 @@
           self.catalogflg = false;
           self.articleflg =true;
           self.questionSearch = res.data.ret.questionSearch;
-          console.log(self.firsturl);
-        console.log(self.path);
+          //console.log(self.firsturl);
+       // console.log(self.path);
         }).catch((err)=>{
 
         })

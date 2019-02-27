@@ -313,54 +313,6 @@ let routers = [
       keepAlive: false // false 表示需要使用缓存
     }
   },
-  // {
-  //   path: '/testqn',
-  //   name: 'testqn',
-  //   component: resolve => require(['@/views/testqn'], resolve),
-  //   meta: {
-  //     keepAlive: false // false 表示需要使用缓存
-  //   }
-  // },
-  // {
-  //   path: '/testtree',
-  //   name: 'testtree',
-  //   component: resolve => require(['@/components/page/catalogtree'], resolve),
-  //   meta: {
-  //     keepAlive: false // false 表示需要使用缓存
-  //   }
-  // },
-  // {
-  //   path: '/testpagination',
-  //   name: 'testpagination',
-  //   component: resolve => require(['@/components/page/pagination'], resolve),
-  //   meta: {
-  //     keepAlive: false // false 表示需要使用缓存
-  //   }
-  // },
-  // {
-  //   path: '/testdate',
-  //   name: 'testdate',
-  //   component: resolve => require(['@/components/page/datepicker'], resolve),
-  //   meta: {
-  //     keepAlive: false // false 表示需要使用缓存
-  //   }
-  // },
-  // {
-  //   path: '/testbtn',
-  //   name: 'testbtn',
-  //   component: resolve => require(['@/views/testbtn'], resolve),
-  //   meta: {
-  //     keepAlive: false // false 表示需要使用缓存
-  //   }
-  // },
-  // {
-  //   path: '/testtimepicker',
-  //   name: 'testtimepicker',
-  //   component: resolve => require(['@/views/testtimepicker'], resolve),
-  //   meta: {
-  //     keepAlive: false // false 表示需要使用缓存
-  //   }
-  // },
 ];
 export default new Router({
   mode: 'hash',  // 默认hash

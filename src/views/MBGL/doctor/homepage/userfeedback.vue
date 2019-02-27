@@ -10,7 +10,12 @@
       </a>
     </header>
     <div style="margin-left:0.5rem;margin-top:1.5rem;color:#ddd">
-      反馈内容
+      反馈类型
+    </div>
+    <div style="width:100%;display:flex;margin-left:0.5rem;margin-top:0.5rem;">
+      <div v-for="(item, key) of alltype" style="width:45%">
+        <input class="aui-radio" type="checkbox" v-bind:value="item.id" v-model="selectedtype"><span style="height:24px;line-height:24px;margin-left:4px;">{{item.name}}</span>
+      </div>
     </div>
     <ul class="aui-list aui-form-list" style="margin-top:0.5rem">
         <div class="aui-border-b">
@@ -34,28 +39,63 @@
       self = this;    //使用self来代替this，避免this无效
     },
     mounted(){
+      self.init();
     },
     data(){
       return {
         content : '', //文章反馈内容
+        alltype : [],   //所有类型
+        selectedtype : [], //选择之类型
       }
     },
     methods :{
+      init : function(){
+        //获得类型列表
+        self.api.user_getFeedBackTypes({type : 'global'}).then((res)=>{
+          for(let index in res.data.ret) {  
+            let type = {id : index, name: res.data.ret[index]};
+            self.alltype.push(type);
+          };  
+        }).catch((err)=>{
+
+        })
+      },
+      //提交反馈
       doFeedBack : function(){
+        if(self.selectedtype.length == 0){
+           MessageBox('提示','请选择反馈类型！');
+           return false;
+        }
         if(self.content == ''){
            MessageBox('提示','反馈内容不能为空！');
            return false;
         }
+        var type = "";
+        for(var i=0;i<self.selectedtype.length;i++){
+          if(self.selectedtype.length == 1){
+            type = self.selectedtype[0];
+          }else{
+            if(i == self.selectedtype.length-1 ){
+              type += self.selectedtype[i];
+            }else{
+              type += self.selectedtype[i] + "&";
+            }
+          }
+        }
+        //console.log(JSON.stringify(type));
         let params = {
           user_id : localStorage.getItem("doc_id"),
+          role : localStorage.getItem("role"),
           token : localStorage.getItem("token"),
-          content : self.content,
-          mokuai : 'doctor_feedback'
+          type : type,
+          mokuai_id: '-1',
+          content : self.content
         }
-        self.api.doc_userFeedBack(params).then((res)=>{
+        self.api.common_doFeedBack(params).then((res)=>{
+          //console.log(JSON.stringify(res));
           MessageBox('提交成功！','非常感谢您的反馈！');
-          self.common.jumpToPage({router : self.$router, url : "../homepage"})
         }).catch((err)=>{
+
         })
       },
       clickBack : function () {

@@ -112,11 +112,8 @@
           <div >文章反馈</div>
           </div>
     <div v-if="acceptflg">
-      <div class="illList" style="margin-top:1rem; width:40%;margin-left:1.25rem" @click="changeAcceptStatus">
-          <div >专业认可</div>
-          </div>
-          <div class="illList" style="margin-top:1rem; width:40%;margin-left:1.25rem" >
-          <div >取消认可</div>
+      <div class="illList" style="margin-top:1rem; width:40%;margin-left:1.25rem;margin-bottom:3rem;border-color:#03a9f4;color:#03a9f4" @click="changeAcceptStatus">
+          <div >{{acceptbtntext}}</div>
           </div>
     </div>
     <div v-if="nexusflg" v-for="item of nexusinfo" style="">
@@ -154,6 +151,7 @@
         nexusflg : false,         //文章关联是否显示
         sourceflg : false,         //文章来源是否显示
         collecttext : '',         //收藏处显示的文字
+        acceptbtntext : '',       //认可按钮显示的文字
         accepttext : '',          //认可处显示的文字
         acceptflg : false,
         footer : "",
@@ -164,7 +162,7 @@
       self.articleid = articleid;
         //获取文章关联
         self.api.doc_getArticleNexus({article_id : articleid}).then((res)=>{
-          self.common.consoledebug.log("res :"  + JSON.stringify(res.data.ret));
+          //self.common.consoledebug.log("res :"  + JSON.stringify(res.data.ret));
           self.nexusinfo = res.data.ret;
           if(self.nexusinfo != ""){
             self.nexusflg = true;
@@ -174,7 +172,7 @@
         })
         //获取文章信息详情
         self.api.doc_getArticleDetail({article_id : articleid, ill_id:self.illid,user_id : localStorage.getItem("doc_id")}).then((res)=>{
-          self.common.consoledebug.log("detailres :"  + JSON.stringify(res.data.ret));
+          //self.common.consoledebug.log("detailres :"  + JSON.stringify(res.data.ret));
           self.detailinfo = res.data.ret;
         }).catch((err)=>{
 
@@ -197,7 +195,7 @@
         })
         //获取文章收藏状态
         self.api.doc_getCollectStatus({article_id : articleid, user_id : localStorage.getItem("doc_id")}).then((res)=>{
-          self.common.consoledebug.log("收藏状态 :"  + JSON.stringify(res.data.ret));
+          //self.common.consoledebug.log("收藏状态 :"  + JSON.stringify(res.data.ret));
           if(res.data.ret == "true"){
             self.collecttext = "已收藏";
             self.footer = "取消收藏";
@@ -215,11 +213,13 @@
           {
             self.acceptflg = true;
             self.api.doc_getAcceptStatus({user_id : localStorage.getItem("doc_id"), role : localStorage.getItem("role"),article_id : articleid}).then((res)=>{
-              self.common.consoledebug.log("认可状态 :"  + JSON.stringify(res.data.ret));
+              //self.common.consoledebug.log("认可状态 :"  + JSON.stringify(res.data.ret));
               if(res.data.ret == "true"){
                 self.accepttext = "已认可";
+                self.acceptbtntext = "取消认可";
               }else{
                 self.accepttext = "未认可";
+                self.acceptbtntext = "专业认可";
               }
               }).catch((err)=>{
 
@@ -264,6 +264,10 @@
           token : localStorage.getItem("token"),
         }
         self.api.doc_doAcceptChange(params).then((res)=>{
+          self.$message({
+          message: '操作成功',
+          type: 'success'
+        });
           //self.common.consoledebug.log("res :"  + JSON.stringify(res.data.ret));
           self.init(self.articleid);
         }).catch((err)=>{

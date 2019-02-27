@@ -200,7 +200,7 @@
         })
         //获取文章收藏状态
         self.api.doc_getCollectStatus({article_id : articleid, user_id : localStorage.getItem("doc_id")}).then((res)=>{
-          self.common.consoledebug.log("收藏状态 :"  + JSON.stringify(res.data.ret));
+          //self.common.consoledebug.log("收藏状态 :"  + JSON.stringify(res.data.ret));
           if(res.data.ret == "true"){
             self.collecttext = "已收藏";
             self.footer = "取消收藏";
@@ -213,13 +213,13 @@
         })
         //获取文章是否有认可资格
         self.api.doc_getAcceptTitle({article_id : articleid, user_id : localStorage.getItem("doc_id"), role : localStorage.getItem("role"), ill_id : self.illid}).then((res)=>{
-          self.common.consoledebug.log("是否有认可资格 :"  + JSON.stringify(res));
+          //self.common.consoledebug.log("是否有认可资格 :"  + JSON.stringify(res));
                 
           if(res.data.result == true)
           {
             self.acceptflg = true;
             self.api.doc_getAcceptStatus({user_id : localStorage.getItem("doc_id"), role : localStorage.getItem("role"),article_id : articleid}).then((res)=>{
-              self.common.consoledebug.log("认可状态 :"  + JSON.stringify(res.data.ret));
+              //self.common.consoledebug.log("认可状态 :"  + JSON.stringify(res.data.ret));
               if(res.data.ret == "true"){
                 self.accepttext = "已认可";
                 self.acceptbtntext = "取消认可";

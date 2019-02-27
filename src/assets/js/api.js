@@ -9,9 +9,15 @@ import {consoledebug} from "./common";
 const BUSI_NAME = "mbgl";   //慢病管理
 
 //调试标志符
-const DEBUG_FLAG = true;
-
-let base = DEBUG_FLAG ? 'http://de.lljiankang.top/' : 'http://de.lljiankang.top/'; //基础接口
+const DEBUG_FLAG = localStorage.getItem("DEBUG_FLAG");
+let base = '';
+if( DEBUG_FLAG == 'true'){
+   base = 'http://lljiankang.top/';
+}else{
+   base = 'http://de.lljiankang.top/';
+}
+// const DEBUG_FLAG = true;
+// let base = DEBUG_FLAG ? 'http://de.lljiankang.top/' : 'http://de.lljiankang.top/'; //基础接口
 
 // axios 配置
 axios.defaults.retry = 4
@@ -22,7 +28,7 @@ axios.defaults.baseURL = base
 
 //request拦截器
 axios.interceptors.request.use((config) => {
-  consoledebug.log("axios.interceptors.request config:" + JSON.stringify(config));   //调试用
+  //consoledebug.log("axios.interceptors.request config:" + JSON.stringify(config));   //调试用
   //统一配置user_id和token
   if (config.method == "get") {
 
@@ -68,7 +74,7 @@ axios.interceptors.response.use((res) => {
 function axios_ajax(url, params, method, loadding_flag) {
 
   //请注意，配置param，包括放入user_id和token，应该在request拦截器中实现
-  consoledebug.log("axios_ajax method:" + method + " url:" + url + "  params:" + JSON.stringify(params));
+  //consoledebug.log("axios_ajax method:" + method + " url:" + url + "  params:" + JSON.stringify(params));
   //加载图标
   if (loadding_flag) {
     Indicator.open({
@@ -103,6 +109,16 @@ function axios_ajax(url, params, method, loadding_flag) {
 //数组常量
 export const user_getUtils = params => {
   return axios_ajax('api/common/utils', params, 'GET', false);
+}
+
+//反馈获取反馈类型
+export const user_getFeedBackTypes = params => {
+  return axios_ajax('api/common/feedback', params, 'GET', false);
+}
+
+//反馈获取反馈类型
+export const common_doFeedBack = params => {
+  return axios_ajax('api/common/feedbackPost', params, 'POST', false);
 }
 
 //获取用户角色选择状态（列表形式）
@@ -419,6 +435,8 @@ export default{
   axios_ajax,   //基础axios方法封装
   createToast,   //创建Toast
   user_getUtils,
+  user_getFeedBackTypes,
+  common_doFeedBack,
   getUploadtoken,
   doc_doLogin,
   doc_doRegister,

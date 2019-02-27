@@ -96,7 +96,7 @@
         });
       //获得认证的审核状态
       self.api.doc_getshenheStatus({user_id : doc_id}).then((res)=>{
-          this.common.consoledebug.log(JSON.stringify(res.data.ret));
+          //this.common.consoledebug.log(JSON.stringify(res.data.ret));
           self.docstatus = JSON.stringify(res.data.ret.doctor_status_str).replace(/"/g, "");
           self.nurstatus = JSON.stringify(res.data.ret.nurse_status_str).replace(/"/g, "");
           //初始化认证状态字体的颜色

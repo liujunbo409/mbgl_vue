@@ -99,6 +99,7 @@
   </div>
 </template>
 <script>
+  import {MessageBox} from 'mint-ui'
   var self = null;    //在create方法中初始化为this
   export default {
     data(){
@@ -150,52 +151,179 @@
       // }
       //var gotype = localStorage.getItem("type");
       let doc_id = localStorage.getItem("doc_id");
+      const DEBUG_FLAG = localStorage.getItem("DEBUG_FLAG");
+      let base = '';
+      if( DEBUG_FLAG == 'true'){
+          base = 'http://lljiankang.top/';
+        }else{
+          base = 'http://de.lljiankang.top/';
+        }
       //doc_id = '35';//测试用
       //doc_id = '32';//测试用
       if(doc_id == '' || doc_id == null){
             self.common.jumpToPage({router: self.$router, url : "../doctor/login"});
       }else{
         var gotype = localStorage.getItem("type");
-        //var gotype = 'czjh';//测试用
-        if(gotype != null){
-          switch (gotype){
-            //我的页面
-            case 'grzl' :
-              self.common.jumpToPage({router: self.$router, url : "../doctor/homepage"});
-              break;
-            //医生认证
-            case 'ysrz' :
-              self.common.jumpToPage({router: self.$router, url : "../doctor/homepage/doctorapply"});
-              break;
-            //出诊时间
-            case 'czjh' :
-              self.common.jumpToPage({router: self.$router, url : "../doctor/visitplan"});
-              break;
-            //审核文章
-            case 'shwz' :
-              self.common.jumpToPage({router: self.$router, url : "../doctor/assessarticle"});
-              break;
-            //系统文章
-            case 'qbwz' : 
-              self.common.jumpToPage({router: self.$router, url : "../doctor/systemarticle"});
-              break;
-            //收藏文章
-            case 'scwz' :
-              self.common.jumpToPage({router: self.$router, url : "../doctor/collectarticle"});
-              break;
+        self.api.doc_getUserStatus({user_id : localStorage.getItem("doc_id")}).then((res)=>{
+          if(res.data.result == false){
+            MessageBox('提示', '您已被停用！请联系管理员！');
+            window.location.href = base + "doctor/h5/vue#/MBGL/doctor/login";
           }
-        }
+        }).catch((err)=>{
+
+        })
         self.api.doc_getByIdWithToken({user_id : doc_id}).then((res)=>{
             localStorage.setItem("doctor", JSON.stringify(res.data.ret));
             localStorage.setItem("token", res.data.ret.token);
             localStorage.setItem("doc_id", res.data.ret.id);
             localStorage.setItem("role", res.data.ret.role);
-            self.init();
+            let doctor = JSON.parse(localStorage.getItem("doctor"));
+            if(doctor.ID_number =="" || doctor.xueli =="" || doctor.ID_number ==null || doctor.xueli == null){
+              MessageBox('提示', '您的个人信息尚未完善，请先填写个人信息');
+              //self.common.jumpToPage({router : self.$router, url : "../doctor/homepage/myinfo"});
+              window.location.href = base + "doctor/h5/vue#/MBGL/doctor/homepage/myinfo";
+            }
+            if(gotype != 'grzl' && gotype!= 'ysrz' && gotype!= '' && gotype!= null){
+                self.api.doc_userAccess({user_id : localStorage.getItem("doc_id"), role : localStorage.getItem("role")}).then((res)=>{
+                  if(res.data.result == false){
+                      //alert('您现在没有进入该模块的权限，将前往首页');
+                      MessageBox('提示', '您现在没有进入该模块的权限，将前往首页');
+                      // this.$message({
+                      //   message: '您现在没有进入该模块的权限，将前往首页',
+                      //   type: 'warning'
+                      // });
+                      window.location.href = base + "doctor/h5/vue#/MBGL/doctor/index";
+                    }else{
+                      if(gotype != null){
+                          switch (gotype){
+                            //意见反馈
+                            case 'yjfk' :
+                              //self.common.jumpToPage({router: self.$router, url : "../doctor/homepage"});
+                              window.location.href = base + "doctor/h5/vue#/MBGL/doctor/homepage/userfeedback";
+                              break;
+                            //出诊时间
+                            case 'czjh' :
+                              //self.common.jumpToPage({router: self.$router, url : "../doctor/visitplan"});
+                              window.location.href = base + "doctor/h5/vue#/MBGL/doctor/visitplan";
+                              break;
+                            //审核文章
+                            case 'shwz' :
+                              //self.common.jumpToPage({router: self.$router, url : "../doctor/assessarticle"});
+                              window.location.href = base + "doctor/h5/vue#/MBGL/doctor/assessarticle";
+                              break;
+                            //系统文章
+                            case 'qbwz' : 
+                              //self.common.jumpToPage({router: self.$router, url : "../doctor/systemarticle"});
+                              window.location.href = base + "doctor/h5/vue#/MBGL/doctor/systemarticle";
+                              break;
+                            //收藏文章
+                            case 'scwz' :
+                              //self.common.jumpToPage({router: self.$router, url : "../doctor/collectarticle"});
+                              window.location.href = base + "doctor/h5/vue#/MBGL/doctor/collectarticle";
+                              break;
+                            //认可问答题库
+                            case 'rkwdtk' :
+                              //self.common.jumpToPage({router: self.$router, url : "../doctor/collectarticle"});
+                              window.location.href = base + "doctor/h5/vue#/MBGL/doctor/qaCollectList";
+                              break;
+                            //审核问答题库
+                            case 'shwdtk' :
+                              //self.common.jumpToPage({router: self.$router, url : "../doctor/collectarticle"});
+                              window.location.href = base + "doctor/h5/vue#/MBGL/doctor/assessQa";
+                              break;
+                          }
+                        }
+                    }
+                }).catch((err)=>{
+
+                })
+
+            }else{
+              if(gotype != null){
+                  switch (gotype){
+                    //我的页面
+                    case 'grzl' :
+                      //self.common.jumpToPage({router: self.$router, url : "../doctor/homepage"});
+                      window.location.href = base + "doctor/h5/vue#/MBGL/doctor/homepage";
+                      break;
+                    //医生认证
+                    case 'ysrz' :
+                      //self.common.jumpToPage({router: self.$router, url : "../doctor/homepage/doctorapply"});
+                      window.location.href = base + "doctor/h5/vue#/MBGL/doctor/homepage/doctorapply";
+                      break;
+          }
+        }
+            }
         }).catch((err)=>{
 
         })
+        //var gotype = 'czjh';//测试用
+        // if(gotype != null){
+        //   switch (gotype){
+        //     //我的页面
+        //     case 'grzl' :
+        //       //self.common.jumpToPage({router: self.$router, url : "../doctor/homepage"});
+        //       window.location.href = base + "doctor/h5/vue#/MBGL/doctor/homepage";
+        //       break;
+        //     //意见反馈
+        //     case 'yjfk' :
+        //       //self.common.jumpToPage({router: self.$router, url : "../doctor/homepage"});
+        //       window.location.href = base + "doctor/h5/vue#/MBGL/doctor/homepage/userfeedback";
+        //       break;
+        //     //医生认证
+        //     case 'ysrz' :
+        //       //self.common.jumpToPage({router: self.$router, url : "../doctor/homepage/doctorapply"});
+        //       window.location.href = base + "doctor/h5/vue#/MBGL/doctor/homepage/doctorapply";
+        //       break;
+        //     //出诊时间
+        //     case 'czjh' :
+        //       //self.common.jumpToPage({router: self.$router, url : "../doctor/visitplan"});
+        //       window.location.href = base + "doctor/h5/vue#/MBGL/doctor/visitplan";
+        //       break;
+        //     //审核文章
+        //     case 'shwz' :
+        //       //self.common.jumpToPage({router: self.$router, url : "../doctor/assessarticle"});
+        //       window.location.href = base + "doctor/h5/vue#/MBGL/doctor/assessarticle";
+        //       break;
+        //     //系统文章
+        //     case 'qbwz' : 
+        //       //self.common.jumpToPage({router: self.$router, url : "../doctor/systemarticle"});
+        //       window.location.href = base + "doctor/h5/vue#/MBGL/doctor/systemarticle";
+        //       break;
+        //     //收藏文章
+        //     case 'scwz' :
+        //       //self.common.jumpToPage({router: self.$router, url : "../doctor/collectarticle"});
+        //       window.location.href = base + "doctor/h5/vue#/MBGL/doctor/collectarticle";
+        //       break;
+        //     //认可问答题库
+        //     case 'rkwdtk' :
+        //       //self.common.jumpToPage({router: self.$router, url : "../doctor/collectarticle"});
+        //       window.location.href = base + "doctor/h5/vue#/MBGL/doctor/qaCollectList";
+        //       break;
+        //     //审核问答题库
+        //     case 'shwdtk' :
+        //       //self.common.jumpToPage({router: self.$router, url : "../doctor/collectarticle"});
+        //       window.location.href = base + "doctor/h5/vue#/MBGL/doctor/assessQa";
+        //       break;
+        //   }
+        // }
+        // self.api.doc_getByIdWithToken({user_id : doc_id}).then((res)=>{
+        //     localStorage.setItem("doctor", JSON.stringify(res.data.ret));
+        //     localStorage.setItem("token", res.data.ret.token);
+        //     localStorage.setItem("doc_id", res.data.ret.id);
+        //     localStorage.setItem("role", res.data.ret.role);
+        //     self.init();
+        //     let doctor = JSON.parse(localStorage.getItem("doctor"));
+        //     if(doctor.ID_number =="" || doctor.xueli =="" || doctor.ID_number ==null || doctor.xueli == null){
+        //       MessageBox('提示', '您的个人信息尚未完善，请先填写个人信息');
+        //       //self.common.jumpToPage({router : self.$router, url : "../doctor/homepage/myinfo"});
+        //       window.location.href = "http://lljiankang.top/doctor/h5/vue#/MBGL/doctor/homepage/myinfo";
+        //     }
+        // }).catch((err)=>{
+
+        // })
       }
-      //self.init();
+      self.init();
     },
     methods :{
       init : function () {
@@ -203,7 +331,7 @@
         let doctor = JSON.parse(localStorage.getItem("doctor"));
         //已存在doctor信息，直接将页面信息赋值
           //个人资料上的标志显示
-        if(doctor.real_name =="" || doctor.nick_name =="" )
+        if(doctor.ID_number =="" || doctor.xueli =="" || doctor.ID_number ==null || doctor.xueli == null)
         {
           self.flg1 = false;
           self.flg2 = true;
@@ -268,42 +396,56 @@
         
       },
       selTab : function (index) {
-        switch (index){
-          //我的页面
-          case 0 :
-            self.common.jumpToPage({router: self.$router, url : "../doctor/homepage"});
-            break;
-          //医生认证
-          case 1 :
-            self.common.jumpToPage({router: self.$router, url : "../doctor/homepage/doctorapply"});
-            break;
-          //出诊时间
-          case 2 :
-            self.common.jumpToPage({router: self.$router, url : "../doctor/visitplan"});
-            break;
-          //审核文章
-          case 3 :
-            self.common.jumpToPage({router: self.$router, url : "../doctor/assessarticle"});
-            break;
-          //系统文章
-          case 4 : 
-            self.common.jumpToPage({router: self.$router, url : "../doctor/systemarticle"});
-            break;
-          //收藏文章
-          case 5 :
-            self.common.jumpToPage({router: self.$router, url : "../doctor/collectarticle"});
-            break;
-            //审核问答题库
-          case 6 :
-            self.common.jumpToPage({router: self.$router, url : "../doctor/assessQa"});
-            break;
-              //全部问答题库
-          case 7 :
-            self.common.jumpToPage({router: self.$router, url : "../doctor/systemQa"});
-            break;
-          case 8 :
-            self.common.jumpToPage({router: self.$router, url : "../doctor/qaCollectList"});
-            break;
+        if(index != 0 && index != 1){
+          self.api.doc_userAccess({user_id : localStorage.getItem("doc_id"), role : localStorage.getItem("role")}).then((res)=>{
+            if(res.data.result == false){
+                MessageBox('提示', '您现在没有进入该模块的权限，通过资格审核之后方可进入');
+                return false;
+              }else{
+                switch (index){
+                  //出诊时间
+                  case 2 :
+                    self.common.jumpToPage({router: self.$router, url : "../doctor/visitplan"});
+                    break;
+                  //审核文章
+                  case 3 :
+                    self.common.jumpToPage({router: self.$router, url : "../doctor/assessarticle"});
+                    break;
+                  //系统文章
+                  case 4 : 
+                    self.common.jumpToPage({router: self.$router, url : "../doctor/systemarticle"});
+                    break;
+                  //收藏文章
+                  case 5 :
+                    self.common.jumpToPage({router: self.$router, url : "../doctor/collectarticle"});
+                    break;
+                    //审核问答题库
+                  case 6 :
+                    self.common.jumpToPage({router: self.$router, url : "../doctor/assessQa"});
+                    break;
+                      //全部问答题库
+                  case 7 :
+                    self.common.jumpToPage({router: self.$router, url : "../doctor/systemQa"});
+                    break;
+                  case 8 :
+                    self.common.jumpToPage({router: self.$router, url : "../doctor/qaCollectList"});
+                    break;
+                }
+              }
+          }).catch((err)=>{
+
+          })
+        }else{
+          switch (index){
+            //我的页面
+            case 0 :
+              self.common.jumpToPage({router: self.$router, url : "../doctor/homepage"});
+              break;
+            //医生认证
+            case 1 :
+              self.common.jumpToPage({router: self.$router, url : "../doctor/homepage/doctorapply"});
+              break;
+          }
         }
       },
       //下一页（分页）

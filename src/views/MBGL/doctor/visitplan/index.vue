@@ -253,7 +253,7 @@
             //获取一周出诊信息
             var doc_id = localStorage.getItem("doc_id");
             self.api.doc_getvisitTime({user_id : doc_id}).then((res)=>{
-                self.common.consoledebug.log("res:" + JSON.stringify(res.data.ret));
+                //self.common.consoledebug.log("res:" + JSON.stringify(res.data.ret));
                 for(var i = 0;i < res.data.ret.length;i++){
                     for(var j = 0 ;j < res.data.ret[i].length;j++){
                         if(res.data.ret[i][j] == null){
@@ -352,9 +352,9 @@
                 time_to : self.timeto,
                 address : self.address
             }
-            self.common.consoledebug.log(params);
+            //self.common.consoledebug.log(params);
             self.api.doc_editvisitTime(params).then((res)=>{
-                self.common.consoledebug.log("res" + JSON.stringify(res.data.ret));
+                //self.common.consoledebug.log("res" + JSON.stringify(res.data.ret));
                 MessageBox({
                         message: "保存成功",
                         duration: 2000,
@@ -369,7 +369,7 @@
         doDelete : function(){
             self.api.doc_delvisitTime({id : self.planid,user_id : localStorage.getItem("doc_id"),
                 token : localStorage.getItem("token"),}).then((res)=>{
-                self.common.consoledebug.log("res" + JSON.stringify(res.data.ret));
+                //self.common.consoledebug.log("res" + JSON.stringify(res.data.ret));
                 MessageBox({
                         message: "删除成功",
                         duration: 2000,

@@ -60,8 +60,8 @@
     },
     data(){
       return {
-        title :'文章列表',                  //header文字
-        statustext : '我的收藏',     //右上方显示文字=>  我的收藏or我的认可
+        title :'收藏文章列表',                  //header文字
+        statustext : '我的认可',     //右上方显示文字=>  我的收藏or我的认可
         illid : '',                              //选择的疾病id
         illinfo: null,
         articleinfo : null,
@@ -79,14 +79,14 @@
     },
     methods :{
       handleCurrentChange : function(page){
-         console.log(page);
-         console.log(self.firsturl);
-         console.log(self.path);
+         //console.log(page);
+         //console.log(self.firsturl);
+         //console.log(self.path);
         var illanduserid = self.firsturl.split("?");
         illanduserid = illanduserid[1].split("&");
         var illid = illanduserid[0];
         var userid = illanduserid[1];
-        console.log(illanduserid);
+        //console.log(illanduserid);
         this.api.axios_ajax(self.path + '?' + illid + '&' + userid + '&page=' + page, '', 'GET', false).then((res)=>{
           //console.log("数据：" + JSON.stringify(res.data.ret) );
           self.articleinfo = res.data.ret.data;
@@ -108,7 +108,7 @@
       selectill : function(illid){
         self.illid = illid;
         self.api.doc_getCollectList({user_id: localStorage.getItem("doc_id"), ill_id : illid}).then((res)=>{
-          self.common.consoledebug.log("res :" + JSON.stringify(res.data.ret));
+          //self.common.consoledebug.log("res :" + JSON.stringify(res.data.ret));
           self.articleinfo = res.data.ret.data;
           self.pagetotal = res.data.ret.total;
           self.currentpage = res.data.ret.current_page;
@@ -125,10 +125,11 @@
         })
       },
       changeStatus : function(){
-        if(self.statustext == '我的收藏'){
-          self.statustext = '我的认可';
+        if(self.statustext == '我的认可'){
+          self.statustext = '我的收藏';
+          self.title = "认可文章列表"
           self.api.doc_getAcceptList({user_id: localStorage.getItem("doc_id"), ill_id : self.illid}).then((res)=>{
-            self.common.consoledebug.log("res :" + JSON.stringify(res.data.ret));
+            //self.common.consoledebug.log("res :" + JSON.stringify(res.data.ret));
             self.articleinfo = res.data.ret.data;
             self.pagetotal = res.data.ret.total;
             self.currentpage = res.data.ret.current_page;
@@ -140,7 +141,8 @@
 
           })
         }else{
-          self.statustext = '我的收藏';
+          self.statustext = '我的认可';
+          self.title = "收藏文章列表"
           self.selectill(self.illid);
         }
       },

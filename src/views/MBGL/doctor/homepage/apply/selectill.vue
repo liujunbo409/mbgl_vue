@@ -47,7 +47,7 @@
       var departmentid = self.$route.query.departmentid;
       //获取科室疾病列表
       self.api.doc_getDepartmentIllList({department_id : departmentid}).then((res)=>{
-        self.common.consoledebug.log("ret :" + JSON.stringify(res.data.ret));
+        //self.common.consoledebug.log("ret :" + JSON.stringify(res.data.ret));
         self.illinfo = res.data.ret;
       }).catch((err)=>{
 

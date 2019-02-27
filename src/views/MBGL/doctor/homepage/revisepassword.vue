@@ -78,7 +78,7 @@
         var doc_id = localStorage.getItem("doc_id");
         var password = self.password;
         self.api.doc_validatePassword({user_id : doc_id, password : password, token: token}).then((res) => {
-          self.common.consoledebug.log("res:" + JSON.stringify(res));
+          //self.common.consoledebug.log("res:" + JSON.stringify(res));
         if(!res.data.result){
           MessageBox('提示', '密码输入错误，请重试');
           return false;
@@ -105,7 +105,7 @@
         var doc_id = localStorage.getItem("doc_id");
         //修改密码
         self.api.doc_revisePassword({user_id : doc_id, password : self.password, new_password : newpassword, token : token}).then((res) =>{
-          self.common.consoledebug.log("res:" + JSON.stringify(res));
+          //self.common.consoledebug.log("res:" + JSON.stringify(res));
           if(res.data.ret)
           {
             MessageBox('提示', '修改密码成功！');

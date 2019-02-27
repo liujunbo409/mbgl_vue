@@ -160,11 +160,11 @@
         }, 1000);
         if(self.type == "1"){
           self.api.doc_validateNewPhonenum({phonenum : self.phonenum}).then((res) => {
-            self.common.consoledebug.log("res:" + JSON.stringify(res));
+            //self.common.consoledebug.log("res:" + JSON.stringify(res));
           if(res.data.result == false)
           {
             MessageBox('提示',JSON.stringify(res.data.message).replace(/"/g,""));
-            clearInterval(interval);
+            clearInterval(self.interval);
             document.getElementById("getcaptchabtn").disabled = false;
             document.getElementById("getcaptchabtn").innerText = "获取验证码";
             return false;
@@ -175,11 +175,11 @@
         });
         }else {
           self.api.doc_validateOldPhonenum({phonenum : self.phonenum}).then((res) => {
-            self.common.consoledebug.log("res:" + JSON.stringify(res));
+            //self.common.consoledebug.log("res:" + JSON.stringify(res));
           if(res.data.result == false)
           {
             MessageBox('提示',JSON.stringify(res.data.message).replace(/"/g,""));
-            clearInterval(interval);
+            clearInterval(self.interval);
             document.getElementById("getcaptchabtn").disabled = false;
             document.getElementById("getcaptchabtn").innerText = "获取验证码";
             return false;
@@ -225,12 +225,14 @@
         }
         //注册
         if(self.type == "1"){
-          self.api.doc_doRegister({phonenum : self.phonenum, password : self.password, sm_validate : self.phoneidentifyCodeInput, invite : self.invite, fwh_openid : localStorage.getItem("fwh_openid")}).then((res)=>{
-            self.common.consoledebug.log("res:" + JSON.stringify(res));
+          self.api.doc_doRegister({phonenum : self.phonenum, password : self.password, sm_validate : self.phoneidentifyCodeInput, fwh_openid : localStorage.getItem("fwh_openid")}).then((res)=>{
+            //self.common.consoledebug.log("res:" + JSON.stringify(res));
           if(res.data.result == false) {
             MessageBox('提示', JSON.stringify(res.data.message).replace(/"/g, ""));
+            clearInterval(self.interval);
             return false;
           }
+          clearInterval(self.interval);
           MessageBox('提示', "注册成功!");
           setTimeout(self.common.jumpToPage({router: self.$router, url : "../doctor/login"}),1000);
           }).catch((err)=>{
@@ -239,7 +241,7 @@
         }else{
           //忘记密码
           self.api.doc_forgetPWD({phonenum : self.phonenum, password : self.password, sm_validate : self.phoneidentifyCodeInput,fwh_openid : localStorage.getItem("fwh_openid")}).then((res)=>{
-            self.common.consoledebug.log("res:" + JSON.stringify(res));
+            //self.common.consoledebug.log("res:" + JSON.stringify(res));
           if(res.data.result == false) {
             MessageBox('提示', JSON.stringify(res.data.message).replace(/"/g, ""));
             return false;

@@ -190,7 +190,7 @@
           self.info = res.data.ret;
           self.hospital = self.info.hospital_cache;
           self.hospitalname = self.info.hospital_name;
-          self.nurse_title = self.info.title;
+          self.nurse_title = self.info.title_cache;
           self.departmentname = self.info.department_name;
           self.department = self.info.department_id_cache;
           self.desc = self.info.desc_cache;
@@ -245,7 +245,7 @@
         }
         var ill_ids = "";
         self.api.doc_getDepartmentIllList({department_id : self.department}).then((res)=>{
-          self.common.consoledebug.log("ret :" + JSON.stringify(res.data.ret));
+          //self.common.consoledebug.log("ret :" + JSON.stringify(res.data.ret));
           self.illinfo = res.data.ret;
           for(var i in self.illinfo){
             if(i != self.illinfo.length-1 ){
@@ -268,7 +268,7 @@
             zyzj_img : self.zyrzurl,
           }
           self.api.doc_nurApply(params).then((res)=>{
-            self.common.consoledebug.log("ret :" + JSON.stringify(res));
+            //self.common.consoledebug.log("ret :" + JSON.stringify(res));
             MessageBox('提示','资格申请已提交！');
           }).catch((err)=>{
 
@@ -312,7 +312,7 @@
         self.illselected = [];
         //获取科室疾病列表
         self.api.doc_getDepartmentIllList({department_id : departmentid}).then((res)=>{
-          self.common.consoledebug.log("ret :" + JSON.stringify(res.data.ret));
+          //self.common.consoledebug.log("ret :" + JSON.stringify(res.data.ret));
           self.illinfo = res.data.ret;
         }).catch((err)=>{
 
@@ -350,7 +350,7 @@
       doSubmitill : function(){
         //获取科室疾病列表
         self.api.doc_getDepartmentIllList({department_id : departmentid}).then((res)=>{
-          self.common.consoledebug.log("ret :" + JSON.stringify(res.data.ret));
+          //self.common.consoledebug.log("ret :" + JSON.stringify(res.data.ret));
           self.illinfo = res.data.ret;
         }).catch((err)=>{
 

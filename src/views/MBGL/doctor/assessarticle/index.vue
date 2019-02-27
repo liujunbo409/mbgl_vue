@@ -121,7 +121,7 @@
         self.dshflg =false;
         self.yshflg = true;
         self.api.doc_getArticleReadyList({user_id : localStorage.getItem("doc_id"), role : localStorage.getItem("role")}).then((res)=>{
-          self.common.consoledebug.log("res : " + JSON.stringify(res.data.ret));
+          //self.common.consoledebug.log("res : " + JSON.stringify(res.data.ret));
            self.ysharticleinfo = res.data.ret.data;
           // self.pagetotal = res.data.ret.total;
           // self.currentpage = res.data.ret.current_page;

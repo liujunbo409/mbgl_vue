@@ -44,13 +44,13 @@
       init : function(){
         //获取医院列表
         self.api.doc_getHospitalList({}).then((res)=>{
-          self.common.consoledebug.log(JSON.stringify(res.data.ret));
+          //self.common.consoledebug.log(JSON.stringify(res.data.ret));
           self.hospitalinfo = res.data.ret;
         }).catch((err)=>{
         })
       },
       selecthospital : function(data){
-        self.common.consoledebug.log(data)
+        //self.common.consoledebug.log(data)
         self.common.goToApplyindex({router: self.$router, hospitalname : data.hospital_name, hospital : data.id});
       },
       customHospital : function(){

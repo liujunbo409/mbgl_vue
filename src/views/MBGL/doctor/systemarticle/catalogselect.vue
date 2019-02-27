@@ -88,14 +88,14 @@
     },
     methods :{
       handleCurrentChange : function(page){
-        console.log(page);
-        console.log(self.firsturl);
-        console.log(self.path);
+        //console.log(page);
+        //console.log(self.firsturl);
+        //console.log(self.path);
         var muluid = self.firsturl.split("?");
         muluid = muluid[1].split("&");
         muluid = muluid[0];
-        console.log(muluid);
-        this.api.axios_ajax(self.path + '?' + muluid + '&page=' + page, '', 'GET', false).then((res)=>{
+        //console.log(muluid);
+        this.api.axios_ajax(self.path + '?' + muluid + '&page=' + page, '', 'GET', true).then((res)=>{
           //console.log("数据：" + JSON.stringify(res.data.ret) );
           self.articleinfo = res.data.ret.data;
           self.currentpage = res.data.ret.current_page;

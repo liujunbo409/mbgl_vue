@@ -150,7 +150,7 @@
       self.articleid = articleid;
         //获取文章信息详情
         self.api.doc_getSHArticle({article_id : articleid}).then((res)=>{
-          self.common.consoledebug.log("detailres :"  + JSON.stringify(res.data.ret));
+          //self.common.consoledebug.log("detailres :"  + JSON.stringify(res.data.ret));
           self.detailinfo = res.data.ret;
           //格式化标题 
           if(self.detailinfo.title.length > 8)
@@ -210,7 +210,7 @@
             }
             //进行文章的审核
             self.api.doc_shenheArticle(params).then((res)=>{
-              self.common.consoledebug.log("ret :"  + JSON.stringify(res.data.ret));
+              //self.common.consoledebug.log("ret :"  + JSON.stringify(res.data.ret));
               MessageBox('提示', '操作成功！')
               self.clickBack();
             }).catch((err)=>{

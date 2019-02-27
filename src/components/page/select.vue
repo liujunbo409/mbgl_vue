@@ -1,9 +1,7 @@
 <template>
-  <div class="">
-        <select style=""  v-model="value"  @change="choose">
+        <select class="select"  v-model="value"  @change="choose">
           <option  v-bind:key="key" v-bind:value="key"  v-for="(item,key) of info">{{item}}</option>
         </select>
-  </div>
 </template>
 <script>
   export default{
@@ -43,8 +41,8 @@
   }
 </script>
 <style>
-select{
-  width: 279px;
+.select{
+  width: 250px;
   direction: rtl;
 }
 </style>

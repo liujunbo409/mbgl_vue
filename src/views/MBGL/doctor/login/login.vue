@@ -92,7 +92,7 @@
         }
         //Login
         self.api.doc_doLogin({phonenum: phonenum, password : password, fwh_openid : localStorage.getItem("fwh_openid")}).then((res) => {
-          self.common.consoledebug.log("res:" + JSON.stringify(res));
+          //self.common.consoledebug.log("res:" + JSON.stringify(res));
           if(res.data.ret)
           {
             var doc_id = res.data.ret.id;

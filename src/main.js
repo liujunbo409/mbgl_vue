@@ -84,6 +84,9 @@ router.beforeEach((to, from, next) => {
   //   })
   // }
   //是否被停用
+  if(localStorage.getItem("doc_id") != null && localStorage.getItem("doc_id") != ''){
+
+  
   api.doc_getUserStatus({user_id : localStorage.getItem("doc_id")}).then((res)=>{
     if(res.data.result == false){
       MessageBox('提示', '您已被停用！请联系管理员！');
@@ -99,7 +102,7 @@ router.beforeEach((to, from, next) => {
       router.push({name: 'doctorapply'});
     }else{
       if(to.name != 'homepage' && to.name !='myrole' && to.name != 'myinfo' && to.name != 'management' && to.name != 'revisephonenum' && to.name != 'revisepassword'
-      && to.name !='userfeedback' && to.name !='index' && to.name !='selectrole' && to.name !='doctorapply'  && to.name !='nurseapply'
+      && to.name !='userfeedback' && to.name !='index' && to.name !='selectrole' && to.name !='doctorapply'  && to.name !='nurseapply' && to.name !='register'
       )
       {
         // var role = localStorage.getItem("role");
@@ -127,7 +130,7 @@ router.beforeEach((to, from, next) => {
   }).catch((err)=>{
 
   })
-  }
+  }}
   next()
  
 })
