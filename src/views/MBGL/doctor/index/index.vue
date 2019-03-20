@@ -12,60 +12,64 @@
     <section class="aui-grid aui-margin-b-15">
       <div class="aui-row">
         <div class="aui-col-xs-4" @click="selTab(0)">
-          <div  class="aui-badge aui-bg-info" v-show="flg1">完成</div>
-          <div class="aui-badge aui-bg-default" v-show="flg2">待填写</div>
-          <i class="aui-iconfont iconfont icon-qunfenggerenziliao"></i>
+          <div  class="aui-badge icon" style="top:2rem;left:45%;background-color:#2ad61f" v-show="flg1">完成</div>
+          <div class="aui-badge aui-bg-default icon" style="top:2rem;left:45%" v-show="flg2">待填写</div>
+          <!-- <i class="aui-iconfont iconfont icon-qunfenggerenziliao"></i> -->
+          <img style="height:1.4rem;  display:inline" class="" src="../../../../assets/img/grzl.png">
           <div class="aui-grid-label aui-font-size-12">个人资料</div>
         </div>
 
 
         <div class="aui-col-xs-4" @click="selTab(1)">
-
-          <i class="aui-iconfont iconfont icon-zhuanjiarenzheng"></i>
-
+          <div  class="aui-badge icon " v-if="applystatus == '0'" style="top:2rem;left:45%;background-color:#c1bfbf" v-show="applyflg">未提交</div>
+          <div  class="aui-badge icon " v-else-if="applystatus == '1'" style="top:2rem;left:45%;background-color:#03a9f4" v-show="applyflg">待审核</div>
+          <div  class="aui-badge icon " v-else-if="applystatus == '2'" style="top:2rem;left:45%;background-color:#2ad61f" v-show="applyflg">通过</div>
+          <div  class="aui-badge icon " v-else-if="applystatus == '3'" style="top:2rem;left:45%;background-color:#f51f1f" v-show="applyflg">驳回</div>
+          <!-- <i class="aui-iconfont iconfont icon-zhuanjiarenzheng"></i> -->
+          <img style="height:1.4rem;  display:inline" class="" src="../../../../assets/img/zgrz.png"> 
           <div class="aui-grid-label aui-font-size-12">医生认证</div>
         </div>
 
 
 
-        <div class="aui-col-xs-4" @click="selTab(2)">
-
-          <i class="aui-iconfont iconfont icon-riqixuanze"></i>
-
+        <div class="aui-col-xs-4" @click="selTab(2)" v-if="roleflg">
+          <!-- <i class="aui-iconfont iconfont icon-riqixuanze"></i> -->
+          <img style="height:1.4rem;  display:inline" class="" src="../../../../assets/img/czjh.png"> 
+          <div  class="aui-badge aui-bg-info icon" style="left:24%;top:2rem" v-show="czsjflg">{{czdate}}</div>
           <div class="aui-grid-label aui-font-size-12">出诊计划</div>
         </div>
 
         <div class="aui-col-xs-4" @click="selTab(3)">
-          <i class="aui-iconfont iconfont icon-dkw_shenhetongguo"></i>
-
+          <!-- <i class="aui-iconfont iconfont icon-dkw_shenhetongguo"></i> -->
+          <img style="height:1.4rem;  display:inline" class="" src="../../../../assets/img/shwz.png"> 
           <div class="aui-grid-label aui-font-size-12">审核文章</div>
         </div>
 
         <div class="aui-col-xs-4" @click="selTab(4)">
-          <i class="aui-iconfont iconfont icon-guanyuwomen1"></i>
-
+          <!-- <i class="aui-iconfont iconfont icon-guanyuwomen1"></i> -->
+          <img style="height:1.4rem;  display:inline" class="" src="../../../../assets/img/qbwz.png"> 
           <div class="aui-grid-label aui-font-size-12">全部文章</div>
         </div>
 
         <div class="aui-col-xs-4" @click="selTab(5)">
-          <i class="aui-iconfont iconfont icon-shoucang"></i>
-
+          <!-- <i class="aui-iconfont iconfont icon-shoucang"></i> -->
+          <img style="height:1.4rem;  display:inline" class="" src="../../../../assets/img/scwz.png"> 
           <div class="aui-grid-label aui-font-size-12">收藏文章</div>
         </div>
         <div class="aui-col-xs-4" @click="selTab(6)">
-          <i class="aui-iconfont iconfont icon-dkw_shenhetongguo"></i>
-
-          <div class="aui-grid-label aui-font-size-12">审核问答题库</div>
+          <!-- <i class="aui-iconfont iconfont icon-dkw_shenhetongguo"></i> -->
+          <img style="height:1.4rem;  display:inline" class="" src="../../../../assets/img/shwdtk.png"> 
+          <div class="aui-grid-label aui-font-size-12">审核问答</div>
         </div>
          <div class="aui-col-xs-4" @click="selTab(7)">
-          <i class="aui-iconfont iconfont icon-guanyuwomen1"></i>
-
-          <div class="aui-grid-label aui-font-size-12">全部问答题库</div>
+          <!-- <i class="aui-iconfont iconfont icon-guanyuwomen1"></i> -->
+          <img style="height:1.4rem;  display:inline" class="" src="../../../../assets/img/qbwd.png"> 
+          <div class="aui-grid-label aui-font-size-12">全部问答</div>
         </div>
         <div class="aui-col-xs-4" @click="selTab(8)">
-          <i class="aui-iconfont iconfont icon-guanyuwomen1"></i>
-
-          <div class="aui-grid-label aui-font-size-12">我收藏的问答</div>
+          <!-- <i class="aui-iconfont iconfont icon-guanyuwomen1"></i> -->
+          <img style="height:1.4rem;  display:inline" class="" src="../../../../assets/img/yscwd.png"> 
+          <div class="aui-grid-label aui-font-size-12">收藏问答</div>
         </div>
       </div>
     </section>
@@ -99,7 +103,8 @@
   </div>
 </template>
 <script>
-  import {MessageBox} from 'mint-ui'
+  import {MessageBox} from 'mint-ui';
+  const back_delete_ill = false;
   var self = null;    //在create方法中初始化为this
   export default {
     data(){
@@ -115,41 +120,20 @@
         pageto :'',        //最后一页（共有几页）
         pageper :'',       //每页有几条数据
         doctor : null,
+        applyflg : false,
+        applystatus : '0',
+        czsjflg : false,
+        czdate : '03-03',
+        roleflg : true,
       }
     },
     created() {
       self = this;    //使用self来代替this，避免this无效
     },
     mounted() {
-      //localStorage.clear();
-      //localStorage.setItem("fwh_openid", 'oCbCtt55Qxofc-aPMtGYmi8CadFY');
-      // self.doctor = {
-      //       ID_number: null,
-      //       avatar: null,
-      //       birthday: "2001-10-01",
-      //       city: null,
-      //       created_at: "2018-11-26 10:50:31",
-      //       default_ill: null,
-      //       deleted_at: null,
-      //       doctor_status: "1",
-      //       fwh_openid: "oCbCtt55Qxofc-aPMtGYmi8CadFY",
-      //       gender: "1",
-      //       id: 35,
-      //       nick_name: "老于子博",
-      //       nurse_status: "1",
-      //       password: "96e79218965eb72c92a549dd5a330112",
-      //       phonenum: "13224135945",
-      //       province: null,
-      //       real_name: "老于",
-      //       role: "doctor",
-      //       status: "1",
-      //       token: "3E616094BD78CB0A78A02B83E1398048",
-      //       unionid: null,
-      //       updated_at: "2018-12-18 15:42:29",
-      //       xueli: "03"
-
-      // }
-      //var gotype = localStorage.getItem("type");
+      if(localStorage.getItem("doc_id") == ""){
+        localStorage.setItem("doc_id", localStorage.getItem("doc_laravel_id"))
+      }
       let doc_id = localStorage.getItem("doc_id");
       const DEBUG_FLAG = localStorage.getItem("DEBUG_FLAG");
       let base = '';
@@ -164,6 +148,7 @@
             self.common.jumpToPage({router: self.$router, url : "../doctor/login"});
       }else{
         var gotype = localStorage.getItem("type");
+        localStorage.setItem("type", "");
         self.api.doc_getUserStatus({user_id : localStorage.getItem("doc_id")}).then((res)=>{
           if(res.data.result == false){
             MessageBox('提示', '您已被停用！请联系管理员！');
@@ -175,7 +160,7 @@
         self.api.doc_getByIdWithToken({user_id : doc_id}).then((res)=>{
             localStorage.setItem("doctor", JSON.stringify(res.data.ret));
             localStorage.setItem("token", res.data.ret.token);
-            localStorage.setItem("doc_id", res.data.ret.id);
+            //localStorage.setItem("doc_id", res.data.ret.id);
             localStorage.setItem("role", res.data.ret.role);
             let doctor = JSON.parse(localStorage.getItem("doctor"));
             if(doctor.ID_number =="" || doctor.xueli =="" || doctor.ID_number ==null || doctor.xueli == null){
@@ -257,88 +242,40 @@
         }).catch((err)=>{
 
         })
-        //var gotype = 'czjh';//测试用
-        // if(gotype != null){
-        //   switch (gotype){
-        //     //我的页面
-        //     case 'grzl' :
-        //       //self.common.jumpToPage({router: self.$router, url : "../doctor/homepage"});
-        //       window.location.href = base + "doctor/h5/vue#/MBGL/doctor/homepage";
-        //       break;
-        //     //意见反馈
-        //     case 'yjfk' :
-        //       //self.common.jumpToPage({router: self.$router, url : "../doctor/homepage"});
-        //       window.location.href = base + "doctor/h5/vue#/MBGL/doctor/homepage/userfeedback";
-        //       break;
-        //     //医生认证
-        //     case 'ysrz' :
-        //       //self.common.jumpToPage({router: self.$router, url : "../doctor/homepage/doctorapply"});
-        //       window.location.href = base + "doctor/h5/vue#/MBGL/doctor/homepage/doctorapply";
-        //       break;
-        //     //出诊时间
-        //     case 'czjh' :
-        //       //self.common.jumpToPage({router: self.$router, url : "../doctor/visitplan"});
-        //       window.location.href = base + "doctor/h5/vue#/MBGL/doctor/visitplan";
-        //       break;
-        //     //审核文章
-        //     case 'shwz' :
-        //       //self.common.jumpToPage({router: self.$router, url : "../doctor/assessarticle"});
-        //       window.location.href = base + "doctor/h5/vue#/MBGL/doctor/assessarticle";
-        //       break;
-        //     //系统文章
-        //     case 'qbwz' : 
-        //       //self.common.jumpToPage({router: self.$router, url : "../doctor/systemarticle"});
-        //       window.location.href = base + "doctor/h5/vue#/MBGL/doctor/systemarticle";
-        //       break;
-        //     //收藏文章
-        //     case 'scwz' :
-        //       //self.common.jumpToPage({router: self.$router, url : "../doctor/collectarticle"});
-        //       window.location.href = base + "doctor/h5/vue#/MBGL/doctor/collectarticle";
-        //       break;
-        //     //认可问答题库
-        //     case 'rkwdtk' :
-        //       //self.common.jumpToPage({router: self.$router, url : "../doctor/collectarticle"});
-        //       window.location.href = base + "doctor/h5/vue#/MBGL/doctor/qaCollectList";
-        //       break;
-        //     //审核问答题库
-        //     case 'shwdtk' :
-        //       //self.common.jumpToPage({router: self.$router, url : "../doctor/collectarticle"});
-        //       window.location.href = base + "doctor/h5/vue#/MBGL/doctor/assessQa";
-        //       break;
-        //   }
-        // }
-        // self.api.doc_getByIdWithToken({user_id : doc_id}).then((res)=>{
-        //     localStorage.setItem("doctor", JSON.stringify(res.data.ret));
-        //     localStorage.setItem("token", res.data.ret.token);
-        //     localStorage.setItem("doc_id", res.data.ret.id);
-        //     localStorage.setItem("role", res.data.ret.role);
-        //     self.init();
-        //     let doctor = JSON.parse(localStorage.getItem("doctor"));
-        //     if(doctor.ID_number =="" || doctor.xueli =="" || doctor.ID_number ==null || doctor.xueli == null){
-        //       MessageBox('提示', '您的个人信息尚未完善，请先填写个人信息');
-        //       //self.common.jumpToPage({router : self.$router, url : "../doctor/homepage/myinfo"});
-        //       window.location.href = "http://lljiankang.top/doctor/h5/vue#/MBGL/doctor/homepage/myinfo";
-        //     }
-        // }).catch((err)=>{
-
-        // })
       }
       self.init();
     },
     methods :{
       init : function () {
         //localStorage.setItem("fwh_openid",'oCbCtt55Qxofc-aPMtGYmi8CadFY');//测试用
-        let doctor = JSON.parse(localStorage.getItem("doctor"));
+        //let doctor = JSON.parse(localStorage.getItem("doctor"));
         //已存在doctor信息，直接将页面信息赋值
           //个人资料上的标志显示
-        if(doctor.ID_number =="" || doctor.xueli =="" || doctor.ID_number ==null || doctor.xueli == null)
-        {
-          self.flg1 = false;
-          self.flg2 = true;
-        }else{
-          self.flg1 = true;
-          self.flg2 = false;
+        //判断各模块信息是否完善
+        if(localStorage.getItem("role") == 'nurse'){
+          self.roleflg = false;
         }
+        self.api.doc_getMokuaiStatus({user_id : localStorage.getItem("doc_id")}).then((res)=>{
+          //console.log(JSON.stringify(res.data.ret));
+          if(res.data.ret.info == 'true'){
+            self.flg1 = true;
+            self.flg2 = false;
+          }else{
+            self.flg1 = false;
+            self.flg2 = true;
+          }
+          if(res.data.ret.apply){
+            self.applyflg = true;
+            self.applystatus = res.data.ret.apply
+          }
+          if(res.data.ret.czsj != ''){
+            self.czsjflg = true;
+            self.czdate = res.data.ret.czsj;
+          }
+
+        }).catch((err)=>{
+
+        })
         //待审核文章
         self.api.doc_getArticleWaitList({user_id : localStorage.getItem("doc_id"), role : localStorage.getItem("role")}).then((res)=>{
           //self.common.consoledebug.log("res : " + JSON.stringify(res.data.ret));
@@ -417,7 +354,7 @@
                     break;
                   //收藏文章
                   case 5 :
-                    self.common.jumpToPage({router: self.$router, url : "../doctor/collectarticle"});
+                    self.common.jumpToPage({router: self.$router, url : "../doctor/collectarticle/selectill"});
                     break;
                     //审核问答题库
                   case 6 :
@@ -443,7 +380,11 @@
               break;
             //医生认证
             case 1 :
-              self.common.jumpToPage({router: self.$router, url : "../doctor/homepage/doctorapply"});
+              if(localStorage.getItem("role") == 'doctor'){
+                self.common.jumpToPage({router: self.$router, url : "../doctor/homepage/doctorapply"});
+              }else{
+                self.common.jumpToPage({router: self.$router, url : "../doctor/homepage/nurseapply"});
+              }
               break;
           }
         }
@@ -490,5 +431,11 @@
 <style scoped>
 .lastli{
   border: none;
+}
+.icon{
+    position: absolute;
+    top: 2rem;
+    left: 47%;
+    z-index: 99;
 }
 </style>

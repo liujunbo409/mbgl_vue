@@ -177,6 +177,24 @@ let routers = [
       keepAlive: false // false 表示需要使用缓存
     }
   },
+    //主页=> 系统文章=>疾病下目录
+    {
+      path: '/MBGL/doctor/systemarticle/articlemulu',
+      name: 'articlemulu',
+      component: resolve => require(['@/views/MBGL/doctor/systemarticle/articlemulu'], resolve),
+      meta: {
+        keepAlive: false // false 表示需要使用缓存
+      }
+    },
+    //主页=> 系统文章=>目录下文章列表
+    {
+      path: '/MBGL/doctor/systemarticle/articleList',
+      name: 'systemarticleList',
+      component: resolve => require(['@/views/MBGL/doctor/systemarticle/articleList'], resolve),
+      meta: {
+        keepAlive: false // false 表示需要使用缓存
+      }
+    },
   //主页=> 系统文章 =>文章详情
   {
     path: '/MBGL/doctor/articledetail',
@@ -213,6 +231,15 @@ let routers = [
       keepAlive: false // false 表示需要使用缓存
     }
   },
+    //主页=> 收藏文章 => 选择疾病
+    {
+      path: '/MBGL/doctor/collectarticle/selectill',
+      name: 'collectarticleselectill',
+      component: resolve => require(['@/views/MBGL/doctor/collectarticle/selectill'], resolve),
+      meta: {
+        keepAlive: false // false 表示需要使用缓存
+      }
+    },
   //主页=> 收藏文章 =>文章详情
   {
     path: '/MBGL/doctor/collectarticledetail',
@@ -291,6 +318,24 @@ let routers = [
     path: '/MBGL/doctor/Qadetail',
     name: 'Qadetail',
     component: resolve => require(['@/views/MBGL/doctor/systemQa/Qadetail'], resolve),
+    meta: {
+      keepAlive: false // false 表示需要使用缓存
+    }
+  },
+   //主页=> 全部问答题库 =>问答题库分类
+   {
+    path: '/MBGL/doctor/Qafenleiselect',
+    name: 'Qafenleiselect',
+    component: resolve => require(['@/views/MBGL/doctor/systemQa/Qafenleiselect'], resolve),
+    meta: {
+      keepAlive: false // false 表示需要使用缓存
+    }
+  },
+  //主页=> 全部问答题库 =>问答题库列表
+  {
+    path: '/MBGL/doctor/QaList',
+    name: 'QaList',
+    component: resolve => require(['@/views/MBGL/doctor/systemQa/QaList'], resolve),
     meta: {
       keepAlive: false // false 表示需要使用缓存
     }

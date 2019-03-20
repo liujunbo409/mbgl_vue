@@ -121,7 +121,7 @@
             内科疾病 （点击添加）
         </div>
       </li>
-      <li class="aui-list-item" style="border:none;height:20rem">
+      <li class="aui-list-item" style="border:none">
         <div class="illList" style="margin-top:1rem" v-bind:id="item.id" v-bind:value="item.id" v-for="(item,key) of illinfo" @click="selectill(item, item.id)">
           <div >{{item.ill.name}}</div>
           </div>
@@ -133,6 +133,7 @@
   </div>
 </template>
 <script>
+  const back_delete_ill = false;
   import { MessageBox } from 'mint-ui';
   //七牛组件
   import upload from '../../../../../components/page/qnupload.vue';   
@@ -179,7 +180,7 @@
       //以下为主页面的方法
       init : function(){
         //获取医院列表
-        self.api.doc_getHospitalList({}).then((res)=>{
+        self.api.doc_getHospitalList({user_id : localStorage.getItem("doc_id"), role : 'doctor'}).then((res)=>{
           self.hospitalinfo = res.data.ret;
         }).catch((err)=>{
         })

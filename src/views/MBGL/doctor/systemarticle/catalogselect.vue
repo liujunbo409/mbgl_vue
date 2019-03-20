@@ -4,7 +4,7 @@
       <a class="aui-pull-left" @click="clickBack">
         <span class="aui-iconfont aui-icon-left"></span>
       </a>
-      <div class="aui-title">文章列表</div>
+      <div class="aui-title">全部文章</div>
       <a class="aui-pull-right" href="#/MBGL/doctor/index">
         <span class="aui-iconfont aui-icon-home"></span>
       </a>
@@ -15,56 +15,21 @@
           <div >{{item.name}}</div>
           </div>
     </div>
-    <div v-if="catalogflg">
-    <tree :illid='illid' :type="'article'" @selectBymuluid="selectBymuluid"></tree>
-    </div>
-    <div v-if="articleflg">
-      <ul class="aui-list aui-form-list">
-      <li class="aui-list-item" v-for="(item,key) of articleinfo" @click="gotoArticle(item.article.id, item.mulu_id)" :class="key == articleinfo.length-1?'lastli':''">
-        <div class="aui-list-item-inner">
-          <div>
-            {{item.article.title}}
-            <div>
-        <span style="font-size:0.55rem;color:#B3B3B3">收藏 :{{item.article.used_num}}</span>
-            <span style="margin-left:1rem;font-size:0.55rem;color:#B3B3B3">认可 : {{item.article.accept_num}}</span>
-            <span style="margin-left:1rem;font-size:0.55rem;color:#B3B3B3">浏览 :{{item.article.show_num}}</span>
-        </div>
-          </div>
-          <span class="aui-iconfont aui-icon-right" style="color: #B3B3B3"></span>
-        </div>
-      </li>
-      </ul>
-       <div v-show="articleinfo != ''" class="block" style="text-align:center;background-color:#FFFFFF;padding-top:1rem">
-        <el-pagination
-          @prev-click = "gotoPrev"
-          @next-click = "gotoNext"
-          @current-change="handleCurrentChange"
-          :current-page="currentpage"
-          :page-size="pageper"
-          layout=" prev, pager, next, total"
-          :total="pagetotal">
-        </el-pagination>
-      </div>
-    </div>
   </div>
 </template>
 <script>
-  import Tree from '../../../../components/page/catalogtree.vue'
   var self = null;    //在create方法中初始化为this
+  const back_delete_ill = false;
   export default {
-    components: {
-      'Tree':Tree,
-    },
     created() {
       self = this;    //使用self来代替this，避免this无效
     },
     mounted(){
       //获取疾病
       self.api.doc_getIlllist().then((res)=>{
-        
         self.illinfo = res.data.ret;
+        self.init();
       }).catch((err)=>{
-
       })
     },
     data(){
@@ -87,78 +52,22 @@
       }
     },
     methods :{
-      handleCurrentChange : function(page){
-        //console.log(page);
-        //console.log(self.firsturl);
-        //console.log(self.path);
-        var muluid = self.firsturl.split("?");
-        muluid = muluid[1].split("&");
-        muluid = muluid[0];
-        //console.log(muluid);
-        this.api.axios_ajax(self.path + '?' + muluid + '&page=' + page, '', 'GET', true).then((res)=>{
-          //console.log("数据：" + JSON.stringify(res.data.ret) );
-          self.articleinfo = res.data.ret.data;
-          self.currentpage = res.data.ret.current_page;
-          self.prevurl = res.data.ret.prev_page_url;
-          self.nexturl = res.data.ret.next_page_url;
-          self.pageto =  res.data.ret.to;
-          self.pageper = Number(res.data.ret.per_page);
-        }).catch((err)=>{
-
-        })
+      init : function(){
+        let doctor = JSON.parse(localStorage.getItem("doctor"));
+        if(doctor.default_ill != '' && doctor.default_ill != null && doctor!=''){
+        self.common.jumpToPageByParam({router : self.$router, url : "../doctor/systemarticle/articlemulu", param : doctor.default_ill});
+        }
       },
       selectill : function(illid){
         self.illid = illid;
-        self.illflg = false;
-        self.catalogflg = true;
-      },
-      selectBymuluid : function(data){
-        self.api.doc_getArticlelist({mulu_id : data.id}).then((res)=>{
-          //self.common.consoledebug.log("res :"  + JSON.stringify(res.data.ret));
-          self.articleinfo = res.data.ret.data;
-          self.pagetotal = res.data.ret.total;
-          self.currentpage = res.data.ret.current_page;
-          self.prevurl = res.data.ret.prev_page_url;
-          self.nexturl = res.data.ret.next_page_url;
-          self.pageto = res.data.ret.to;
-          self.pageper = Number(res.data.ret.per_page);
-          self.path = res.data.ret.path;
-          self.firsturl = res.data.ret.first_page_url;
-          self.illflg = false;
-          self.catalogflg = false;
-          self.articleflg =true;
+        let doctor = JSON.parse(localStorage.getItem("doctor"));
+        doctor.default_ill = illid;
+        self.api.doc_updataDefaultIll({user_id : localStorage.getItem("doc_id"), default_ill : illid, token : localStorage.getItem("token")}).then((res)=>{
+          if(res){
+            localStorage.setItem("doctor", JSON.stringify(doctor));
+            self.common.jumpToPageByParam({router : self.$router, url : "../doctor/systemarticle/articlemulu", param : self.illid});
+          }
         }).catch((err)=>{
-
-        })
-      },
-      gotoArticle : function(articleid, muluid){
-        self.common.goToArticleDetail({router: self.$router, articleid : articleid, muluid : muluid, illid : self.illid});
-      },
-      gotoNext : function(){
-        this.api.axios_ajax(this.nexturl, '', 'GET', false).then((res)=>{
-          //console.log("数据：" + JSON.stringify(res.data.ret) );
-          self.articleinfo = res.data.ret.data;
-          self.currentpage = res.data.ret.current_page;
-          self.prevurl = res.data.ret.prev_page_url;
-          self.nexturl = res.data.ret.next_page_url;
-          self.pageto =  res.data.ret.to;
-          self.pageper = Number(res.data.ret.per_page);
-        }).catch((err)=>{
-
-        })
-
-      },
-      gotoPrev : function (){
-        this.api.axios_ajax(this.prevurl, '', 'GET', false).then((res)=>{
-          //console.log("数据：" + JSON.stringify(res.data.ret) );
-          self.articleinfo = res.data.ret.data;
-          self.currentpage = res.data.ret.current_page;
-          self.prevurl = res.data.ret.prev_page_url;
-          self.nexturl = res.data.ret.next_page_url;
-          self.pageto =  res.data.ret.to;
-          self.pageper = Number(res.data.ret.per_page);
-        }).catch((err)=>{
-
         })
       },
       clickBack : function () {

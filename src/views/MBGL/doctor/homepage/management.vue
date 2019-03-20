@@ -53,6 +53,7 @@
 </style>
 
 <script>
+  const back_delete_ill = false;
   var self = null;    //在create方法中初始化为this
   import { MessageBox  } from 'mint-ui';
   export default {

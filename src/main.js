@@ -56,8 +56,23 @@ new Vue({
   template: '<App/>'
 })
 import {MessageBox} from 'mint-ui'
+
 //路由拦截
 router.beforeEach((to, from, next) => {
+  // console.log('to :' + JSON.stringify(to));
+  // console.log(from);
+  if(to.name == 'systemarticle' && from.name == 'articlemulu' || to.name == 'systemqa' && from.name == 'Qafenleiselect' || to.name == 'collectarticleselectill' && from.name == 'collectarticle')
+  {
+    window.addEventListener("popstate", function(e) {
+      if(e.state != null){
+          let doctor = JSON.parse(localStorage.getItem("doctor"));
+          doctor.default_ill = '';
+          localStorage.setItem("doctor", JSON.stringify(doctor));
+          api.doc_updataDefaultIll({user_id : localStorage.getItem("doc_id"), default_ill : '', token : localStorage.getItem("token")}).then((res)=>{
+          }).catch((err)=>{
+          })}
+    }, false);
+  }
   //let docid = localStorage.getItem("doc_id");
   //let token = localStorage.getItem("token");
   // api.doc_getHospitalList().then((res)=>{

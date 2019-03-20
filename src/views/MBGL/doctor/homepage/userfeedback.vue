@@ -33,6 +33,7 @@
 </template>
 <script>
   var self = null;    //在create方法中初始化为this
+  const back_delete_ill = false;
   import { MessageBox  } from 'mint-ui';
   export default {
     created() {
@@ -89,7 +90,8 @@
           token : localStorage.getItem("token"),
           type : type,
           mokuai_id: '-1',
-          content : self.content
+          content : self.content,
+          mokuai : 'global'
         }
         self.api.common_doFeedBack(params).then((res)=>{
           //console.log(JSON.stringify(res));

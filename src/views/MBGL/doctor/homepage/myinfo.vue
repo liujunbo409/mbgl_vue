@@ -61,8 +61,9 @@
             </div>
             <div class="aui-list-item-input">
               <div class="aui-text-right">
-                <input type="text" class="aui-text-right" style="color: #B3B3B3" maxlength="15" v-bind:disabled="true"
-                       v-model="phonenum">
+                <!-- <input type="text" class="aui-text-right" style="color: #B3B3B3" maxlength="15" disabled
+                       v-model="phonenum"> -->
+                       <span  class="aui-text-right" style="color: #B3B3B3">{{phonenum}}</span>
               </div>
             </div>
           </div>
@@ -167,6 +168,7 @@
 </template>
 <script>
   var self = null;    //在create方法中初始化为this
+  const back_delete_ill = false;
   import {MessageBox} from 'mint-ui';
   import Select from '../../../../components/page/select.vue'
   export default {
@@ -253,6 +255,26 @@
         }
         if(self.ID_number == null || self.ID_number == ''){
           MessageBox('错误', '请填写身份证号')
+        }
+        if(self.realname == '' || self.realname == null){
+          MessageBox('提示', '请填写真实姓名');
+          return false;
+        }
+        if(self.nick_name == '' || self.nick_name == null){
+          MessageBox('提示', '请填写昵称');
+          return false;
+        }
+        if(self.xueli == '' || self.xueli == null){
+          MessageBox('提示', '请选择学历');
+          return false;
+        }
+        if(self.gender == '' || self.gender == null){
+          MessageBox('提示', '请选择性别');
+          return false;
+        }
+        if(self.realname.length < 2){
+          MessageBox('提示', '姓名不能少于两个字');
+          return false;
         }
         var token = localStorage.getItem("token");
         var doc_id = localStorage.getItem("doc_id");

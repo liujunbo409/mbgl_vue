@@ -14,49 +14,11 @@
           <div >{{item.name}}</div>
           </div>
     </div>
-     <div  v-if="!illflg">
-      <span style="margin-top:0.5rem;margin-left:0.5rem;color:#03a9f4;font-size:0.7rem" v-show="cataloguse&&catalogflg"  @click="changeiIlflg('0')">忽略分类查看</span>
-      <span style="margin-top:0.5rem;margin-left:0.5rem;color:#03a9f4;font-size:0.7rem" v-show="!cataloguse&&!catalogflg"  @click="changeiIlflg('1')">按照分类查看</span>
-      <span style="margin-top:0.5rem;margin-left:0.5rem;color:#03a9f4;font-size:0.7rem" v-show="cataloguse&&!catalogflg"  @click="changeiIlflg('2')">重新选择分类</span>
-      <span style="margin-top:0.5rem;margin-left:0.5rem;color:#03a9f4;font-size:0.7rem" @click="rechoseIll()">选择疾病 </span>
-    </div>
-    <div v-if="catalogflg">
-    <tree :illid='illid' :type="'question'" @selectBymuluid="selectBymuluid"></tree>
-    </div>
-    <div v-if="articleflg">
-      <div style="display: flex;">
-        <input v-model="questionSearch" style="width: 80%;line-height: 1.5rem;">
-        <div @click="searchQaList()" class="searchbtn">搜索</div>
-      </div>
-      <ul class="aui-list aui-form-list">
-      <li class="aui-list-item" v-for="(item,key) of qaList" @click="gotoQainfo(item.qa.id)" :class="key == qaList.length-1?'lastli':''">
-        <div class="aui-list-item-inner">
-          <div>
-            {{item.qa.question}}
-            <div>
-            <span style="margin-left:1rem;font-size:0.55rem;color:#B3B3B3">浏览 :{{item.doctor_show_num}}</span>
-        </div>
-          </div>
-          <span class="aui-iconfont aui-icon-right" style="color: #B3B3B3"></span>
-        </div>
-      </li>
-      </ul>
-       <div v-show="qaList != ''" class="block" style="text-align:center;background-color:#FFFFFF;padding-top:1rem">
-        <el-pagination
-          @prev-click = "gotoPrev"
-          @next-click = "gotoNext"
-          @current-change="handleCurrentChange"
-          :current-page="currentpage"
-          :page-size="pageper"
-          layout=" prev, pager, next, total"
-          :total="pagetotal">
-        </el-pagination>
-      </div>
-    </div>
   </div>
 </template>
 <script>
   import Tree from '../../../../components/page/catalogtree.vue'
+  const back_delete_ill = false;
   var self = null;    //在create方法中初始化为this
   export default {
     components: {
@@ -69,6 +31,7 @@
       //获取疾病
       self.api.doc_getIlllist().then((res)=>{
         self.illinfo = res.data.ret;
+        self.init();
       }).catch((err)=>{
 
       })
@@ -95,32 +58,23 @@
       }
     },
     methods :{
-      handleCurrentChange : function(page){
-        //console.log(page);
-        //console.log(self.firsturl);
-        //console.log(self.path);
-        this.api.axios_ajax(self.path + '?' +'&page=' + page, '', 'GET', false).then((res)=>{
-          //console.log("数据：" + JSON.stringify(res.data.ret) );
-          self.qaList = res.data.ret.data.data;
-          self.questionSearch = res.data.ret.questionSearch;
-          self.currentpage = res.data.ret.data.current_page;
-          self.prevurl = res.data.ret.data.prev_page_url;
-          self.nexturl = res.data.ret.data.next_page_url;
-          self.pageto =  res.data.ret.data.to;
-          self.pageper = Number(res.data.ret.data.per_page);
-        }).catch((err)=>{
-
-        })
+      init : function(){
+        let doctor = JSON.parse(localStorage.getItem("doctor"));
+        if(doctor.default_ill != '' && doctor.default_ill != null && doctor!=''){
+            self.common.jumpToPageByParam({router : self.$router, url : "../doctor/Qafenleiselect", param : doctor.default_ill})
+        }
       },
       selectill : function(illid){
         self.illid = illid;
-        self.illflg = false;
-        if(self.catalogflg){//展示分类
-           
-        }
-        else{//不显示分类
-          self.getillQaList();
-        }
+        let doctor = JSON.parse(localStorage.getItem("doctor"));
+        doctor.default_ill = illid;
+        self.api.doc_updataDefaultIll({user_id : localStorage.getItem("doc_id"), default_ill : illid, token : localStorage.getItem("token")}).then((res)=>{
+          if(res){
+            localStorage.setItem("doctor", JSON.stringify(doctor));
+            self.common.jumpToPageByParam({router : self.$router, url : "../doctor/Qafenleiselect", param : self.illid})
+          }
+        }).catch((err)=>{
+        })
       },
        rechoseIll : function(){
         self.cataloguse = false;//不使用分类

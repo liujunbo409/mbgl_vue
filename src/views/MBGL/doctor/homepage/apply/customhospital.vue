@@ -26,6 +26,7 @@
   </div>
 </template>
 <script>
+  const back_delete_ill = false;
   import { MessageBox } from 'mint-ui';
   var self = null;    //在create方法中初始化为this
   export default {

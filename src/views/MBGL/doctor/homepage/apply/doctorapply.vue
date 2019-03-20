@@ -17,7 +17,7 @@
               医院
             </div>
             <div class="aui-list-item-input">
-              <select v-model="hospital" @change="getDepartmentList" class="select">
+              <select v-model="hospital" @change="changeHosipital" class="select">
                 <option  v-bind:key="key" v-bind:value="item.id" v-for="(item,key) of hospitalinfo" >{{item.hospital_name}}</option>
                 <!-- <option value="0" >{{hospitalinput}}</option> -->
               </select>
@@ -54,9 +54,9 @@
             </div>
             <div class="aui-list-item-input" @click="gotoselectill" style="width: 200px;">
               <div class="aui-text-right" >
-                <!-- <input type="text" class="aui-text-right" style="color: #B3B3B3" maxlength="15"  placeholder="未选择"
-                       v-model="illnames"> -->
-                       <div class="aui-text-right" style="color: #B3B3B3" >{{illnames}}</div>
+                <input type="text" class="aui-text-right" style="color: #B3B3B3" maxlength="15"  placeholder="未选择"
+                       v-model="illnames">
+                       <!-- <div class="aui-text-right" style="color: #B3B3B3" >{{illnames}}</div> -->
               </div>
             </div>
           </div>
@@ -122,7 +122,7 @@
             内科疾病 （点击添加）
         </div>
       </li>
-      <li class="aui-list-item" style="border:none;height:20rem">
+      <li class="aui-list-item" style="border:none;background-image:none;">
         <div class="illList" style="margin-top:1rem" v-bind:id="item.ill.id"  v-for="(item,key) of illinfo" @click="selectill(item, item.ill.id)">
           <div >{{item.ill.name}}</div>
           </div>
@@ -137,6 +137,7 @@
   </div>
 </template>
 <script>
+  const back_delete_ill = false;
   import { MessageBox } from 'mint-ui';
   //七牛组件
   import upload from '../../../../../components/page/qnupload.vue';   
@@ -176,6 +177,7 @@
       }
     },
     mounted(){
+      history.replaceState(null,null,'?type=0');
       //初始化
       self.init();
     },
@@ -183,7 +185,7 @@
       //以下为主页面的方法
       init : function(){
         //获取医院列表
-        self.api.doc_getHospitalList({}).then((res)=>{
+        self.api.doc_getHospitalList({user_id : localStorage.getItem("doc_id"), role : 'doctor'}).then((res)=>{
           self.hospitalinfo = res.data.ret;
         }).catch((err)=>{
         })
@@ -213,23 +215,42 @@
       getDepartmentList : function(){
         self.api.doc_getDepartmentList({hospital_id : self.hospital}).then((res)=>{
           //self.common.consoledebug.log("ret :" + JSON.stringify(res.data.ret));
+          //self.department = "";
+          self.departmentinfo = res.data.ret;
+        }).catch((err)=>{
+        })
+      },
+      changeHosipital : function(){
+        self.api.doc_getDepartmentList({hospital_id : self.hospital}).then((res)=>{
+          //self.common.consoledebug.log("ret :" + JSON.stringify(res.data.ret));
+          self.department = "";
           self.departmentinfo = res.data.ret;
         }).catch((err)=>{
         })
       },
       doDoctorApply : function(){
         //校验
-        if(self.department == "")
+        if(self.hospital == ""|| self.hospital == undefined)
+        {
+          MessageBox('提示','请选择医院！')
+          return false;
+        }
+        if(self.department == ""|| self.department == undefined)
         {
           MessageBox('提示','请选择科室！')
           return false;
         }
-        if(self.illids == "")
+        if(self.doctor_title == ""|| self.doctor_title == undefined)
+        {
+          MessageBox('提示','请选择职称！')
+          return false;
+        }
+        if(self.illids == "" || self.illids == undefined)
         {
           MessageBox('提示','请选择疾病！')
           return false;
         }
-        if(self.desc == "")
+        if(self.desc == "" || self.desc == undefined)
         {
           MessageBox('提示','请填写简介')
           return false;

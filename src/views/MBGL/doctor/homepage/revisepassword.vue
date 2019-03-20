@@ -57,7 +57,7 @@
 <script>
   var self = null;    //在create方法中初始化为this
   import {MessageBox} from 'mint-ui';
-
+  const back_delete_ill = false;
   export default {
     created() {
       self = this;    //使用self来代替this，避免this无效

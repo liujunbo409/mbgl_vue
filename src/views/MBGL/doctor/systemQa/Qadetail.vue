@@ -9,7 +9,7 @@
         <span class="aui-iconfont aui-icon-home"></span>
       </a>
     </header>
-    <div class="aui-text-center aui-margin-t-15" style="position: relative;text-align: left;font-weight: bold;margin-left: 0.5rem;">
+    <div class="aui-text-center aui-margin-t-15" style="position: relative;text-align: left;font-weight: bold;margin-left: 0.5rem;margin-right: 0.5rem;">
         <span class="font-size-18">{{detailinfo.question}}
         </span>
     </div>
@@ -19,7 +19,7 @@
           浏览数：{{count.doctor_show_num}}
         </span>
     </div>
-     <div  style="float:left;margin-left:1rem;width:100%">所属分类：</div><br>
+     <div  style="float:left;margin-left:1rem;">所属分类：</div><br>
     <ul>
           <li class="aui-list-item"  style="text-indent: 5%;"
           v-for="(bank,key) of bankLists"  :class="key == bankLists.length-1?'lastli':''">
@@ -29,8 +29,7 @@
     <div class="aui-padded-15" style="font-weight:light;font-size:0.7rem">
       <div v-html="detailinfo.answer"></div>
     </div>
-    
-     <div  style="float:left;margin-left:1rem;width:100%">关联文章：</div><br/>
+     <div  style="float:left;margin-left:1rem;">关联文章：</div><br/>
         <ul>
           <li class="aui-list-item"  style="text-indent: 5%;color:#03a9f4"
           v-for="(bind,key) of bindLists"  :class="key == bindLists.length-1?'lastli':''"
@@ -38,28 +37,44 @@
               {{bind.article.title}}
           </li>
         </ul>
-         <div  style="float:left;margin-left:1rem;width:100%">文章来源：</div><br/>
+         <div  style="float:left;margin-left:1rem;">文章来源：</div><br/>
         <ul>
           <li class="aui-list-item"  style="text-indent: 5%;"
           v-for="(source,key) of sourceLists"  :class="key == sourceLists.length-1?'lastli':''">
-              {{source.source_text}}
+              [{{source.sequence}}]{{source.source_text}}
           </li>
         </ul>
-        <!-- 问答反馈 -->
-        <div class="illList" style="margin-top:1rem; width:40%;margin-left:1.25rem;margin-bottom:3rem;" @click="gotoFeedBack">
-          <div >问答反馈</div>
+        <div style="margin-bottom:3rem;margin-right: 0.5rem;">
+          <div style="margin-left:1rem;margin-top:1.5rem;" v-if="lastQaflg">
+            <span>上一篇：</span><span v-if="lastQa.id != '0'" @click="gotoNearQa(lastQa.id)">{{lastQa.question}}</span><span v-else style="color:#B3B3B3">{{lastQa.question}}</span>
           </div>
-          <div class="aui-bar aui-bar-tab aui-bg-info" id="footer" style="margin-top:2rem">
-        <div class="aui-bar-tab-item aui-active" tapmode @click="changeCollectStatus">
-            <div class="aui-bar-tab-label aui-text-white aui-border-r cy-btn">
-                    {{footer}}
-            </div>
+          <div  style="margin-left:1rem;margin-top:0.5rem;" v-if="nextQaflg">
+            <span>下一篇：</span><span v-if="nextQa.id != '0'" @click="gotoNearQa(nextQa.id)">{{nextQa.question}}</span><span v-else style="color:#B3B3B3">{{nextQa.question}}</span>
+          </div>
         </div>
-    </div>
+        <!-- 问答反馈 -->
+       
+        <div style="position:fixed;bottom:0px;display:flex;border-top:1px solid #B3B3B3;background-color:white;width:100%" >
+          <div style="width:50%;text-align:center" @click="gotoFeedBack">
+          <img width="17px" height="17px" style="display:inline;margin-top: 5px;" src="http://src.yixuekeyan.cn/feedback.png">
+
+          <div class="aui-grid-label aui-font-size-12">问答反馈</div>
+          </div>
+          <div style="border-left:1px solid #B3B3B3;width:0%;height:22px;line-height:22px;margin-top: 15px;"></div>
+          <div style="width:50%;text-align:center" @click="changeCollectStatus">
+          <img v-if="footer == '收藏问答'" width="17px" height="17px" style="display:inline;margin-top: 5px;" src="http://src.yixuekeyan.cn/uncollected.png">
+          <img v-else width="17px" height="17px" style="display:inline;margin-top: 5px;" src="http://src.yixuekeyan.cn/collected.png">
+          <span v-if="footer == '收藏问答'" style="margin-left:2px">{{collectnum}}</span>
+          <span v-else style="color:#03a9f4;margin-left:2px" >{{collectnum}}</span>
+          <div v-if="footer == '收藏问答'" class="aui-grid-label aui-font-size-12">{{footer}}</div>
+          <div v-else style="color:#03a9f4" class="aui-grid-label aui-font-size-12">{{footer}}</div>
+      </div>
+          </div>
   </div>
 </template>
 <script>
   import { MessageBox  } from 'mint-ui';
+  const back_delete_ill = false;
   var self = null;    //在create方法中初始化为this
   export default {
     created() {
@@ -82,7 +97,13 @@
         bankLists : '' ,//问答题库分类
         sourceLists :'',//来源
         bindLists :'',//关联
-        count :''//统计
+        count :'',//统计
+        collectnum : 0,
+        bank_id : '0',
+        lastQa : null,
+        nextQa : null,
+        lastQaflg : false,
+        nextQaflg : false,
       }
     },
     methods :{
@@ -90,11 +111,14 @@
       self.question_id = question_id;
         //获取文章信息详情
         self.api.doc_getQaDetail({question_id : question_id,bank_id:self.bank_id}).then((res)=>{
+          //console.log("Qares+ " + JSON.stringify(res.data.ret.count));
           self.detailinfo = res.data.ret.question;
           self.bankLists = res.data.ret.banks;
           self.sourceLists = res.data.ret.sources;//来源
           self.bindLists = res.data.ret.binds;//关联
           self.count = res.data.ret.count;//数据记录
+          self.collectnum = res.data.ret.count.user_favorite_num + res.data.ret.count.doctor_favorite_num;
+          //console.log(self.collectnum);
           // //格式化标题 
           // if(self.detailinfo.title.length > 8)
           // {
@@ -117,6 +141,21 @@
         }).catch((err)=>{
 
         })
+        //获取上一篇问答和下一篇问答
+        self.api.doc_getNearQa({question_id : question_id, type : 'next', bank_id : self.bank_id, role_type : 'D'}).then((res)=>{
+          //console.log('next'+JSON.stringify(res));
+          self.nextQa =res.data.ret;
+          self.nextQaflg = true;
+        }).catch((err)=>{
+
+        })
+        self.api.doc_getNearQa({question_id : question_id, type : 'last', bank_id : self.bank_id, role_type : 'D'}).then((res)=>{
+          //console.log('last'+JSON.stringify(res));
+          self.lastQa = res.data.ret;
+          self.lastQaflg = true;
+        }).catch((err)=>{
+
+        })
       },
       //浏览关联文章
       gotoArticle : function(articleid, muluid,illid){
@@ -134,6 +173,7 @@
           token : localStorage.getItem("token"),
         }
         self.api.doc_qaCollectChange(params).then((res)=>{
+          //console.log(JSON.stringify(res))
           self.init(self.question_id);
         }).catch((err)=>{
 
@@ -149,6 +189,11 @@
       },
       clickBack : function () {
         self.common.clickBack();
+      },
+      gotoNearQa : function(question_id){
+        self.init(question_id);
+        self.question_id = question_id;
+        window.scrollTo(0, 0);
       }
     },
   }

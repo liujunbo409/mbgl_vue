@@ -40,7 +40,7 @@
         <ul>
           <li class="aui-list-item"  style="text-indent: 5%;"
           v-for="(source,key) of sourceLists"  :class="key == sourceLists.length-1?'lastli':''">
-              {{source.source_text}}
+              [{{source.sequence}}]{{source.source_text}}
           </li>
         </ul>
         <div v-show="detailinfo.shenhe.status=='1'" class="aui-tab" id="tab">
@@ -68,6 +68,7 @@
   </div>
 </template>
 <script>
+  const back_delete_ill = false;
   import { MessageBox  } from 'mint-ui';
   var self = null;    //在create方法中初始化为this
   export default {

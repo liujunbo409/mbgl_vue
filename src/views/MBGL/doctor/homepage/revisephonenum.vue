@@ -72,6 +72,7 @@
 </style>
 <script>
   var self = null;    //在create方法中初始化为this
+  const back_delete_ill = false;
   import { MessageBox } from 'mint-ui';
   import SIdentify from '../../../../components/page/identify.vue'
   export default {

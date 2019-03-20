@@ -112,7 +112,7 @@
                         </div>
                         <div class="aui-list-item-input">
                             <input type="hidden" v-model="planid">
-                            <select id="day" name="day" v-model="day">
+                            <select id="day" name="day" v-model="day" disabled>
                                 <option value="0">周一</option>
                                 <option value="1">周二</option>
                                 <option value="2">周三</option>
@@ -131,7 +131,7 @@
                             时间段：
                         </div>
                         <div class="aui-list-item-input">
-                            <select id="shijianduan" name="shijianduan" v-model="timeslot">
+                            <select id="shijianduan" name="shijianduan" v-model="timeslot" disabled>
                                 <option value="0">上午</option>
                                 <option value="1">下午</option>
                                 <option value="2">夜间</option>
@@ -159,7 +159,7 @@
                         </div>
                     </div>
                 </li> -->
-                <li class="aui-list-item">
+                <!-- <li class="aui-list-item">
                     <div class="aui-list-item-inner">
                         <div class="aui-list-item-label aui-font-size-14">
                             开始时间：
@@ -188,6 +188,36 @@
                         </el-time-picker>
                         </div>
                     </div>
+                </li> -->
+                <li class="aui-list-item">
+                    <div class="aui-list-item-inner">
+                        <div class="aui-list-item-label aui-font-size-14">
+                            开始时间：
+                        </div>
+                        <div class="aui-list-item-input">
+                        <el-time-select
+                            v-model="timefrom"
+                            :picker-options="cztime"
+                            :editable = "false"
+                            placeholder="请选择开始时间">
+                            </el-time-select>
+                        </div>
+                    </div>
+                </li>
+                <li class="aui-list-item">
+                    <div class="aui-list-item-inner">
+                        <div class="aui-list-item-label aui-font-size-14">
+                            结束时间：
+                        </div>
+                        <div class="aui-list-item-input">
+                        <el-time-select
+                            v-model="timeto"
+                            :picker-options="cztime"
+                            :editable = "false"
+                            placeholder="请选择结束时间">
+                            </el-time-select>
+                        </div>
+                    </div>
                 </li>
                 <li class="aui-list-item" style="border:none">
                     <div class="aui-list-item-inner">
@@ -205,8 +235,8 @@
                         <div id="addplan" class="aui-btn aui-btn-info aui-btn-block"
                              style="border-radius: 50px;width:40%;margin: auto;" @click="doSave">保存
                         </div>
-                        <div id="delplan" class="aui-btn aui-btn-danger aui-btn-block "
-                             style="border-radius: 50px;width:40%;margin: auto;" @click="doDelete" v-if="delbtnflg">删除
+                        <div id="delplan" class="aui-btn aui-btn-block "
+                             style="border-radius: 50px;width:40%;margin: auto;background-color:red;color:white" @click="doDelete" v-if="delbtnflg">删除
                         </div>
                         </div>
                     </div>
@@ -217,6 +247,7 @@
   </div>
 </template>
 <script>
+  const back_delete_ill = false;
   var self = null;    //在create方法中初始化为this
   import { MessageBox  } from 'mint-ui';
   export default {
@@ -238,6 +269,7 @@
         delbtnflg : false,           //删除按钮显示标志
         planid : '',                 //出诊计划id
         showflg : false,             //页面显示标志
+        cztime : {start: '08:30', step: '00:15', end: '18:30'}
       }
     },
     methods :{
@@ -257,7 +289,7 @@
                 for(var i = 0;i < res.data.ret.length;i++){
                     for(var j = 0 ;j < res.data.ret[i].length;j++){
                         if(res.data.ret[i][j] == null){
-                            res.data.ret[i][j] = [{"time_from" : "","time_to" : "", "address" : ""}]
+                            res.data.ret[i][j] = {"time_from" : "","time_to" : "", "address" : ""};
                         }else{
                             res.data.ret[i][j].time_from = JSON.stringify(res.data.ret[i][j].time_from).substring(1, 6);
                             res.data.ret[i][j].time_to = JSON.stringify(res.data.ret[i][j].time_to).substring(1, 6);
@@ -271,15 +303,48 @@
             })
         },
         edit : function(data, dayOfweek, timeSlot){
-            //页面下方信息赋值
+            if(timeSlot == '0'){
+                self.cztime = {start: '08:00', step: '00:15', end: '12:00'};
+            }else if(timeSlot == '1'){
+                self.cztime = {start: '12:00', step: '00:15', end: '18:00'};
+            }else if(timeSlot == '2'){
+                self.cztime = {start: '18:00', step: '00:15', end: '23:59'};
+            }
             self.planid = data.id;
             self.delbtnflg = false;
             self.day = dayOfweek;
             self.timeslot = timeSlot;
-            self.timefrom = data.time_from;
-            self.timeto = data.time_to;
-            self.address = data.address;
-            if(data.time_to != null){
+            //如果为新增，获取默认值
+            if(data.address == '' && data.time_from == '' && data.time_to == ''){
+                self.api.doc_getLastCZSJ({user_id : localStorage.getItem("doc_id"), shijianduan : timeSlot, type : 'time'}).then((res)=>{
+                    console.log('time' + JSON.stringify(res));
+                    if(res.data.ret){
+                        self.timeto = res.data.ret.time_to.substring(0, 5);
+                        self.timefrom = res.data.ret.time_from.substring(0, 5);
+                    }else{
+                        self.timefrom = data.time_from;
+                        self.timeto = data.time_to;
+                    }
+                }).catch((err)=>{
+
+                })
+                self.api.doc_getLastCZSJ({user_id : localStorage.getItem("doc_id"), shijianduan : timeSlot, type : 'dizhi'}).then((res)=>{
+                    //console.log('dizhi' + JSON.stringify(res));
+                    if(res.data.ret){
+                        self.address = res.data.ret.address;
+                    }else{
+                        self.address = data.address;
+                    }
+                }).catch((err)=>{
+
+                })
+            }else{
+                //页面下方信息赋值
+                self.timefrom = data.time_from;
+                self.timeto = data.time_to;
+                self.address = data.address;
+            }
+            if(data.time_to != null && data.time_to != ""){
                 self.delbtnflg = true;
             }
             window.scrollTo(0, document.body.scrollHeight);
@@ -298,6 +363,11 @@
             if(self.timefrom > self.timeto)
             {
                 MessageBox('提示', "开始时间不能晚于结束时间!");
+                 return false;
+            }
+            if(self.timefrom == self.timeto)
+            {
+                MessageBox('提示', "开始时间和结束时间不能为同一时间!");
                  return false;
             }
             if(self.timeslot == "0"){
@@ -322,7 +392,7 @@
                 }
             }else{
                 //晚上
-                if(self.timefrom >  '23:00:00'){
+                if(self.timefrom >  '24:00:00'){
                     MessageBox('提示', "您所填写的时间段并不在晚上");
                     return false;
                     }

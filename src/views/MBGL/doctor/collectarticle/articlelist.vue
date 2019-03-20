@@ -1,7 +1,7 @@
 <template>
   <div >
     <header class="aui-bar aui-bar-nav">
-      <a class="aui-pull-left" @click="clickBack">
+      <a class="aui-pull-left" @click="clickBack()">
         <span class="aui-iconfont aui-icon-left"></span>
       </a>
       <div class="aui-title">{{title}}</div>
@@ -9,14 +9,8 @@
         <span class="aui-iconfont aui-icon-home"></span>
       </a>
     </header>
-    <span style="margin-top:1rem;margin-left:0.5rem;color:#03a9f4;font-size:0.7rem">选择疾病 </span>
-    <span style="margin-top:1rem;margin-left:0.5rem;color:#03a9f4;font-size:0.7rem">全部目录 </span>
+    <span v-if="articleflg" style="margin-top:1rem;margin-left:0.5rem;color:#03a9f4;font-size:0.7rem" @click="clickBack()">重新选择疾病 </span>
     <span v-if="articleflg" style="margin-right:0.5rem;color:#03a9f4;font-size:0.7rem;float:right" @click="changeStatus">{{statustext}} </span>
-    <div v-if="illflg">
-      <div class="illList" style="margin-top:1rem; width:40%;margin-left:1.25rem" v-bind:id="item.id" v-bind:value="item.id" v-for="(item,key) of illinfo" @click="selectill(item.id)">
-          <div >{{item.name}}</div>
-          </div>
-    </div>
     <div v-if="articleflg">
       <ul class="aui-list aui-form-list">
       <li class="aui-list-item" v-for="(item,key) of articleinfo" @click="gotoArticle(item.id)" :class="key == articleinfo.length-1?'lastli':''">
@@ -26,7 +20,7 @@
             <div>
         <span style="font-size:0.55rem;color:#B3B3B3">收藏 :{{item.data.used_num}}</span>
             <span style="margin-left:1rem;font-size:0.55rem;color:#B3B3B3">认可 : {{item.data.accept_num}}</span>
-            <span style="margin-left:1rem;font-size:0.55rem;color:#B3B3B3">浏览 :{{item.data.show_num}}</span>
+            <span style="margin-left:1rem;font-size:0.55rem;color:#B3B3B3">浏览 :{{item.data.doctor_show_num + item.data.user_show_num}}</span>
         </div>
           </div>
           <span class="aui-iconfont aui-icon-right" style="color: #B3B3B3"></span>
@@ -48,6 +42,7 @@
   </div>
 </template>
 <script>
+  const back_delete_ill = true;
   import Tree from '../../../../components/page/catalogtree.vue'
   var self = null;    //在create方法中初始化为this
   export default {
@@ -56,7 +51,8 @@
     },
     mounted(){
       //初始化
-      self.init();
+        self.illid = self.$route.query.param;
+        self.selectill(self.$route.query.param);
     },
     data(){
       return {
@@ -177,10 +173,29 @@
         })
       },
       clickBack : function () {
-        self.common.clickBack();
+        let doctor = JSON.parse(localStorage.getItem("doctor"));
+        doctor.default_ill = '';
+        localStorage.setItem("doctor", JSON.stringify(doctor));
+        self.api.doc_updataDefaultIll({user_id : localStorage.getItem("doc_id"), default_ill : '', token : localStorage.getItem("token")}).then((res)=>{
+          if(res){
+            self.common.clickBack();
+          }
+        }).catch((err)=>{
+
+        })
       }
     },
   }
+  // window.addEventListener("popstate", function(e) {
+  //   if(e.state != null){
+  //       let doctor = JSON.parse(localStorage.getItem("doctor"));
+  //       doctor.default_ill = '';
+  //       localStorage.setItem("doctor", JSON.stringify(doctor));
+  //       api.doc_updataDefaultIll({user_id : localStorage.getItem("doc_id"), default_ill : '', token : localStorage.getItem("token")}).then((res)=>{
+  //       }).catch((err)=>{
+  //       })}
+  // }, false);
+
 
 </script>
 <style scoped>

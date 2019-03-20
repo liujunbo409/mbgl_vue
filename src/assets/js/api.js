@@ -74,7 +74,7 @@ axios.interceptors.response.use((res) => {
 function axios_ajax(url, params, method, loadding_flag) {
 
   //请注意，配置param，包括放入user_id和token，应该在request拦截器中实现
-  //consoledebug.log("axios_ajax method:" + method + " url:" + url + "  params:" + JSON.stringify(params));
+  consoledebug.log("axios_ajax method:" + method + " url:" + url + "  params:" + JSON.stringify(params));
   //加载图标
   if (loadding_flag) {
     Indicator.open({
@@ -197,7 +197,7 @@ export const doc_forgetPWD = params => {
 
 //获取医院列表
 export const doc_getHospitalList = params => {
-  return axios_ajax('api/doctor/apply/hospitalList', params, 'GET', false);
+  return axios_ajax('api/common/hospitalList', params, 'GET', false);
 }
 
 //获取科室列表
@@ -268,6 +268,21 @@ export const doc_getArticlelist = params => {
 //获取文章详情
 export const doc_getArticleDetail = params => {
   return axios_ajax('api/doctor/article/article', params, 'GET', false);
+}
+
+//获取上下文章
+export const doc_getNearArticle = params => {
+  return axios_ajax('api/doctor/article/nearArticle', params, 'GET', false);
+}
+
+//获取上下问答
+export const doc_getNearQa = params => {
+  return axios_ajax('api/doctor/qa/nearQa', params, 'GET', false);
+}
+
+//获取文章收藏数、认可数
+export const doc_getArticleData = params => {
+  return axios_ajax('api/doctor/article/getArticleData', params, 'GET', false);
 }
 
 //获取文章来源
@@ -411,6 +426,21 @@ export const doc_qaCollectChange = params => {
 export const doc_getUserStatus = params => {
   return axios_ajax('api/doctor/my/userStatus', params, 'GET', false);
 }
+
+//出诊时间获取上次出诊时间
+export const doc_getLastCZSJ = params => {
+  return axios_ajax('api/doctor/czsj/getLastCZSJ', params, 'GET', false);
+}
+
+//首页获取各模块信息是否填写完成
+export const doc_getMokuaiStatus = params => {
+  return axios_ajax('api/doctor/my/getMokuaiStatus', params, 'GET', false);
+}
+
+//更新默认疾病
+export const doc_updataDefaultIll = params => {
+  return axios_ajax('api/common/updataDefaultIll', params, 'POST', false);
+}
 /*
  *
  * 创建Toast
@@ -498,6 +528,12 @@ export default{
   doc_qaCollectChange,
   doc_getQaCollectList,
   doc_getUserStatus,
+  doc_getNearArticle,
+  doc_getArticleData,
+  doc_getMokuaiStatus,
+  doc_getLastCZSJ,
+  doc_updataDefaultIll,
+  doc_getNearQa,
 }
 
 

@@ -76,7 +76,10 @@ export const clickBack = params => {
 export const jumpToPage = params => {
   params.router.push({path: params.url, query: {}})
 }
-
+//跳转到指定页面奥
+export const jumpToPageByParam = params => {
+  params.router.push({path: params.url, query: {param: params.param}})
+}
 //注册&忘记密码页面
 export const goToRegister = params => {
   params.router.push({path: "../doctor/register", query: {type : params.type}})
@@ -93,10 +96,20 @@ export const goToSelectIll = params => {
 export const goToDoctorApply = params => {
   params.router.push({path: "../doctorapply", query: {ill_ids : params.ill_ids, ill_names : params.ill_names}})
 }
+//选择疾病和目录之后查看文章列表页
+export const goToArticleList = params => {
+  params.router.push({path: "../systemarticle/articleList", query: { muluid : params.muluid, illid : params.illid}})
+}
 //选择文章之后查看文章详情页
 export const goToArticleDetail = params => {
-  params.router.push({path: "../doctor/articledetail", query: {articleid : params.articleid, muluid : params.muluid, illid : params.illid}})
+  params.router.push({path: "../articledetail", query: {articleid : params.articleid, muluid : params.muluid, illid : params.illid}})
 }
+
+//选择问答之后查看问答详情页
+export const goToQaList = params => {
+  params.router.push({path: "../doctor/QaList", query: {banknow : params.banknow, illid : params.illid ,type : params.type}})
+}
+
 //选择文章之后查看文章问题
 export const goToArticleQuestion = params => {
   params.router.push({path: "../doctor/articlequestion", query: {articleid : params.articleid}})
@@ -142,12 +155,14 @@ export default{
   //页面跳转
   clickBack,
   jumpToPage,
+  jumpToPageByParam,
   goToRegister,
   goToApplyindex,
   //goToSelectDepartment,
   goToSelectIll,
   goToDoctorApply,
   goToArticleDetail,
+  goToArticleList,
   goToArticleQuestion,
   goToArticleDetailWithCollected,
   goToArticleQuestionWithCollected,
@@ -156,6 +171,7 @@ export default{
   jumpToPageWithArticleid,
   jumpToQaInfo,
   gotoQaDetail,
+  goToQaList,
   goToQaFeedBack,
 };
 
