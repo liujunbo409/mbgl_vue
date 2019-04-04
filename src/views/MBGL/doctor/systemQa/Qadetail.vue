@@ -5,8 +5,8 @@
         <span class="aui-iconfont aui-icon-left"></span>
       </a>
       <div class="aui-title">{{title}}</div>
-      <a class="aui-pull-right" href="#/MBGL/doctor/index">
-        <span class="aui-iconfont aui-icon-home"></span>
+      <a class="aui-pull-right" @click="home">
+        <span style="color:#FFFFFF;font-size:0.66rem">返回首页</span>
       </a>
     </header>
     <div class="aui-text-center aui-margin-t-15" style="position: relative;text-align: left;font-weight: bold;margin-left: 0.5rem;margin-right: 0.5rem;">
@@ -37,7 +37,7 @@
               {{bind.article.title}}
           </li>
         </ul>
-         <div  style="float:left;margin-left:1rem;">文章来源：</div><br/>
+         <div  style="float:left;margin-left:1rem;">参考文献：</div><br/>
         <ul>
           <li class="aui-list-item"  style="text-indent: 5%;"
           v-for="(source,key) of sourceLists"  :class="key == sourceLists.length-1?'lastli':''">
@@ -92,8 +92,8 @@
         shenhe_id : '',            //审核id
         title : '问答题库',               //页面title
         detailinfo : null,        //文章详情信息
-        sourceinfo : null,        //文章来源信息   
-        sourceflg : false,         //文章来源是否显示
+        sourceinfo : null,        //参考文献信息   
+        sourceflg : false,         //参考文献是否显示
         bankLists : '' ,//问答题库分类
         sourceLists :'',//来源
         bindLists :'',//关联
@@ -194,6 +194,9 @@
         self.init(question_id);
         self.question_id = question_id;
         window.scrollTo(0, 0);
+      },
+      home : function(){
+        self.common.jumpToPage({router : self.$router, url : "/MBGL/doctor/index"})
       }
     },
   }

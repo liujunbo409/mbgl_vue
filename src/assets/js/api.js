@@ -285,7 +285,7 @@ export const doc_getArticleData = params => {
   return axios_ajax('api/doctor/article/getArticleData', params, 'GET', false);
 }
 
-//获取文章来源
+//获取参考文献
 export const doc_getArticleSource = params => {
   return axios_ajax('api/doctor/article/source', params, 'GET', false);
 }
@@ -441,6 +441,21 @@ export const doc_getMokuaiStatus = params => {
 export const doc_updataDefaultIll = params => {
   return axios_ajax('api/common/updataDefaultIll', params, 'POST', false);
 }
+
+//查看本文上次审核未通过审核记录
+export const doc_getlastLostShenhe = params => {
+  return axios_ajax('api/doctor/article/shenhe/lastLostShenhe', params, 'GET', false);
+}
+
+//文章下我的审核记录
+export const doc_getmyShenheByArticle = params => {
+  return axios_ajax('api/doctor/article/shenhe/myShenheByArticle', params, 'GET', false);
+}
+
+//待审核文章数量
+export const doc_getDSHwaitNum = params => {
+  return axios_ajax('api/doctor/article/shenhe/waitNum', params, 'GET', false);
+}
 /*
  *
  * 创建Toast
@@ -534,6 +549,9 @@ export default{
   doc_getLastCZSJ,
   doc_updataDefaultIll,
   doc_getNearQa,
+  doc_getlastLostShenhe,
+  doc_getmyShenheByArticle,
+  doc_getDSHwaitNum,
 }
 
 

@@ -5,8 +5,8 @@
         <span class="aui-iconfont aui-icon-left"></span>
       </a>
       <div class="aui-title">文章详情</div>
-      <a class="aui-pull-right" href="#/MBGL/doctor/index">
-        <span class="aui-iconfont aui-icon-home"></span>
+     <a class="aui-pull-right" @click="home">
+        <span style="color:#FFFFFF;font-size:0.66rem">返回首页</span>
       </a>
     </header>
     <div class="aui-text-center aui-margin-t-15" style="position: relative;text-align: left;font-weight: bold;margin-left: 0.5rem;margin-right: 0.5rem;">
@@ -27,7 +27,7 @@
       <div v-html="detailinfo.html"></div>
     </div>
 
-    <div  style="float:left;margin-left:1rem;">文章来源：</div><br/>
+    <div  style="float:left;margin-left:1rem;">参考文献：</div><br/>
         <div class="mt-10" style="margin-left:10px" v-if="sourceflg">
             <h4 v-if="sourceflg" v-for="(item, key) of sourceinfo" style="margin-left:0.6rem;margin-top:0.2rem">
               <span>[{{item.sequence}}]{{item.source_text}}</span>
@@ -199,10 +199,10 @@
         illid : '',               //疾病id
         articleid : '',           //文章id
         detailinfo : null,        //文章详情信息
-        sourceinfo : null,        //文章来源信息   
+        sourceinfo : null,        //参考文献信息   
         nexusinfo : null,         //文章关联信息
         nexusflg : false,         //文章关联是否显示
-        sourceflg : false,         //文章来源是否显示
+        sourceflg : false,         //参考文献是否显示
         collecttext : '',         //收藏处显示的文字
         acceptbtntext : '',       //认可按钮显示的文字
         accepttext : '',          //认可处显示的文字
@@ -232,7 +232,7 @@
         }).catch((err)=>{
 
         })
-        //获取文章来源详情信息
+        //获取参考文献详情信息
         self.api.doc_getArticleSource({article_id : articleid}).then((res)=>{
           //self.common.consoledebug.log("sourceres :"  + JSON.stringify(res.data.ret));
           // if(res.data.ret.length == 0){
@@ -354,6 +354,9 @@
       clickBack : function () {
         self.common.jumpToPageByParam({router : self.$router, url : "../doctor/collectarticle",param : self.illid});
         //self.common.clickBack();
+      },
+      home : function(){
+        self.common.jumpToPage({router : self.$router, url : "/MBGL/doctor/index"})
       }
     },
   }

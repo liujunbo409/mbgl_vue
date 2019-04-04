@@ -359,8 +359,11 @@ let routers = [
     }
   },
 ];
+console.log("router");
 export default new Router({
-  mode: 'hash',  // 默认hash
+  //mode: 'hash',  // 默认hash
+  mode: 'history',  // 默认hash
+  base: '/doctor/h5/vue',  // 基础路径
   routes: routers,    //统一管理路由
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {

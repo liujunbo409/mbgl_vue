@@ -5,18 +5,19 @@
         <span class="aui-iconfont aui-icon-left"></span>
       </a>
       <div class="aui-title">{{title}}</div>
-      <a class="aui-pull-right" href="#/MBGL/doctor/index">
-        <span class="aui-iconfont aui-icon-home"></span>
+      <a class="aui-pull-right" @click="home">
+        <span style="color:#FFFFFF;font-size:0.66rem">返回首页</span>
       </a>
     </header>
-    <span v-if="articleflg" style="margin-top:1rem;margin-left:0.5rem;color:#03a9f4;font-size:0.7rem" @click="clickBack()">重新选择疾病 </span>
+    <span v-if="illid == ''" style="margin-top:1rem;margin-left:0.5rem;color:#03a9f4;font-size:0.7rem" @click="gotoSeletIll">选择疾病查看 </span>
+    <span v-if="illid != ''" style="margin-top:1rem;margin-left:0.5rem;color:#03a9f4;font-size:0.7rem" @click="hulueill('')">忽略疾病查看 </span>
     <span v-if="articleflg" style="margin-right:0.5rem;color:#03a9f4;font-size:0.7rem;float:right" @click="changeStatus">{{statustext}} </span>
     <div v-if="articleflg">
       <ul class="aui-list aui-form-list">
-      <li class="aui-list-item" v-for="(item,key) of articleinfo" @click="gotoArticle(item.id)" :class="key == articleinfo.length-1?'lastli':''">
+      <li class="aui-list-item" v-for="(item,key) of articleinfo" @click="gotoArticle(item.article.id, item.ill_id)" :class="key == articleinfo.length-1?'lastli':''">
         <div class="aui-list-item-inner">
           <div>
-            {{item.title}}
+            {{item.article.title}}
             <div>
         <span style="font-size:0.55rem;color:#B3B3B3">收藏 :{{item.data.used_num}}</span>
             <span style="margin-left:1rem;font-size:0.55rem;color:#B3B3B3">认可 : {{item.data.accept_num}}</span>
@@ -37,6 +38,11 @@
           layout=" prev, pager, next, total"
           :total="pagetotal">
         </el-pagination>
+      </div>
+    </div>
+    <div  style="position:fixed;bottom:0px;display:flex;border-top:1px solid #B3B3B3;background-color:#03a9f4;width:100%" >
+        <div style="width:100%;text-align:center;height:2rem;line-height:2rem;color:white" @click="gotoAllArticle()">
+          <div class="aui-grid-label aui-font-size-12">查看全部文章</div>
       </div>
     </div>
   </div>
@@ -120,12 +126,45 @@
 
         })
       },
+      hulueill : function(illid){
+        if(self.statustext == '我的认可'){
+          self.api.doc_getCollectList({user_id: localStorage.getItem("doc_id"), ill_id : illid}).then((res)=>{
+          //self.common.consoledebug.log("res :" + JSON.stringify(res.data.ret));
+          self.articleinfo = res.data.ret.data;
+          self.pagetotal = res.data.ret.total;
+          self.currentpage = res.data.ret.current_page;
+          self.prevurl = res.data.ret.prev_page_url;
+          self.nexturl = res.data.ret.next_page_url;
+          self.firsturl = res.data.ret.first_page_url;
+          self.pageto = res.data.ret.to;
+          self.path = res.data.ret.path;
+          self.pageper = Number(res.data.ret.per_page);
+          self.illflg = false;
+          self.articleflg = true;
+        }).catch((err)=>{
+
+        })
+        }else{
+          self.api.doc_getAcceptList({user_id: localStorage.getItem("doc_id"), ill_id : illid}).then((res)=>{
+            self.common.consoledebug.log("res :" + JSON.stringify(res.data.ret));
+            self.articleinfo = res.data.ret.data;
+            self.pagetotal = res.data.ret.total;
+            self.currentpage = res.data.ret.current_page;
+            self.prevurl = res.data.ret.prev_page_url;
+            self.nexturl = res.data.ret.next_page_url;
+            self.pageto = res.data.ret.to;
+            self.pageper = Number(res.data.ret.per_page);
+          }).catch((err)=>{
+
+          })
+        }
+      },
       changeStatus : function(){
         if(self.statustext == '我的认可'){
           self.statustext = '我的收藏';
           self.title = "认可文章列表"
           self.api.doc_getAcceptList({user_id: localStorage.getItem("doc_id"), ill_id : self.illid}).then((res)=>{
-            //self.common.consoledebug.log("res :" + JSON.stringify(res.data.ret));
+            self.common.consoledebug.log("res :" + JSON.stringify(res.data.ret));
             self.articleinfo = res.data.ret.data;
             self.pagetotal = res.data.ret.total;
             self.currentpage = res.data.ret.current_page;
@@ -142,8 +181,11 @@
           self.selectill(self.illid);
         }
       },
-      gotoArticle : function(articleid){
-        self.common.goToArticleDetailWithCollected({router: self.$router, articleid : articleid, illid : self.illid});
+      gotoArticle : function(articleid, ill_id){
+        self.common.goToArticleDetailWithCollected({router: self.$router, articleid : articleid, illid : ill_id});
+      },
+      gotoAllArticle : function(){
+        self.common.jumpToPage({router: self.$router, url: '../doctor/systemarticle'})
       },
       gotoNext : function(){
         this.api.axios_ajax(this.nexturl, '', 'GET', false).then((res)=>{
@@ -158,6 +200,9 @@
 
         })
 
+      },
+      gotoSeletIll : function(){
+self.common.jumpToPage({router : self.$router, url : "/MBGL/doctor/collectarticle/selectill"})
       },
       gotoPrev : function (){
         this.api.axios_ajax(this.prevurl, '', 'GET', false).then((res)=>{
@@ -183,6 +228,9 @@
         }).catch((err)=>{
 
         })
+      },
+      home : function(){
+        self.common.jumpToPage({router : self.$router, url : "/MBGL/doctor/index"})
       }
     },
   }

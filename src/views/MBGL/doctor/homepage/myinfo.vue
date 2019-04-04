@@ -6,8 +6,8 @@
         <span class="aui-iconfont aui-icon-left"></span>
       </a>
       <div class="aui-title">个人信息</div>
-      <a class="aui-pull-right" href="#/MBGL/doctor/index">
-        <span class="aui-iconfont aui-icon-home"></span>
+      <a class="aui-pull-right" @click="home">
+        <span style="color:#FFFFFF;font-size:0.66rem">返回首页</span>
       </a>
     </header>
     <form id="form-edit" class="form form-horizontal" method="post" onsubmit="">
@@ -68,8 +68,8 @@
             </div>
           </div>
         </li>
-        <li class="aui-list-item">
-          <div class="aui-list-item-inner">
+        <li class="aui-list-item" v-show="false">
+          <div class="aui-list-item-inner" >
             <div class="aui-list-item-label">
               出生日期
             </div>
@@ -376,6 +376,9 @@
       xueliChange : function (data) {
        //self.common.consoledebug.log("你将下拉框修改为：" + data.value);
         self.xueli = data.value;
+      },
+      home : function(){
+        self.common.jumpToPage({router : self.$router, url : "/MBGL/doctor/index"})
       }
     },
   }

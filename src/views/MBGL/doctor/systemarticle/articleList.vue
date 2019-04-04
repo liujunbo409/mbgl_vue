@@ -5,8 +5,8 @@
         <span class="aui-iconfont aui-icon-left"></span>
       </a>
       <div class="aui-title">文章列表</div>
-      <a class="aui-pull-right" href="#/MBGL/doctor/index">
-        <span class="aui-iconfont aui-icon-home"></span>
+      <a class="aui-pull-right" @click="home">
+        <span style="color:#FFFFFF;font-size:0.66rem">返回首页</span>
       </a>
     </header>
     <div v-if="articleflg">
@@ -142,6 +142,9 @@
       },
       clickBack : function () {
         self.common.clickBack();
+      },
+      home : function(){
+        self.common.jumpToPage({router : self.$router, url : "/MBGL/doctor/index"})
       }
     },
   }

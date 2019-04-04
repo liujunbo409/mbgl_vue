@@ -5,9 +5,9 @@
         <!-- <span class="aui-iconfont aui-icon-left"></span> -->
       </a>
       <div class="aui-title">首页</div>
-      <a class="aui-pull-right" href="#/MBGL/doctor/index">
+      <!-- <a class="aui-pull-right" href="#/MBGL/doctor/index">
         <span class="aui-iconfont aui-icon-home"></span>
-      </a>
+      </a> -->
     </header>
     <section class="aui-grid aui-margin-b-15">
       <div class="aui-row">
@@ -42,6 +42,7 @@
         <div class="aui-col-xs-4" @click="selTab(3)">
           <!-- <i class="aui-iconfont iconfont icon-dkw_shenhetongguo"></i> -->
           <img style="height:1.4rem;  display:inline" class="" src="../../../../assets/img/shwz.png"> 
+          <div v-if="waitnum != ''" class="aui-badge icon" style="top:14%;left:57%;" >{{waitnum}}</div>
           <div class="aui-grid-label aui-font-size-12">审核文章</div>
         </div>
 
@@ -74,10 +75,10 @@
       </div>
     </section>
     <!-- 我的待审核文章 -->
-    <div class="aui-padded-10">
+    <!-- <div class="aui-padded-10">
         <div class="aui-font-size-14" style="border-left: 3px solid #03a9f4;padding-left: 10px;">我的待审核文章</div>
-    </div>
-    <div v-if="listflg">
+    </div> -->
+    <!-- <div v-if="listflg">
     <ul class="aui-list aui-form-list">
       <li class="aui-list-item" v-for="(item,key) of articleinfo" @click="" :class="key == articleinfo.length-1?'lastli':''" @click="gotoArticle(item.article_id, item.id)">
         <div class="aui-list-item-inner aui-list-item-arrow">
@@ -99,7 +100,7 @@
           :total="pagetotal">
         </el-pagination>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
@@ -125,14 +126,16 @@
         czsjflg : false,
         czdate : '03-03',
         roleflg : true,
+        waitnum : '',
       }
     },
     created() {
       self = this;    //使用self来代替this，避免this无效
     },
     mounted() {
-      if(localStorage.getItem("doc_id") == ""){
-        localStorage.setItem("doc_id", localStorage.getItem("doc_laravel_id"))
+      console.log("index");
+      if(localStorage.getItem("doc_id") == "" || localStorage.getItem("doc_id") == null){
+        localStorage.setItem("doc_id", localStorage.getItem("doc_laravel_id"));
       }
       let doc_id = localStorage.getItem("doc_id");
       const DEBUG_FLAG = localStorage.getItem("DEBUG_FLAG");
@@ -276,21 +279,29 @@
         }).catch((err)=>{
 
         })
-        //待审核文章
-        self.api.doc_getArticleWaitList({user_id : localStorage.getItem("doc_id"), role : localStorage.getItem("role")}).then((res)=>{
-          //self.common.consoledebug.log("res : " + JSON.stringify(res.data.ret));
-          //信息赋值
-          self.articleinfo = res.data.ret.data;
-          self.pagetotal = res.data.ret.total;
-          self.currentpage = res.data.ret.current_page;
-          self.prevurl = res.data.ret.prev_page_url;
-          self.nexturl = res.data.ret.next_page_url;
-          self.pageto = res.data.ret.to;
-          self.pageper = Number(res.data.ret.per_page);
-          self.listflg = true;
+        //待审核文章数量
+        self.api.doc_getDSHwaitNum({user_id : localStorage.getItem("doc_id"), role : localStorage.getItem("role")}).then((res)=>{
+          self.common.consoledebug.log("res : " + JSON.stringify(res));
+          if(res.data.result == true){
+            self.waitnum = res.data.ret;
+          }
+          
         }).catch((err)=>{
-
         })
+        // self.api.doc_getArticleWaitList({user_id : localStorage.getItem("doc_id"), role : localStorage.getItem("role")}).then((res)=>{
+        //   //self.common.consoledebug.log("res : " + JSON.stringify(res.data.ret));
+        //   //信息赋值
+        //   self.articleinfo = res.data.ret.data;
+        //   self.pagetotal = res.data.ret.total;
+        //   self.currentpage = res.data.ret.current_page;
+        //   self.prevurl = res.data.ret.prev_page_url;
+        //   self.nexturl = res.data.ret.next_page_url;
+        //   self.pageto = res.data.ret.to;
+        //   self.pageper = Number(res.data.ret.per_page);
+        //   self.listflg = true;
+        // }).catch((err)=>{
+
+        // })
         //免登陆，访问openID登录接口并赋值
         // if(doctor == null){
         // //if(1 == 1){//测试用
@@ -354,7 +365,7 @@
                     break;
                   //收藏文章
                   case 5 :
-                    self.common.jumpToPage({router: self.$router, url : "../doctor/collectarticle/selectill"});
+                    self.common.jumpToPageByParam({router: self.$router, url : "/MBGL/doctor/collectarticle", param : ''});
                     break;
                     //审核问答题库
                   case 6 :
@@ -420,7 +431,7 @@
       },
       //查看待审核文章详情
       gotoArticle : function(articleid, shenheid){
-        self.common.jumpToPageWithArticleid({router: self.$router, url : "../doctor/assessarticle/detail", articleid : articleid, type : 0, shenheid : shenheid});
+        self.common.jumpToAccessDetail({router: self.$router, url : "../doctor/assessarticle/detail", articleid : articleid, type : 0, shenheid : shenheid, shenhestatus : 'dsh'});
       },
       clickBack : function () {
         self.common.clickBack();

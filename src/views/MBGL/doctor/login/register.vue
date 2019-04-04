@@ -5,7 +5,7 @@
         <span class="aui-iconfont aui-icon-left"></span>
       </a>
       <div class="aui-title">{{title}}</div>
-      <a class="aui-pull-right" href="">
+      <a class="aui-pull-right" @click="home">
         <span class="aui-iconfont aui-icon-home"></span>
       </a>
     </header>
@@ -234,7 +234,28 @@
           }
           clearInterval(self.interval);
           MessageBox('提示', "注册成功!");
-          setTimeout(self.common.jumpToPage({router: self.$router, url : "../doctor/login"}),1000);
+          //注册成功后登录
+          //Login
+        self.api.doc_doLogin({phonenum: phonenum, password : password, fwh_openid : localStorage.getItem("fwh_openid")}).then((res) => {
+          //self.common.consoledebug.log("res:" + JSON.stringify(res));
+          if(res.data.ret)
+          {
+            var doc_id = res.data.ret.id;
+            var token = res.data.ret.token;
+            //数据存入localStorage
+            localStorage.setItem("token", token);
+            localStorage.setItem("doc_id", doc_id);
+            localStorage.setItem("role", res.data.ret.role);
+            localStorage.setItem("doctor", JSON.stringify(res.data.ret));
+          }else{
+            self.errmsg="";
+            self.errmsg = JSON.stringify(res.data.message).replace(/"/g,"");
+            return false;
+          }
+        self.common.jumpToPage({router: self.$router, url : "../doctor/index"});
+      }).catch((err) => {
+          self.common.consoledebug.log("err:" + JSON.stringify(err));
+      });
           }).catch((err)=>{
             self.common.consoledebug.log("err:" + JSON.stringify(err));
           })
@@ -247,7 +268,28 @@
             return false;
           }
           MessageBox('提示', "找回密码成功!");
-          setTimeout(self.common.jumpToPage({router: self.$router, url : "../doctor/login"}),1000);
+          //成功后登录
+          //Login
+        self.api.doc_doLogin({phonenum: phonenum, password : password, fwh_openid : localStorage.getItem("fwh_openid")}).then((res) => {
+          //self.common.consoledebug.log("res:" + JSON.stringify(res));
+          if(res.data.ret)
+          {
+            var doc_id = res.data.ret.id;
+            var token = res.data.ret.token;
+            //数据存入localStorage
+            localStorage.setItem("token", token);
+            localStorage.setItem("doc_id", doc_id);
+            localStorage.setItem("role", res.data.ret.role);
+            localStorage.setItem("doctor", JSON.stringify(res.data.ret));
+          }else{
+            self.errmsg="";
+            self.errmsg = JSON.stringify(res.data.message).replace(/"/g,"");
+            return false;
+          }
+        self.common.jumpToPage({router: self.$router, url : "../doctor/index"});
+      }).catch((err) => {
+          self.common.consoledebug.log("err:" + JSON.stringify(err));
+      });
         }).catch((err)=>{
             self.common.consoledebug.log("err:" + JSON.stringify(err));
         })
@@ -256,6 +298,9 @@
       clickBack : function () {
         clearInterval(self.interval);
         self.common.clickBack();
+      },
+      home : function(){
+        self.common.jumpToPage({router : self.$router, url : "/MBGL/doctor/index"})
       }
     },
     mounted() {

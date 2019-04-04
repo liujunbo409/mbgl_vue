@@ -48,19 +48,28 @@ Vue.use(SIdentify)
 Vue.use(Select)
 
 Vue.config.productionTip = false
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  components: {App},
-  template: '<App/>'
-})
-import {MessageBox} from 'mint-ui'
-
 //路由拦截
 router.beforeEach((to, from, next) => {
-  // console.log('to :' + JSON.stringify(to));
-  // console.log(from);
+  console.log("main.js");
+  if((localStorage.getItem("doc_id") == "" || localStorage.getItem("doc_id") == null)&& (from.name == '' || from.name == null) && to.name != 'login'){
+    if(localStorage.getItem("doc_laravel_id") != "" && localStorage.getItem("doc_laravel_id") != null){
+      localStorage.setItem("doc_id", localStorage.getItem("doc_laravel_id"));
+    }else{
+      router.push({name: 'login'});
+    }
+  }
+  if((localStorage.getItem("doc_id") == "" || localStorage.getItem("doc_id") == null) && (from.name == '' || from.name == null) && to.name != 'login'){
+    // const DEBUG_FLAG = localStorage.getItem("DEBUG_FLAG");
+    //   let base = '';
+    //   if( DEBUG_FLAG == 'true'){
+    //       base = 'http://lljiankang.top/';
+    //     }else{
+    //       base = 'http://de.lljiankang.top/';
+    //     }
+        // window.location.href = base + "doctor/h5/vue/MBGL/doctor/login";
+        // return false;
+        router.push({name: 'login'});
+  }
   if(to.name == 'systemarticle' && from.name == 'articlemulu' || to.name == 'systemqa' && from.name == 'Qafenleiselect' || to.name == 'collectarticleselectill' && from.name == 'collectarticle')
   {
     window.addEventListener("popstate", function(e) {
@@ -73,31 +82,7 @@ router.beforeEach((to, from, next) => {
           })}
     }, false);
   }
-  //let docid = localStorage.getItem("doc_id");
-  //let token = localStorage.getItem("token");
-  // api.doc_getHospitalList().then((res)=>{
-  //   console.log("ret"  + JSON.stringify(res.data.ret));
-  // }).catch((err)=>{
-  // })
-  // localStorage.clear();
-  //localStorage.setItem("fwh_openid",'oCbCtt55Qxofc-aPMtGYmi8CadFY');
   if (to.name !== 'login') {
-  //     let doc_id = localStorage.getItem("doc_id");
-  //   if(doc_id == null && token==null && role==null){
-  //     api.doc_checkLogin({fwh_openid : localStorage.getItem("fwh_openid")}).then((res)=>{
-  //       if (res.data.result == true){
-  //         console.log("ret:" + JSON.stringify(res.data.ret));
-  //         localStorage.setItem("doctor", JSON.stringify(res.data.ret));
-  //         localStorage.setItem("token", res.data.ret.token);
-  //         localStorage.setItem("doc_id", res.data.ret.id);
-  //         localStorage.setItem("role", res.data.ret.role);
-  //       }else{
-  //         router.push({name: 'login'});
-  //       }
-  //   }).catch((err)=>{
-
-  //   })
-  // }
   //是否被停用
   if(localStorage.getItem("doc_id") != null && localStorage.getItem("doc_id") != ''){
 
@@ -149,3 +134,11 @@ router.beforeEach((to, from, next) => {
   next()
  
 })
+/* eslint-disable no-new */
+new Vue({
+  el: '#app',
+  router,
+  components: {App},
+  template: '<App/>',
+})
+import {MessageBox} from 'mint-ui'

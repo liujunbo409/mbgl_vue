@@ -1,12 +1,12 @@
 <template>
   <div >
     <header class="aui-bar aui-bar-nav">
-      <a class="aui-pull-left" href="#/MBGL/doctor/index">
+      <a class="aui-pull-left" @click="clickBack">
         <span class="aui-iconfont aui-icon-left"></span>
       </a>
       <div class="aui-title">{{title}}</div>
-      <a class="aui-pull-right" href="#/MBGL/doctor/index">
-        <span class="aui-iconfont aui-icon-home"></span>
+      <a class="aui-pull-right" @click="home">
+        <span style="color:#FFFFFF;font-size:0.66rem">返回首页</span>
       </a>
     </header>
     <div>
@@ -51,29 +51,31 @@
       init : function(){
         self.api.doc_getIlllist().then((res)=>{
         self.illinfo = res.data.ret;
-        let doctor = JSON.parse(localStorage.getItem("doctor"));
-        if(doctor.default_ill != '' && doctor.default_ill != null && doctor!=''){
-        self.common.jumpToPageByParam({router : self.$router, url : "../collectarticle", param : doctor.default_ill});
-        }
+        // let doctor = JSON.parse(localStorage.getItem("doctor"));
+        // if(doctor.default_ill != '' && doctor.default_ill != null && doctor!=''){
+        // self.common.jumpToPageByParam({router : self.$router, url : "../collectarticle", param : doctor.default_ill});
+        // }
       }).catch((err)=>{
       })
       },
       selectill : function(illid){
         self.illid = illid;
-        let doctor = JSON.parse(localStorage.getItem("doctor"));
-        doctor.default_ill = illid;
-        self.api.doc_updataDefaultIll({user_id : localStorage.getItem("doc_id"), default_ill : illid, token : localStorage.getItem("token")}).then((res)=>{
-          if(res){
-            localStorage.setItem("doctor", JSON.stringify(doctor));
-            self.common.jumpToPageByParam({router : self.$router, url : "../collectarticle", param : illid});
-
-          }
-        }).catch((err)=>{
-        })
+        self.common.jumpToPageByParam({router : self.$router, url : "../collectarticle", param : illid});
+        // let doctor = JSON.parse(localStorage.getItem("doctor"));
+        // doctor.default_ill = illid;
+        // self.api.doc_updataDefaultIll({user_id : localStorage.getItem("doc_id"), default_ill : illid, token : localStorage.getItem("token")}).then((res)=>{
+        //   if(res){
+        //     localStorage.setItem("doctor", JSON.stringify(doctor));
+        //     self.common.jumpToPageByParam({router : self.$router, url : "../collectarticle", param : illid});
+        //   }
+        // }).catch((err)=>{
+        // })
       },
       clickBack : function () {
-
         self.common.clickBack();
+      },
+      home : function(){
+        self.common.jumpToPage({router : self.$router, url : "/MBGL/doctor/index"})
       }
     },
   }

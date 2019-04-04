@@ -6,8 +6,8 @@
         <span class="aui-iconfont aui-icon-left"></span>
       </a>
       <div class="aui-title">医院科室选择</div>
-      <a class="aui-pull-right" href="#/MBGL/doctor/index">
-        <span class="aui-iconfont aui-icon-home"></span>
+      <a class="aui-pull-right" @click="home">
+        <span style="color:#FFFFFF;font-size:0.66rem">返回首页</span>
       </a>
     </header>
     <ul class="aui-list aui-form-list" style="margin-top:0.5rem">
@@ -32,8 +32,8 @@
         <span class="aui-iconfont aui-icon-left"></span>
       </a>
       <div class="aui-title">自定义科室</div>
-      <a class="aui-pull-right" href="#/MBGL/doctor/index">
-        <span class="aui-iconfont aui-icon-home"></span>
+      <a class="aui-pull-right" href="/doctor/h5/vue/MBGL/doctor/index">
+        <span style="color:#FFFFFF;font-size:0.66rem">返回首页</span>
       </a>
     </header>
   </div>
@@ -77,6 +77,9 @@
       },
       clickBack : function () {
         self.common.clickBack();
+      },
+      home : function(){
+        self.common.jumpToPage({router : self.$router, url : "/MBGL/doctor/index"})
       }
     },
   }

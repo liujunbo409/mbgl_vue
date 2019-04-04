@@ -135,6 +135,9 @@ export const goToArticleFeedBackWithCollected = params => {
 export const jumpToPageWithArticleid = params => {
   params.router.push({path: params.url, query: {articleid : params.articleid, type: params.type, shenheid : params.shenheid}})
 }
+export const jumpToAccessDetail = params => {
+  params.router.push({path: params.url, query: {articleid : params.articleid, type: params.type, shenheid : params.shenheid, shenhestatus : params.shenhestatus}})
+}
 //跳转到问答题库审核详情，参数为question_id,shenhe_id,来源from
 export const jumpToQaInfo = params => {
   params.router.push({path: params.url, query: {question_id : params.question_id, shenhe_id: params.shenhe_id, from : params.from}})
@@ -173,6 +176,7 @@ export default{
   gotoQaDetail,
   goToQaList,
   goToQaFeedBack,
+  jumpToAccessDetail,
 };
 
 

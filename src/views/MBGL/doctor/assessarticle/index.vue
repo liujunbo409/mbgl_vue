@@ -5,8 +5,8 @@
         <span class="aui-iconfont aui-icon-left"></span>
       </a>
       <div class="aui-title">审核文章</div>
-      <a class="aui-pull-right" href="#/MBGL/doctor/index">
-        <span class="aui-iconfont aui-icon-home"></span>
+      <a class="aui-pull-right" @click="home">
+        <span style="color:#FFFFFF;font-size:0.66rem">返回首页</span>
       </a>
     </header>
       <div v-if="dshflg">
@@ -19,7 +19,7 @@
                 </div>
         </div>
         <ul class="aui-list aui-form-list">
-        <li class="aui-list-item" v-for="(item,key) of dsharticleinfo" @click="gotoArticle(item.article_id, item.id, 0)" :class="key == dsharticleinfo.length-1?'lastli':''">
+        <li class="aui-list-item" v-for="(item,key) of dsharticleinfo" @click="gotoArticle(item.article_id, item.id, 0, 'dsh')" :class="key == dsharticleinfo.length-1?'lastli':''">
           <div class="aui-list-item-inner aui-list-item-arrow">
             <div>
               {{item.article.title}}
@@ -41,15 +41,17 @@
           </div>
         </div>
         <ul class="aui-list aui-form-list">
-          <li class="aui-list-item" v-for="(item,key) of ysharticleinfo" @click="gotoArticle(item.article_id, item.id, 999)" :class="key == ysharticleinfo.length-1?'lastli':''">
+          <li class="aui-list-item" v-for="(item,key) of ysharticleinfo" @click="gotoArticle(item.article_id, item.id, 999, 'ysh')" :class="key == ysharticleinfo.length-1?'lastli':''">
             <div class="aui-list-item-inner aui-list-item-arrow">
               <div>
                 {{item.name}}
               </div>
               <a class="aui-pull-right" >
-                <span v-if="item.shenhe_status.level2_status == 1"style="color: #B3B3B3;margin-right: 1.5rem;font-size:0.65rem">待审核</span>
+                <!-- <span v-if="item.shenhe_status.level2_status == 1"style="color: #B3B3B3;margin-right: 1.5rem;font-size:0.65rem">待审核</span>
                 <span v-if="item.shenhe_status.level2_status == 2"style="color: rgb(103, 248, 135);margin-right: 1.5rem;font-size:0.65rem">{{item.shenhe_status.level2_status_str}}</span>
-                <span v-if="item.shenhe_status.level2_status == 3"style="color: red;margin-right: 1.5rem;font-size:0.65rem">{{item.shenhe_status.level2_status_str}}</span>
+                <span v-if="item.shenhe_status.level2_status == 3"style="color: red;margin-right: 1.5rem;font-size:0.65rem">{{item.shenhe_status.level2_status_str}}</span> -->
+                <span v-if="item.status == 3"style="color: red;margin-right: 1.5rem;font-size:0.65rem">审核驳回</span>
+                <span v-if="item.status == 2 "style="color: rgb(103, 248, 135);margin-right: 1.5rem;font-size:0.65rem">审核通过</span>
               </a>
             </div>
           </li>
@@ -114,8 +116,8 @@
 
       },
       //查看文章详情
-      gotoArticle : function(articleid, shenheid, type){
-        self.common.jumpToPageWithArticleid({router: self.$router, url : "../doctor/assessarticle/detail", articleid : articleid, type : type, shenheid : shenheid});
+      gotoArticle : function(articleid, shenheid, type, shenhestatus){
+        self.common.jumpToAccessDetail({router: self.$router, url : "../doctor/assessarticle/detail", articleid : articleid, type : type, shenheid : shenheid, shenhestatus : shenhestatus});
       },
       //获取和显示已审核文章列表
       gotoYshList : function(){
@@ -172,6 +174,9 @@
       },
       clickBack : function () {
         self.common.clickBack();
+      },
+      home : function(){
+        self.common.jumpToPage({router : self.$router, url : "/MBGL/doctor/index"})
       }
     },
   }
