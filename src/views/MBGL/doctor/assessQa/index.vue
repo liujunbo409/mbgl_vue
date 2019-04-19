@@ -19,7 +19,7 @@
                 </div>
         </div>
         <ul class="aui-list aui-form-list">
-        <li class="aui-list-item" v-for="(item,key) of dshQaList" @click="gotoQaInfo(item.qa.id, item.id)" :class="key == dshQaList.length-1?'lastli':''">
+        <li class="aui-list-item" v-for="(item,key) of dshQaList" @click="gotoQaInfo(item.qa.id, item.id, 'dsh')" :class="key == dshQaList.length-1?'lastli':''">
           <div class="aui-list-item-inner aui-list-item-arrow">
             <div>
               {{item.qa.question}}
@@ -41,7 +41,7 @@
           </div>
         </div>
         <ul class="aui-list aui-form-list">
-          <li class="aui-list-item" v-for="(item,key) of yshQaList" @click="gotoQaInfo(item.qa.id, item.id)" :class="key == yshQaList.length-1?'lastli':''">
+          <li class="aui-list-item" v-for="(item,key) of yshQaList" @click="gotoQaInfo(item.qa.id, item.id, 'ysh')" :class="key == yshQaList.length-1?'lastli':''">
             <div class="aui-list-item-inner aui-list-item-arrow">
               <div>
                 {{item.qa.question}}
@@ -115,7 +115,7 @@
       },
       //查看问答题库详情
       gotoQaInfo : function(question_id, shenhe_id, type){
-        self.common.jumpToQaInfo({router: self.$router, url : "../doctor/assessQa/detail", question_id : question_id, shenhe_id : shenhe_id, from :'shenhe'});
+        self.common.jumpToQaInfo({router: self.$router, url : "../doctor/assessQa/detail", question_id : question_id, shenhe_id : shenhe_id, from :'shenhe',type:type});
       },
       //获取和显示已审核问答题库列表
       gotoYshList : function(){

@@ -107,10 +107,10 @@
             </h4>
         </div>
         <div v-if="shenhetype == 'dsh' && shenherecord != null">
-          <div class="recordtitle" style="background-color:#B3B3B3;height:2.5rem;line-height:2.5rem"><b >历史审核记录</b></div>
+          <div class="recordtitle" style="background-color:#B3B3B3;height:2.5rem;line-height:2.5rem">历史审核记录</div>
           <!-- 审核员审核 -->
           <div v-if="adminrecord != null">
-          <div class="recordtitle"  style="margin-top:0px"><b >审核员审核</b></div>
+          <div class="recordtitle"  style="margin-top:0px">审核员审核</div>
           <div v-for="(item, key) in adminrecord">
           <div style="height:2rem;line-height:2rem;background-color:white;padding:0.5rem">
             <span>文章审核员</span>
@@ -126,7 +126,7 @@
           </div>
           <!-- 药师审核 -->
           <div v-if="yaoshirecord != null">
-          <div class="recordtitle"  style="margin-top:0px"><b >药师审核</b></div>
+          <div class="recordtitle"  style="margin-top:0px">药师审核</div>
           <div v-for="(item, key) in yaoshirecord">
           <div style="height:2rem;line-height:2rem;background-color:white;padding:0.5rem">
             <span>药师</span>
@@ -142,8 +142,9 @@
           </div>
           <!-- 护士审核 -->
           <div v-if="nurserecord != null">
-          <div class="recordtitle"  style="margin-top:0px"><b >护士审核</b></div>
+          <div class="recordtitle"  style="margin-top:0px">护士审核</div>
           <div v-for="(item, key) in nurserecord">
+            <div v-if="item.status != '0'">
           <div style="height:2rem;line-height:2rem;background-color:white;padding:0.5rem">
             <span>{{item.title_str}}</span>
             <span v-if="item.status == 2" style="color: rgb(103, 248, 135);margin-left:0.8rem;">审核通过</span>
@@ -153,13 +154,15 @@
           <div style="background-color:white;padding-right:0.5rem;padding-left:0.5rem;padding-bottom:1rem;padding-top:0.5rem">
             <span >审核理由：</span>
             <span style="margin-left:0.2rem;">{{item.remark}}</span>
+          </div>
           </div>
           </div>
           </div>
           <!-- 医生审核 -->
           <div v-if="doctorrecord != null">
-          <div class="recordtitle"  style="margin-top:0px"><b >医生审核</b></div>
+          <div class="recordtitle"  style="margin-top:0px">医生审核</div>
           <div v-for="(item, key) in doctorrecord">
+            <div v-if="item.status != '0'">
           <div style="height:2rem;line-height:2rem;background-color:white;padding:0.5rem">
             <span>{{item.title_str}}</span>
             <span v-if="item.status == 2" style="color: rgb(103, 248, 135);margin-left:0.8rem;">审核通过</span>
@@ -172,9 +175,10 @@
           </div>
           </div>
           </div>
+          </div>
         </div>
         <div v-if="shenhetype == 'ysh' && myshenherecord != null" >
-          <div class="recordtitle"><b >我的审核记录</b></div>
+          <div class="recordtitle">我的审核记录</div>
           <div v-for="(item, key) in myshenherecord">
           <div style="height:2rem;line-height:2rem;background-color:white;padding:0.5rem">
             <span v-if="item.status == 2" style="color: rgb(103, 248, 135);">审核通过</span>
@@ -344,7 +348,7 @@
         })
       },
       getmyShenheByArticle : function(){
-        self.api.doc_getmyShenheByArticle({user_id : localStorage.getItem("doc_id"), article_id : self.articleid}).then((res)=>{
+        self.api.doc_getmyShenheByArticle({user_id : localStorage.getItem("doc_id"), role : localStorage.getItem("role"), article_id : self.articleid}).then((res)=>{
           console.log('ysh' + JSON.stringify(res.data.ret));
           self.myshenherecord = res.data.ret;
         }).catch((err)=>{
@@ -380,12 +384,13 @@
   float:left;
 }
 .recordtitle{
-  background-color: aqua;
+  background-color: #03a9f4;
   height: 2rem;
   line-height: 2rem;
   border: 1px solid #b3b3b3;
   margin-top:1rem;
   padding-right:0.5rem;
   padding-left:0.5rem;
+  color:white;
 }
 </style>

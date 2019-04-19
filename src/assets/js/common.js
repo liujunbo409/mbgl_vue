@@ -140,7 +140,7 @@ export const jumpToAccessDetail = params => {
 }
 //跳转到问答题库审核详情，参数为question_id,shenhe_id,来源from
 export const jumpToQaInfo = params => {
-  params.router.push({path: params.url, query: {question_id : params.question_id, shenhe_id: params.shenhe_id, from : params.from}})
+  params.router.push({path: params.url, query: {question_id : params.question_id, shenhe_id: params.shenhe_id, from : params.from,type : params.type}})
 }
 //跳转到问答题库详情
 export const gotoQaDetail = params => {

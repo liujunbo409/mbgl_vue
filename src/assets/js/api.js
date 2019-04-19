@@ -456,6 +456,18 @@ export const doc_getmyShenheByArticle = params => {
 export const doc_getDSHwaitNum = params => {
   return axios_ajax('api/doctor/article/shenhe/waitNum', params, 'GET', false);
 }
+//待审核问答数量
+export const doc_getDSHWDwaitNum = params => {
+  return axios_ajax('api/doctor/qa/shenhe/waitNum', params, 'GET', false);
+}
+//问答下我的审核记录
+export const doc_getmyShenheByQa = params => {
+  return axios_ajax('api/doctor/qa/shenhe/myShenheByArticle', params, 'GET', false);
+}
+//查看本问答上次审核未通过审核记录
+export const doc_getWDlastLostShenhe = params => {
+  return axios_ajax('api/doctor/qa/shenhe/lastLostShenhe', params, 'GET', false);
+}
 /*
  *
  * 创建Toast
@@ -552,6 +564,9 @@ export default{
   doc_getlastLostShenhe,
   doc_getmyShenheByArticle,
   doc_getDSHwaitNum,
+  doc_getDSHWDwaitNum,
+  doc_getmyShenheByQa,
+  doc_getWDlastLostShenhe,
 }
 
 

@@ -43,6 +43,94 @@
               [{{source.sequence}}]{{source.source_text}}
           </li>
         </ul>
+        <div v-if="shenhetype == 'dsh' && shenherecord != null">
+          <div class="recordtitle" style="background-color:#B3B3B3;height:2.5rem;line-height:2.5rem">历史审核记录</div>
+          <!-- 审核员审核 -->
+          <div v-if="adminrecord != null">
+          <div class="recordtitle"  style="margin-top:0px">审核员审核</div>
+          <div v-for="(item, key) in adminrecord">
+          <div style="height:2rem;line-height:2rem;background-color:white;padding:0.5rem">
+            <span>文章审核员</span>
+            <span v-if="item.status == 2" style="color: rgb(103, 248, 135);margin-left:0.8rem;">审核通过</span>
+            <span v-if="item.status == 3" style="color: red;margin-left:0.8rem;">审核驳回</span>
+            <span style="margin-left:0.8rem;">{{item.updated_at}}</span>
+          </div>
+          <div style="background-color:white;padding-right:0.5rem;padding-left:0.5rem;padding-bottom:1rem;padding-top:0.5rem">
+            <span >审核理由：</span>
+            <span style="margin-left:0.2rem;">{{item.remark}}</span>
+          </div>
+          </div>
+          </div>
+          <!-- 药师审核 -->
+          <div v-if="yaoshirecord != null">
+          <div class="recordtitle"  style="margin-top:0px">药师审核</div>
+          <div v-for="(item, key) in yaoshirecord">
+            <div v-if="item.status != '0'">
+          <div style="height:2rem;line-height:2rem;background-color:white;padding:0.5rem">
+            <span>药师</span>
+            <span v-if="item.status == 2" style="color: rgb(103, 248, 135);margin-left:0.8rem;">审核通过</span>
+            <span v-if="item.status == 3" style="color: red;margin-left:0.8rem;">审核驳回</span>
+            <span style="margin-left:0.8rem;">{{item.updated_at}}</span>
+          </div>
+          <div style="background-color:white;padding-right:0.5rem;padding-left:0.5rem;padding-bottom:1rem;padding-top:0.5rem">
+            <span >审核理由：</span>
+            <span style="margin-left:0.2rem;">{{item.remark}}</span>
+          </div>
+          </div>
+          </div>
+          </div>
+          <!-- 护士审核 -->
+          <div v-if="nurserecord != null">
+          <div class="recordtitle"  style="margin-top:0px">护士审核</div>
+          <div v-for="(item, key) in nurserecord">
+            <div v-if="item.status != '0'">
+          <div style="height:2rem;line-height:2rem;background-color:white;padding:0.5rem">
+            <span>{{item.title_str}}</span>
+            <span v-if="item.status == 2" style="color: rgb(103, 248, 135);margin-left:0.8rem;">审核通过</span>
+            <span v-if="item.status == 3" style="color: red;margin-left:0.8rem;">审核驳回</span>
+            <span style="margin-left:0.8rem;">{{item.updated_at}}</span>
+          </div>
+          <div style="background-color:white;padding-right:0.5rem;padding-left:0.5rem;padding-bottom:1rem;padding-top:0.5rem">
+            <span >审核理由：</span>
+            <span style="margin-left:0.2rem;">{{item.remark}}</span>
+          </div>
+          </div>
+          </div>
+          </div>
+          <!-- 医生审核 -->
+          <div v-if="doctorrecord != null">
+          <div class="recordtitle"  style="margin-top:0px">医生审核</div>
+          <div v-for="(item, key) in doctorrecord">
+            <div v-if="item.status != '0'">
+          <div style="height:2rem;line-height:2rem;background-color:white;padding:0.5rem" >
+            <span>{{item.title_str}}</span>
+            <span v-if="item.status == 2" style="color: rgb(103, 248, 135);margin-left:0.8rem;">审核通过</span>
+            <span v-if="item.status == 3" style="color: red;margin-left:0.8rem;">审核驳回</span>
+            <span style="margin-left:0.8rem;">{{item.updated_at}}</span>
+          </div>
+          <div style="background-color:white;padding-right:0.5rem;padding-left:0.5rem;padding-bottom:1rem;padding-top:0.5rem">
+            <span >审核理由：</span>
+            <span style="margin-left:0.2rem;">{{item.remark}}</span>
+          </div>
+          </div>
+          </div>
+          </div>
+        </div>
+        <div v-if="shenhetype == 'ysh' && myshenherecord != null" >
+          <div class="recordtitle">我的审核记录</div>
+          <div v-for="(item, key) in myshenherecord">
+          <div style="height:2rem;line-height:2rem;background-color:white;padding:0.5rem">
+            <span v-if="item.status == 2" style="color: rgb(103, 248, 135);">审核通过</span>
+            <span v-if="item.status == 3" style="color: red;">审核驳回</span>
+            <span style="margin-left:0.8rem;">{{item.updated_at}}</span>
+          </div>
+          <div style="background-color:white;padding-right:0.5rem;padding-left:0.5rem;padding-bottom:1rem;padding-top:0.5rem">
+            <span >审核理由：</span>
+            <span style="margin-left:0.2rem;">{{item.remark}}</span>
+          </div>
+          </div>
+        </div>
+        <div style="height:3rem"></div>
         <div v-show="detailinfo.shenhe.status=='1'" class="aui-tab" id="tab">
           <div class="aui-tab-item" style="font-size: 0.6rem;background: #03a9f4;border-right:1px solid #FFFFFF;
           color:#FFFFFF;position: fixed;top: auto;bottom: 0;width: 50%;" @click="ShenheArticle(2)">
@@ -77,8 +165,17 @@
     },
     mounted(){
       var question_id = self.$route.query.question_id;
+      self.question_id = question_id;
       self.shenhe_id = self.$route.query.shenhe_id;
+      self.shenhetype = self.$route.query.type;
       self.from = self.$route.query.from;
+      if(self.shenhetype == 'dsh'){
+        //查看本文上次审核未通过审核记录
+        self.getlastLostShenhe();
+      }else{
+        //文章下我的审核记录
+        self.getmyShenheByQa();
+      }
       //初始化
       self.init(question_id);
     },
@@ -87,12 +184,19 @@
         question_id : '',           //文章id
         shenhe_id : '',            //审核id
         title : '审核问答题库',               //页面title
+        shenhetype : '',         //wenda审核类型
         detailinfo : null,        //文章详情信息
         sourceinfo : null,        //参考文献信息   
         sourceflg : false,         //参考文献是否显示
         bankLists : '' ,//问答题库分类
         sourceLists :'',//来源
-        bindLists :''//关联
+        bindLists :'',//关联
+        myshenherecord : null,     //我的审核记录
+        shenherecord : null,       //审核记录
+        adminrecord : null,        //管理员审核记录
+        yaoshirecord : null,       //药师审核记录
+        doctorrecord : null,       //医师审核记录
+        nurserecord : null,        //护士审核记录
       }
     },
     methods :{
@@ -153,6 +257,36 @@
         }).catch(({ cancel }) => {
         });
       },
+      getlastLostShenhe : function(){
+        self.api.doc_getWDlastLostShenhe({ question_id : self.question_id}).then((res)=>{
+          console.log('dsh' + JSON.stringify(res));
+          if(res.data.ret){
+            self.shenherecord = res.data.ret;
+            if(res.data.ret.doctor){
+              self.doctorrecord = res.data.ret.doctor;
+            }
+            if(res.data.ret.nurse){
+              self.nurserecord = res.data.ret.nurse;
+            }
+            if(res.data.ret.admin){
+              self.adminrecord = res.data.ret.admin;
+            }
+            if(res.data.ret.pharmacist){
+              self.yaoshirecord = res.data.ret.pharmacist;
+            }
+          }
+        }).catch((err)=>{
+
+        })
+      },
+      getmyShenheByQa : function(){
+        self.api.doc_getmyShenheByQa({user_id : localStorage.getItem("doc_id"), role : localStorage.getItem("role"),question_id : self.question_id}).then((res)=>{
+          console.log('ysh' + JSON.stringify(res));
+          self.myshenherecord = res.data.ret;
+        }).catch((err)=>{
+
+        })
+      },
       clickBack : function () {
         self.common.clickBack();
       },
@@ -180,5 +314,15 @@
   margin-right: auto;
   position: relative;
   float:left;
+}
+.recordtitle{
+  background-color: #03a9f4;
+  height: 2rem;
+  line-height: 2rem;
+  border: 1px solid #b3b3b3;
+  margin-top:1rem;
+  padding-right:0.5rem;
+  padding-left:0.5rem;
+  color:white;
 }
 </style>

@@ -60,6 +60,7 @@
         <div class="aui-col-xs-4" @click="selTab(6)">
           <!-- <i class="aui-iconfont iconfont icon-dkw_shenhetongguo"></i> -->
           <img style="height:1.4rem;  display:inline" class="" src="../../../../assets/img/shwdtk.png"> 
+          <div v-if="waitnumWD != ''" class="aui-badge icon" style="top:14%;left:57%;" >{{waitnumWD}}</div>
           <div class="aui-grid-label aui-font-size-12">审核问答</div>
         </div>
          <div class="aui-col-xs-4" @click="selTab(7)">
@@ -127,13 +128,13 @@
         czdate : '03-03',
         roleflg : true,
         waitnum : '',
+        waitnumWD : '',
       }
     },
     created() {
       self = this;    //使用self来代替this，避免this无效
     },
     mounted() {
-      console.log("index");
       if(localStorage.getItem("doc_id") == "" || localStorage.getItem("doc_id") == null){
         localStorage.setItem("doc_id", localStorage.getItem("doc_laravel_id"));
       }
@@ -282,8 +283,17 @@
         //待审核文章数量
         self.api.doc_getDSHwaitNum({user_id : localStorage.getItem("doc_id"), role : localStorage.getItem("role")}).then((res)=>{
           self.common.consoledebug.log("res : " + JSON.stringify(res));
-          if(res.data.result == true){
+          if(res.data.result == true && res.data.ret!= 'false'){
             self.waitnum = res.data.ret;
+          }
+          
+        }).catch((err)=>{
+        })
+        //待审核问答数量
+        self.api.doc_getDSHWDwaitNum({user_id : localStorage.getItem("doc_id"), role : localStorage.getItem("role")}).then((res)=>{
+          self.common.consoledebug.log("res : " + JSON.stringify(res));
+          if(res.data.result == true && res.data.ret!= 'false'){
+            self.waitnumWD = res.data.ret;
           }
           
         }).catch((err)=>{
